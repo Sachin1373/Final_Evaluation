@@ -1,0 +1,157 @@
+.sign_in_wrapper{
+    display: flex;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100%;
+    background-color: #18181B;
+}
+
+
+.form_wrapper {
+    width: 350px;
+    padding: 20px;
+    height: 500px;
+    border-radius: 8px;
+  }
+  
+  /* Form Group */
+  .form_group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    display: block;
+    font-size: 14px;
+    font-family: Poppins;
+    color: white;
+    margin-bottom: 5px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    outline: none;
+    background-color: #C4C4C400;
+    
+  }
+  
+  /* input:focus {
+    border-color: #007bff;
+  } */
+
+
+  .signup_btn,
+.google_btn {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  font-family: Poppins;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+
+.signup_btn {
+  background-color: #007bff;
+}
+
+.google_wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    background-color: white;
+}
+
+.google{
+    height: 100px;
+    width: 100px;
+    
+}
+
+.google_btn {
+    display: flex;
+    height: 40px;
+    align-items: center;
+    gap: 40px;
+    background-color: #007bff;
+}
+
+.login_text {
+    text-align: center;
+    font-size: 14px;
+    font-family: inter;
+    font-weight: 400;
+    color: white;
+  }
+  
+  .login_text a {
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .login_text a:hover {
+    text-decoration: underline;
+  }
+
+  .or_text {
+    text-align: center;
+    font-size: 12px;
+    font-family: Poppins;
+    color: white;
+    margin: 10px 0;
+  }
+
+.svgleft img,
+.svgright img,
+.svgbottom img {
+    max-width: 100%; 
+    max-height: 100%; 
+    display: block; 
+}
+
+.svgleft {
+    position: absolute;
+    top: 200.75px;
+    left: 66.47px;
+    max-width: 300px; 
+    height: auto; 
+}
+
+.svgright {
+    position: absolute;
+    top: 178px;
+    left: 1430px;
+    max-width: 230px; 
+    height: auto; 
+}
+
+.svgbottom {
+    position: absolute;
+    top: 620px;
+    left: 877px;
+    max-width: 230px; 
+    height: auto; 
+}
+
+.back_btn{
+    position: absolute;
+    color: white;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    top: 60px;
+    left: 123px;
+    gap: 0px;
+    opacity: 0px;
+    
+}
