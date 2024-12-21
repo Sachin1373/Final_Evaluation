@@ -48,16 +48,16 @@ export const login = async(req,res)=>{
     }
 
     const token = jwt.sign(
-        {id:user._id},
-        process.env.JWT_KEY,
-        {expiresIn: '1hr'}
-    )
+        { userId: user._id, email: user.email }, 
+        process.env.JWT_KEY, 
+        { expiresIn: '12h' } 
+      );
 
     res.status(200).json(
         {
             message: 'Login successful',
             token,
-            username : user.name
+            username : user.username
 
         }
     )
