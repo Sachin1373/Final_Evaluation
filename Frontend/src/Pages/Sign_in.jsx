@@ -1,9 +1,12 @@
 import React from "react";
 import { IoArrowBackSharp } from "react-icons/io5";
+import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import styles from "../Styles/Sign_in.module.css";
 
 function Sign_in() {
+
+  const navigate = useNavigate()
   return (
     <>
       <div className={styles.sign_in_wrapper}>
@@ -53,7 +56,7 @@ function Sign_in() {
 
             {/* Login Link */}
             <p className={styles.login_text}>
-              Already have an account? <a href="/login">Login</a>
+              Already have an account? <a onClick={()=> navigate('/login')}>Login</a>
             </p>
           </form>
         </div>
