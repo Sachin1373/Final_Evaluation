@@ -1,7 +1,9 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 import styles from "../Styles/Landing.module.css"
 
 function Landingpage() {
+      const navigate = useNavigate();
   return (
     <div className={styles.landing_wrapper}>
         <nav>
@@ -11,7 +13,7 @@ function Landingpage() {
             </div>
 
             <div className={styles.sign_from_btn}>
-                <button className={styles.signin}>Sign in</button>
+                <button className={styles.signin} onClick={()=>navigate('/sign-in')}>Sign in</button>
                 <button className={styles.create_bot}>Create a FormBot</button>
             </div>
         </nav>

@@ -36,8 +36,13 @@
     border: 1px solid #ccc;
     border-radius: 12px;
     outline: none;
+    color: white;
     background-color: #C4C4C400;
     
+  }
+
+  .error_message{
+    color: red;
   }
   
   /* input:focus {

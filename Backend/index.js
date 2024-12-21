@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import dbconnection from "./src/db/dbconnection.js";
+import auth from "./src/routes/Auth.js"
 import cors from "cors";
 
 
@@ -19,14 +20,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true })); 
 
 // Basic Route
-app.get("/", (req, res) => {
+app.get("/api/v1", (req, res) => {
   res.send("Welcome to the backend API!");
 });
 
-// Example API Route
-app.get("/api/example", (req, res) => {
-  res.json({ message: "This is an example route!" });
-});
+app.use('/api/v1/auth',auth)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
