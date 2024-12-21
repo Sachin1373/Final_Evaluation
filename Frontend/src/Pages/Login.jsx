@@ -41,13 +41,19 @@ function Login() {
             });
       
             if (response.data) {
-              console.log(response.data)
+              const data = response.data
+              console.log(data)
+              const userdata = {
+                token : data.token,
+                Username: data.username,
+              }
+              localStorage.setItem('userdetails',JSON.stringify(userdata))
               toast.success("Loggedin successful");
               setlogindata({
                 email: "",
                 password: "",
               });
-              // setTimeout(() => navigate("/login"), 2000);
+              
             } else {
               toast.error(response.data.message || "Something went wrong");
             }
