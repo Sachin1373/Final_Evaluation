@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoArrowBackSharp } from "react-icons/io5";
+import { AuthContext } from '../Contexts/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import styles from "../Styles/Sign_in.module.css"
 function Login() {
+
+  const {isLoggedIn,login,logout} = useContext(AuthContext)
 
     const [logindata,setlogindata] = useState({
       email : "",
@@ -47,13 +50,15 @@ function Login() {
                 token : data.token,
                 Username: data.username,
               }
-              localStorage.setItem('userdetails',JSON.stringify(userdata))
+              login(userdata)
               toast.success("Loggedin successful");
               setlogindata({
                 email: "",
                 password: "",
               });
-              
+              setTimeout(()=>{
+                navigate("/dashboard")
+              },1000)
             } else {
               toast.error(response.data.message || "Something went wrong");
             }

@@ -221,19 +221,19 @@
   .folder_wrapper{
     display: flex;
     align-items: center;
-    height: 50px;
+    height: auto;
     width: 100%;
     padding: 0px 200px;
     margin-top: 35px;
+    gap: 30px;
   }
 
   .create_folder{
-    width: Hug (171px)px;
+    width:200px;
     display: flex;
     align-items: center;
     background-color:rgba(255, 255, 255, 0.08);
-    height: Fixed (40px)px;
-    min-width: 40px;
+    height: 40px;
     padding: 8px 16px 8px 16px;
     gap: 8px;
     border-radius: 6px;
@@ -268,6 +268,55 @@
 
 .create_folder.light p {
     color: black;
+}
+
+.folders_list{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.folder_item{
+  width: Hug (213px)px;
+  height: Fixed (40px)px;
+  min-width: 40px;
+  padding: 8px 16px 8px 16px;
+  gap: 0px;
+  border-radius: 6px ;
+  opacity: 0px;
+  background-color: #FFFFFF14;
+  font-family: Open Sans;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19.2px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  
+}
+
+.folder_item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+ 
+}
+
+.folder_item p{
+  cursor: pointer;
+}
+
+
+.folder_item.light{
+  background-color: rgb(167, 163, 163)
+}
+
+.delete_icon{
+  width: 20px;
+  height: 20px;
+  color: #F55050;
+  cursor: pointer;
 }
 
   .forms_wrapper{

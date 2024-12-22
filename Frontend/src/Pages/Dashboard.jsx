@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef,useContext } from 'react';
 import { useTheme } from '../Contexts/ThemeContext'; 
 import CreateFolder from '../Modals/CreateFolder';
 import axios from 'axios';
@@ -6,24 +6,26 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import CreateFormbtn from '../Components/CreateFormbtn';
+import { AuthContext } from '../Contexts/AuthContext';
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { useNavigate } from 'react-router-dom';
 import { FaFolderPlus } from "react-icons/fa";
 import styles from "../Styles/Dashboard.module.css";
 
 function Dashboard() {
   const { isDarkMode, toggleTheme } = useTheme(); 
-  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("userdetails")) || null);
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [foldermodal, setfoldermodal] = useState(false);
+  const [folders, setFolders] = useState([]); 
 
-//    // Retrieve user details from localStorage
-//    const storedUser = localStorage.getItem("userdetails");
-//    if (!storedUser) {
-//      toast.error("User not logged in!");
-//      return;
-//    }
+ const {isLoggedIn,login,logout} = useContext(AuthContext)
+ const navigate = useNavigate()
+  
 
-//    // Parse the stored data
-//    const { token, Username: username } = JSON.parse(storedUser);
+  const previousUsername = useRef(null);
+
+
    
 
   const openfoldermodal = () => {
@@ -38,6 +40,11 @@ function Dashboard() {
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
   };
+
+  const handlelogout = () =>{
+    logout()
+    navigate('/')
+  }
 
   const createdashboard = async () => {
     try {
@@ -59,10 +66,51 @@ function Dashboard() {
       toast.error(error.response?.data?.message || "Server error. Please try again later.");
     }
   };
+
+
+  const getFolders = async () => {
+    try {
+      const response = await axios.get("http://localhost:8000/api/v1/folder/getfolders", {
+        headers: {
+          Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+        },
+      });
+      if (response.data?.folders) {
+        setFolders(response.data.folders);  // Set folders in state
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to load folders.");
+    }
+  };
   
 
+  const handleDeleteFolder = async (folderId) => {
+    try {
+      const response = await axios.delete(`http://localhost:8000/api/v1/folder/deletefolder/${folderId}`, {
+        headers: {
+          Authorization: `Bearer ${userDetails.token}`,
+        },
+      });
+      toast.success(response.data.message);
+      getFolders(); 
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to delete folder.");
+    }
+  };
+
+
   useEffect(() => {
-    createdashboard()
+    if (userDetails?.Username && userDetails.Username !== previousUsername.current) {
+      createdashboard();
+      previousUsername.current = userDetails.Username; 
+    }
+
+    if (userDetails) {
+      getFolders();
+    }
+
   }, [userDetails])
   
 
@@ -82,7 +130,7 @@ function Dashboard() {
             <div className={styles.dropdown_menu}>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`}>Shared Dashboard 1</div>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`}>Settings</div>
-              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }}>Logout</div>
+              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }} onClick={handlelogout}>Logout</div>
             </div>
           )}
         </div>
@@ -103,13 +151,30 @@ function Dashboard() {
       </nav>
 
       <div className={styles.folder_wrapper}>
-        <div className={`${styles.create_folder} ${isDarkMode ? styles.dark : styles.light}`}>
-          <FaFolderPlus className={styles.folder_icon} />
-          <p onClick={openfoldermodal}>Create a folder</p>
-        </div>
+          <div className={`${styles.create_folder} ${isDarkMode ? styles.dark : styles.light}`}>
+            <FaFolderPlus className={styles.folder_icon} />
+            <p onClick={openfoldermodal} >Create a folder</p>
+          </div>
+          
+
+          <div className={styles.folders_list}>
+            {folders.length > 0 ? (
+              folders.map((folder) => (
+                <div key={folder._id} className={`${styles.folder_item} ${isDarkMode ? styles.dark : styles.light}`}>
+                   
+                      <p>{folder.name} </p>
+                      <RiDeleteBin6Line className={styles.delete_icon} onClick={()=>handleDeleteFolder(folder._id)}/>
+                   
+                </div>
+              ))
+            ) : (
+              <p>No folders available.</p>
+            )}
+          </div>
+
       </div>
 
-      {foldermodal && <CreateFolder closeModal={closefoldermodal} />}
+      {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
 
       <div className={styles.forms_wrapper}>
         <div className={styles.Create_TypeBot}>
