@@ -1,0 +1,119 @@
+/* Settings.module.css */
+.settingsContainer {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 60px 0px;
+    align-items: center;
+    height: 100vh;
+    gap: 60px;
+    background-color: black;
+    color: white;
+  }
+  
+  .settingsBox {
+    padding: 30px;
+    border-radius: 8px;
+    width: 500px;
+    text-align: center;
+  }
+  
+  .settingsHeading {
+    margin-bottom: 20px;
+    font-family: Open Sans;
+    font-size: 22px;
+    font-weight: 600;
+    line-height: 29.96px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+  
+  .settingsForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .inputWrapper {
+    position: relative;
+  }
+  
+  .settingsInput {
+    padding: 10px;
+    padding-left: 50px; 
+    font-family: Open Sans;
+    font-size: 17px;
+    font-weight: 400;
+    line-height: 26.28px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    border: 1px solid #555;
+    height: 50px;
+    border-radius: 8px;
+    background-color: #444;
+    color: white;
+  }
+  
+  .settingsInput::placeholder {
+    color: #aaa;
+  }
+  
+  .inputIcon {
+    position: absolute;
+    left: 10px;
+    height: 25px;
+    width: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #aaa;
+  }
+  
+  .updateButton {
+    padding: 10px;
+    margin-top: 30px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: Open Sans;
+    font-size: 19.29px;
+    font-weight: 400;
+    line-height: 26.28px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+  
+  .updateButton:hover {
+    background-color: #0056b3;
+  }
+  
+
+.logout_section{
+    position: absolute;
+    bottom: 50px;
+    left: 50px;
+    display: flex;
+    gap: 10px;
+    cursor: pointer;
+}  
+
+.logout_section p{
+    font-family: Poppins;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #CF3636;
+}
+
+.logout_icon{
+    width: 24px;
+    height: 24px;
+    color: #CF3636;
+}
