@@ -8,7 +8,7 @@ import styles from "../Styles/CreateFolder.module.css";
 function CreateFolder({ closeModal, refreshFolders }) {
   const [folderName, setFolderName] = useState("");
   const { isDarkMode, toggleTheme } = useTheme(); 
-  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("userdetails")) || null);
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
 
   const handleFolderNameChange = (e) => {
     setFolderName(e.target.value);

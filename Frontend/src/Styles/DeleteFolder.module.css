@@ -19,6 +19,7 @@
     border-radius: 24px;
     padding: 20px;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: space-around;
     gap: 20px;
@@ -27,10 +28,12 @@
   }
   
   .heading {
+    width: 340px;
     font-family: Open Sans;
     font-size: 27.33px;
     font-weight: 600;
     line-height: 41px;
+    text-align: center;
     text-underline-position: from-font;
     text-decoration-skip-ink: none;    
     color: white;
@@ -48,7 +51,7 @@
   
   .buttons {
     display: flex;
-    align-items: center;
+    gap: 100px;
     justify-content: space-between;
     
   }
