@@ -1,4 +1,5 @@
 import Dashboard from "../models/DashBoardSchema.model.js";
+import User from "../models/UserSchema.model.js"
 
 export const dashboard = async (req, res) => {
   // Extract username from req.body and userId from the middleware
@@ -28,6 +29,17 @@ export const dashboard = async (req, res) => {
     });
 
     await userDashboard.save();
+    
+    let user  = await User.findById(userId)
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+
+    user.dashboard = userDashboard._id
+    await user.save()
+
     res.status(201).json({ message: "Dashboard created successfully.", dashboard: userDashboard });
     return;
   }

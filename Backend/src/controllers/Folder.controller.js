@@ -1,0 +1,68 @@
+import dashboard from "../models/DashBoardSchema.model.js";
+import Folder from "../models/FolderSchema.model.js";
+
+export const createfolder = async (req, res) => {
+  const { name } = req.body;
+  const { userId } = req;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
+  }
+
+  // Find user's dashboard
+  const userDashboard = await dashboard.findOne({ owner: userId });
+
+  if (!userDashboard) {
+    return res.status(404).json({ message: "Dashboard not found for the user." });
+  }
+
+  const dashboardId = userDashboard._id; // Use consistent variable naming
+
+  // Check if the folder already exists in the dashboard
+  const existingFolder = await Folder.findOne({ name, dashboardId });
+  if (existingFolder) {
+    return res.status(400).json({ message: "Folder with this name already exists in the dashboard." });
+  }
+
+  // Create a new folder
+  const folder = new Folder({ name, dashboardId }); // Ensure dashboardId is passed correctly
+  await folder.save();
+
+  res.status(201).json({ message: "Folder created successfully.", folder });
+};
+
+export const getfolders = async (req, res) => {
+    const { userId } = req;
+  
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
+    }
+  
+    // Find user's dashboard
+    const userDashboard = await dashboard.findOne({ owner: userId });
+  
+    if (!userDashboard) {
+      return res.status(404).json({ message: "Dashboard not found for the user." });
+    }
+  
+    const dashboardId = userDashboard._id; // Use consistent variable naming
+  
+    // Find folders associated with the user's dashboard
+    const folders = await Folder.find({ dashboardId });
+    res.status(200).json({ message: "Folders fetched successfully.", folders });
+  };
+
+export const deletefolder = async(req,res)=>{
+  const { folderId } = req.params;
+
+  const folder = await Folder.findById(folderId);
+
+  if (!folder) {
+    return res.status(404).json({ message: 'Folder not found.' });
+  }
+
+  await Folder.findByIdAndDelete(folderId);
+
+  res.status(200).json({ message: 'Folder deleted successfully.' });
+
+}

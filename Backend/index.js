@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import dbconnection from "./src/db/dbconnection.js";
 import auth from "./src/routes/Auth.js"
 import dashboard from "./src/routes/DashBoard.js"
+import folder from "./src/routes/Folder.js"
 import cors from "cors";
 
 
@@ -30,6 +31,9 @@ app.use('/api/v1/auth',auth)
 
 //dashboard
 app.use('/api/v1/dashboard',dashboard)
+
+//folders
+app.use('/api/v1/folder',folder)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
