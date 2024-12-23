@@ -28,6 +28,10 @@ export const createfolder = async (req, res) => {
   const folder = new Folder({ name, dashboardId }); // Ensure dashboardId is passed correctly
   await folder.save();
 
+
+  userDashboard.folders.push(folder._id);
+  await userDashboard.save();
+
   res.status(201).json({ message: "Folder created successfully.", folder });
 };
 
