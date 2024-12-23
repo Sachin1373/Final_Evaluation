@@ -19,7 +19,7 @@ const FormSchema = new mongoose.Schema(
     dashboardId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Dashboard", // Reference to the Dashboard schema
-      required: true, // Every form must belong to a dashboard
+      default : null, 
     },
   },
   { timestamps: true }

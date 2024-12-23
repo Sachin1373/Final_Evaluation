@@ -1,6 +1,6 @@
-import dashboard from "../models/DashBoardSchema.model";
-import Folder from "../models/FolderSchema.model";
-import Form from "../models/TypeBotSchema.modal";
+import dashboard from "../models/DashBoardSchema.model.js";
+import Folder from "../models/FolderSchema.model.js";
+import Form from "../models/TypeBotSchema.modal.js";
 
 
  export const createtypebot = async(req,res) =>{
@@ -55,4 +55,46 @@ import Form from "../models/TypeBotSchema.modal";
 
     res.status(201).json({ message: "TypeBot created successfully.", typeBot: newTypeBot });
   
+}
+
+export const getTypeBot = async(req,res) =>{
+    const { userId } = req;
+    const { folderId } = req.query;
+
+    if (!userId) {
+        return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
+    }
+    
+    let forms;
+
+    if (folderId) {
+      // Fetch forms by folderId
+      forms = await Form.find({ folderId });
+    } else {
+        const userDashboard = await dashboard.findOne({ owner: userId });
+
+        if (!userDashboard) {
+            return res.status(404).json({ message: "Dashboard not found for the user." });
+        }
+
+      forms = await Form.find({
+        dashboardId: userDashboard._id, // Assuming dashboardId corresponds to userId
+        folderId: null, // Only standalone forms
+      });
+    }
+
+    if (!forms || forms.length === 0) {
+        return res.status(404).json({ message: 'No forms found' });
+      }
+  
+      return res.status(200).json(forms);
+
+}
+
+export const deleteTypeBot = async(req,res) =>{
+    const { typeBotId } = req.query;
+
+    await Form.findByIdAndDelete(typeBotId)
+
+    return res.status(200).json({message : 'TypeBot Deleted'})
 }
