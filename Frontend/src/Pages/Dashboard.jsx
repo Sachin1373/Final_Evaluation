@@ -1,6 +1,7 @@
 import React, { useState,useEffect,useRef,useContext } from 'react';
 import { useTheme } from '../Contexts/ThemeContext'; 
 import CreateFolder from '../Modals/CreateFolder';
+import CreateTypeBot from '../Modals/CreateTypeBot';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -19,13 +20,15 @@ function Dashboard() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [foldermodal, setfoldermodal] = useState(false);
   const [deletefoldermodal, setdeletefoldermodal] = useState(false);
+  const [createtypebotmodal,setcreatetypebotmodal] = useState(false);
   const [folders, setFolders] = useState([]); 
   const [selectedFolderId, setSelectedFolderId] = useState(null);
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
   
-
+  console.log(selectedFolderId);
+  
   const previousUsername = useRef(null);
 
 
@@ -47,6 +50,17 @@ function Dashboard() {
     setdeletefoldermodal(false); // Close the modal
   };
 
+  const opentypeBotmodal = () =>{
+    setcreatetypebotmodal(true);
+  }
+
+  const closetypeBotmodal = () =>{
+    setcreatetypebotmodal(false);
+  }
+
+  const handleFolderClick = (folderId) => {
+    setSelectedFolderId(folderId); // Set the clicked folder as active
+  };
 
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
@@ -176,7 +190,9 @@ function Dashboard() {
           <div className={styles.folders_list}>
             {folders.length > 0 ? (
               folders.map((folder) => (
-                <div key={folder._id} className={`${styles.folder_item} ${isDarkMode ? styles.dark : styles.light}`}>
+                <div key={folder._id} className={`${styles.folder_item} ${
+                  selectedFolderId === folder._id ? styles.active_folder : ""
+                } ${isDarkMode ? styles.dark : styles.light}`} onClick={() => handleFolderClick(folder._id)}>
                    
                       <p>{folder.name} </p>
                       <RiDeleteBin6Line className={styles.delete_icon}  onClick={() => handleDeleteFolderClick(folder._id)} />
@@ -192,16 +208,11 @@ function Dashboard() {
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} handleDeleteFolder={handleDeleteFolder} folderId={selectedFolderId} />}
-
-
+      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal}/>}
 
       <div className={styles.forms_wrapper}>
         <div className={styles.Create_TypeBot}>
-          <CreateFormbtn />
-          <CreateFormbtn />
-          <CreateFormbtn />
-          <CreateFormbtn />
-          
+          <CreateFormbtn onClick={opentypeBotmodal} />
         </div>
       </div>
       

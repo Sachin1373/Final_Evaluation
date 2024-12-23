@@ -332,6 +332,9 @@
     flex-wrap: wrap;
     gap: 20px;
     margin-top: 20px;
-    border: 2px solid white;
   }
   
+  .active_folder{
+    background-color: white;
+    color: black;
+  }
