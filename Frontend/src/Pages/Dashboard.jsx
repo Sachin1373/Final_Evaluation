@@ -2,6 +2,7 @@ import React, { useState,useEffect,useRef,useContext } from 'react';
 import { useTheme } from '../Contexts/ThemeContext'; 
 import CreateFolder from '../Modals/CreateFolder';
 import CreateTypeBot from '../Modals/CreateTypeBot';
+import DeleteTypeBot from '../Modals/DeleteTypeBot';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -21,45 +22,34 @@ function Dashboard() {
   const [foldermodal, setfoldermodal] = useState(false);
   const [deletefoldermodal, setdeletefoldermodal] = useState(false);
   const [createtypebotmodal,setcreatetypebotmodal] = useState(false);
+  const [deletetypebotmodal,setdeletetypebotmodal] = useState(false)
   const [folders, setFolders] = useState([]); 
+  const [forms, setforms] = useState();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
+  const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
+
+  const openfoldermodal = () => setfoldermodal(true); 
+  const closefoldermodal = () => setfoldermodal(false); 
   
-  console.log(selectedFolderId);
+
+  const opendeletefoldermodal = () => setdeletefoldermodal(true); 
+  const closedeletefoldermodal = () => setdeletefoldermodal(false); 
   
-  const previousUsername = useRef(null);
 
+  const opentypeBotmodal = () => setcreatetypebotmodal(true);
+  const closetypeBotmodal = () =>setcreatetypebotmodal(false);
 
-   
-
-  const openfoldermodal = () => {
-    setfoldermodal(true); // Open the modal
-  };
-
-  const closefoldermodal = () => {
-    setfoldermodal(false); // Close the modal
-  };
-
-  const opendeletefoldermodal = () => {
-    setdeletefoldermodal(true); // Open the modal
-  };
-
-  const closedeletefoldermodal = () => {
-    setdeletefoldermodal(false); // Close the modal
-  };
-
-  const opentypeBotmodal = () =>{
-    setcreatetypebotmodal(true);
-  }
-
-  const closetypeBotmodal = () =>{
-    setcreatetypebotmodal(false);
-  }
+  const opendeletetypebotmodal = () => setdeletetypebotmodal(true);
+  const closedeletetypebotmodal = () =>setdeletetypebotmodal(false)
+  
 
   const handleFolderClick = (folderId) => {
-    setSelectedFolderId(folderId); // Set the clicked folder as active
+    
+      setSelectedFolderId(folderId);
+    
   };
 
   const toggleDropdown = () => {
@@ -129,19 +119,83 @@ function Dashboard() {
       toast.error(error.response?.data?.message || "Failed to delete folder.");
     }
   };
+  
+  const createTypeBot = async (name) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/typebot/createtypebot",
+        { name, folderId: selectedFolderId },
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails.token}`,
+          },
+        }
+      );
+      toast.success(response.data.message);
+      closetypeBotmodal();
+      fetchTypeBot(selectedFolderId)
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to create TypeBot.");
+    }
+  };
 
+  const fetchTypeBot = async(folderId) =>{
+      try {
+        
+        const params = folderId ? { folderId } : {};
+
+        const response = await axios.get('http://localhost:8000/api/v1/typebot/getTypeBot',
+          {
+            headers: {
+              Authorization: `Bearer ${userDetails.token}`,
+            },
+            params,
+          }
+        )
+      
+        setforms(response.data || []);
+
+      } catch (error) {
+        setforms([]);
+        toast.error(error.response?.data?.message || 'Failed to load forms');
+      }
+  }
+
+  const handledeletetypebotclick = (typebotId) =>{
+    setSelectedTypeBotId(typebotId)
+    opendeletetypebotmodal()
+  }
+
+  const deleteform = async(TypeBotId) =>{
+    try {
+      const response = axios.delete(`http://localhost:8000/api/v1/typebot/deleteTypeBot?typeBotId=${TypeBotId}`,{
+        headers: {
+          Authorization: `Bearer ${userDetails.token}`,
+        },
+      })
+      toast.success(response?.data?.message)
+      fetchTypeBot(selectedFolderId);
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete form.')
+    }
+  }
 
   useEffect(() => {
-    if (userDetails?.Username && userDetails.Username !== previousUsername.current) {
-      createdashboard();
-      previousUsername.current = userDetails.Username; 
-    }
-
+    // Fetch folders after user details are loaded
     if (userDetails) {
-      getFolders();
+      getFolders();  
+      fetchTypeBot(selectedFolderId)
     }
+    if(selectedFolderId){
+      fetchTypeBot(selectedFolderId);
+    }
+  
+  }, [userDetails, selectedFolderId]);  
 
-  }, [userDetails])
+ 
+  
+  
   
 
   return (
@@ -208,15 +262,31 @@ function Dashboard() {
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} handleDeleteFolder={handleDeleteFolder} folderId={selectedFolderId} />}
-      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal}/>}
+      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} createTypeBot={createTypeBot}/>}
+      {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal} deleteform={deleteform} typebot={selectedTypeBotId}/>}
 
-      <div className={styles.forms_wrapper}>
-        <div className={styles.Create_TypeBot}>
-          <CreateFormbtn onClick={opentypeBotmodal} />
+        <div className={styles.forms_wrapper}>
+            <div className={styles.Create_TypeBot}>
+              <CreateFormbtn onClick={opentypeBotmodal} />
+            </div>
+          
+            <div className={styles.form_wrapper}>
+                {forms?.length > 0 ? (
+                  forms?.map((item) => (
+                       <div key={item._id} className={`${styles.form} ${isDarkMode ? styles.dark : styles.light}`}>
+                         <p>{item.name}</p> 
+                         <RiDeleteBin6Line className={styles.form_delete_icon} onClick={()=>handledeletetypebotclick(item._id)}/>
+                      </div>
+                  ))
+                ) : (
+                  <p>No forms available.</p> // Optional message if no forms
+                )}
+                
+            </div>
+
+
         </div>
-      </div>
       
-     
 
     </div>
       </>

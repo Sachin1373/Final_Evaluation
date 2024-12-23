@@ -1,19 +1,21 @@
 import React,{useState} from 'react'
 import { useTheme } from '../Contexts/ThemeContext';
 import styles from "../Styles/CreateFolder.module.css"
-function CreateTypeBot({closemodal}) {
+function CreateTypeBot({closemodal,createTypeBot}) {
 
-       const [typeBotName, settypeBotName] = useState("");
-       const { isDarkMode, toggleTheme } = useTheme(); 
-       const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
-        
-    const handleDone = () =>{
-        console.log("Done logic");
-        
+  const [typeBotName, setTypeBotName] = useState("");
+
+  const handleDone = () => {
+    if (typeBotName.trim()) {
+      createTypeBot(typeBotName);
+    } else {
+      alert("TypeBot name cannot be empty.");
     }
+  };
+      
 
     const handleFolderNameChange = (e) => {
-        settypeBotName(e.target.value);
+        setTypeBotName(e.target.value);
     };
 
     const handleCancel = () => {

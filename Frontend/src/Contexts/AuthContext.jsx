@@ -5,7 +5,7 @@ export const AuthProvider = ({children}) =>{
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     useEffect(() => {
-        const userDetails = JSON.parse(localStorage.getItem('userdetails'));
+        const userDetails = JSON.parse(localStorage.getItem('UserDetails'));
         const tokenExpiry = userDetails?.expiry;
     
         if (tokenExpiry && tokenExpiry > new Date().getTime()) {

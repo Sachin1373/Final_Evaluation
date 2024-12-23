@@ -8,7 +8,7 @@ function Landingpage() {
 
   // Check if the user is logged in
   const checkLoginStatus = () => {
-    const storedUser = localStorage.getItem("userdetails");
+    const storedUser = localStorage.getItem("UserDetails");
     return storedUser ? JSON.parse(storedUser) : null;
   }
 
