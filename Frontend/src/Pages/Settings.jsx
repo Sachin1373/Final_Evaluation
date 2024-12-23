@@ -4,18 +4,50 @@ import { CiLock } from "react-icons/ci";
 import { AuthContext } from '../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { IoLogOutOutline } from "react-icons/io5";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import styles from "../Styles/Settings.module.css";
+import axios from 'axios';
 
 function Settings() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
   const navigate = useNavigate()
   const {logout} = useContext(AuthContext)
-  const handleUpdate = () => {
-    // Handle the update logic (e.g., API call, validation, etc.)
-    console.log("Update button clicked");
+
+ 
+  const handleUpdate = async () => {
+    
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/update/updateuserdetails",
+        { name, email, oldPassword, newPassword },
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails?.token}`, // Include the token in the headers
+          },
+        }
+      );
+       
+      if (response.status === 200) {
+        toast.success("User details updated successfully!");
+
+        const updatedUserDetails = {
+            ...userDetails,
+            Username: response.data.username, 
+          };
+          localStorage.setItem("UserDetails", JSON.stringify(updatedUserDetails));
+          setUserDetails(updatedUserDetails); 
+        
+      } else {
+        toast.error("Failed to update user details.");
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "An error occurred while updating.");
+    }
   };
 
 
@@ -26,6 +58,7 @@ function Settings() {
 
   return (
       <>
+         <ToastContainer />
         <div className={styles.settingsContainer}>
             <h2 className={styles.settingsHeading}>Settings</h2>
             <div className={styles.settingsBox}>

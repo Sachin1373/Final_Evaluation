@@ -7,6 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import CreateFormbtn from '../Components/CreateFormbtn';
 import { AuthContext } from '../Contexts/AuthContext';
+import DeleteFolder from '../Modals/DeleteFolder';
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { useNavigate } from 'react-router-dom';
 import { FaFolderPlus } from "react-icons/fa";
@@ -17,7 +18,9 @@ function Dashboard() {
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [foldermodal, setfoldermodal] = useState(false);
+  const [deletefoldermodal, setdeletefoldermodal] = useState(false);
   const [folders, setFolders] = useState([]); 
+  const [selectedFolderId, setSelectedFolderId] = useState(null);
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
@@ -34,6 +37,14 @@ function Dashboard() {
 
   const closefoldermodal = () => {
     setfoldermodal(false); // Close the modal
+  };
+
+  const opendeletefoldermodal = () => {
+    setdeletefoldermodal(true); // Open the modal
+  };
+
+  const closedeletefoldermodal = () => {
+    setdeletefoldermodal(false); // Close the modal
   };
 
 
@@ -85,6 +96,11 @@ function Dashboard() {
   };
   
 
+  const handleDeleteFolderClick = (folderId) => {
+    setSelectedFolderId(folderId); // Set the folder ID when delete is clicked
+    opendeletefoldermodal(); // Open the modal
+  };
+
   const handleDeleteFolder = async (folderId) => {
     try {
       const response = await axios.delete(`http://localhost:8000/api/v1/folder/deletefolder/${folderId}`, {
@@ -129,7 +145,7 @@ function Dashboard() {
           {isDropdownOpen && (
             <div className={styles.dropdown_menu}>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`}>Shared Dashboard 1</div>
-              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`}>Settings</div>
+              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={()=> navigate('/settings')}>Settings</div>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }} onClick={handlelogout}>Logout</div>
             </div>
           )}
@@ -163,7 +179,7 @@ function Dashboard() {
                 <div key={folder._id} className={`${styles.folder_item} ${isDarkMode ? styles.dark : styles.light}`}>
                    
                       <p>{folder.name} </p>
-                      <RiDeleteBin6Line className={styles.delete_icon} onClick={()=>handleDeleteFolder(folder._id)}/>
+                      <RiDeleteBin6Line className={styles.delete_icon}  onClick={() => handleDeleteFolderClick(folder._id)} />
                    
                 </div>
               ))
@@ -175,10 +191,17 @@ function Dashboard() {
       </div>
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
+      {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} handleDeleteFolder={handleDeleteFolder} folderId={selectedFolderId} />}
+
+
 
       <div className={styles.forms_wrapper}>
         <div className={styles.Create_TypeBot}>
           <CreateFormbtn />
+          <CreateFormbtn />
+          <CreateFormbtn />
+          <CreateFormbtn />
+          
         </div>
       </div>
       

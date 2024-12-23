@@ -4,6 +4,7 @@ import dbconnection from "./src/db/dbconnection.js";
 import auth from "./src/routes/Auth.js"
 import dashboard from "./src/routes/DashBoard.js"
 import folder from "./src/routes/Folder.js"
+import update from './src/routes/Update.js'
 import cors from "cors";
 
 
@@ -34,6 +35,9 @@ app.use('/api/v1/dashboard',dashboard)
 
 //folders
 app.use('/api/v1/folder',folder)
+
+//update userdetails
+app.use('/api/v1/update',update)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {

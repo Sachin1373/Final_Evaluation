@@ -64,7 +64,7 @@ function Sign_in() {
       });
 
       if (response.data) {
-        toast.success("Registration successful! Redirecting to login...");
+        toast.success("Registration successful!.");
         setFormData({
           username: "",
           email: "",

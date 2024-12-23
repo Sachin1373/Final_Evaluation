@@ -20,7 +20,7 @@ function DeleteFolder({closeModal, handleDeleteFolder, folderId}) {
      delete this folder ?</h2>
     
      <div className={styles.buttons}>
-       <button className={styles.doneButton} onClick={handledone} >Done</button>
+       <button className={styles.doneButton} onClick={handledone} >Confirm</button>
        <div className={styles.divider}></div>
        <button className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
      </div>
