@@ -57,7 +57,7 @@ function Sign_in() {
 
     try {
       // API call
-      const response = await axios.post("http://localhost:8000/api/v1/auth/signup", {
+      const response = await axios.post("https://final-evaluation-qbj9.onrender.com/api/v1/auth/signup", {
         username,
         email,
         password,

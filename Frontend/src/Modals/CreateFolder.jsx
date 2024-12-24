@@ -18,7 +18,7 @@ function CreateFolder({ closeModal, refreshFolders }) {
     try {
       // Send folder creation request to backend API
       const response = await axios.post(
-        "http://localhost:8000/api/v1/folder/createfolder",
+        "https://final-evaluation-qbj9.onrender.com/api/v1/folder/createfolder",
         { name: folderName }, // Sending folder name in the request body
         {
           headers: {

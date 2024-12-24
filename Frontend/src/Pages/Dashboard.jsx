@@ -68,7 +68,7 @@ function Dashboard() {
   
       // Make API request
       const response = await axios.post(
-        "http://localhost:8000/api/v1/dashboard/createdashboard",
+        "https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/createdashboard",
         { username: userDetails.username }, // Send username in the body
         {
           headers: {
@@ -87,7 +87,7 @@ function Dashboard() {
 
   const getFolders = async () => {
     try {
-      const response = await axios.get("http://localhost:8000/api/v1/folder/getfolders", {
+      const response = await axios.get("https://final-evaluation-qbj9.onrender.com/api/v1/folder/getfolders", {
         headers: {
           Authorization: `Bearer ${userDetails.token}`, // Include token in headers
         },
@@ -109,7 +109,7 @@ function Dashboard() {
 
   const handleDeleteFolder = async (folderId) => {
     try {
-      const response = await axios.delete(`http://localhost:8000/api/v1/folder/deletefolder/${folderId}`, {
+      const response = await axios.delete(`https://final-evaluation-qbj9.onrender.com/api/v1/folder/deletefolder/${folderId}`, {
         headers: {
           Authorization: `Bearer ${userDetails.token}`,
         },
@@ -125,7 +125,7 @@ function Dashboard() {
   const createTypeBot = async (name) => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/typebot/createtypebot",
+        "https://final-evaluation-qbj9.onrender.com/api/v1/typebot/createtypebot",
         { name, folderId: selectedFolderId },
         {
           headers: {
@@ -147,7 +147,7 @@ function Dashboard() {
         
         const params = folderId ? { folderId } : {};
 
-        const response = await axios.get('http://localhost:8000/api/v1/typebot/getTypeBot',
+        const response = await axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/typebot/getTypeBot',
           {
             headers: {
               Authorization: `Bearer ${userDetails.token}`,
@@ -171,7 +171,7 @@ function Dashboard() {
 
   const deleteform = async(TypeBotId) =>{
     try {
-      const response = axios.delete(`http://localhost:8000/api/v1/typebot/deleteTypeBot?typeBotId=${TypeBotId}`,{
+      const response = axios.delete(`https://final-evaluation-qbj9.onrender.com/api/v1/typebot/deleteTypeBot?typeBotId=${TypeBotId}`,{
         headers: {
           Authorization: `Bearer ${userDetails.token}`,
         },

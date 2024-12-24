@@ -25,7 +25,7 @@ function Settings() {
   const handleUpdate = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/update/updateuserdetails",
+        "https://final-evaluation-qbj9.onrender.com/api/v1/update/updateuserdetails",
         { name, email, oldPassword, newPassword },
         {
           headers: {
