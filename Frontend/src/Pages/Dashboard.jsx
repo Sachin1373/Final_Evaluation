@@ -211,7 +211,7 @@ function Dashboard() {
         <div className={`${styles.workspace_dropdown} ${isDarkMode ? styles.dark : styles.light}`}>
           <div className={`${styles.workspace_name} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={toggleDropdown}>
             <span className={`${styles.workspace_text} ${isDarkMode ? styles.textDark : styles.textLight}`}>
-              {userDetails?.username} Workspace
+              {userDetails?.username}'s Workspace
             </span>
             {isDropdownOpen ? <IoIosArrowUp className={styles.arrow_icon} /> : <IoIosArrowDown className={styles.arrow_icon} />}
           </div>

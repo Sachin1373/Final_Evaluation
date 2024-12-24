@@ -1,7 +1,7 @@
 .modal {
     position: fixed;
-    top: 0;
-    left: 0;
+    top:-170px;
+    left: -210px;
     right: 0;
     bottom: 0;
     display: flex;
@@ -13,8 +13,8 @@
   }
   
   .modalContent {
-    width: 540px;
-    height: 261px;
+    width: 443px;
+    height: 211px;
     background-color: black;
     border-radius: 24px;
     padding: 20px;

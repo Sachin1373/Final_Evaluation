@@ -70,6 +70,14 @@
     color: #aaa;
   }
   
+  .eyeIcon{
+    position: absolute;
+    height: 25px;
+    width: 25px;
+    right:10px;
+    top: 13px;
+  }
+
   .updateButton {
     padding: 10px;
     margin-top: 30px;

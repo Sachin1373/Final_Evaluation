@@ -229,6 +229,11 @@
     gap: 30px;
   }
 
+
+  .active_folder.light{
+    background-color: black;
+  }
+
   .create_folder{
     width:200px;
     display: flex;
@@ -304,6 +309,7 @@
  
 }
 
+
 .folder_item p{
   cursor: pointer;
 }
@@ -311,6 +317,11 @@
 
 .folder_item.light{
   background-color: rgb(167, 163, 163)
+}
+
+.folder_item.active_folder.light{
+  background-color: black;
+  color: white;
 }
 
 .delete_icon{
