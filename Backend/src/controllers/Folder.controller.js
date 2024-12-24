@@ -1,5 +1,6 @@
 import dashboard from "../models/DashBoardSchema.model.js";
 import Folder from "../models/FolderSchema.model.js";
+import Form from "../models/TypeBotSchema.modal.js";
 
 export const createfolder = async (req, res) => {
   const { name } = req.body;
@@ -53,6 +54,10 @@ export const getfolders = async (req, res) => {
   
     // Find folders associated with the user's dashboard
     const folders = await Folder.find({ dashboardId });
+
+    if(!folders || folders.length==0){
+      return res.status(404).json({ message : "No Folders Found!."})
+    }
     res.status(200).json({ message: "Folders fetched successfully.", folders });
   };
 
@@ -64,6 +69,8 @@ export const deletefolder = async(req,res)=>{
   if (!folder) {
     return res.status(404).json({ message: 'Folder not found.' });
   }
+  
+  await Form.deleteMany({ folderId });
 
   await Folder.findByIdAndDelete(folderId);
 

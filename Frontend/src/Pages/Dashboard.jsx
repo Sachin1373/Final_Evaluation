@@ -18,6 +18,7 @@ import styles from "../Styles/Dashboard.module.css";
 function Dashboard() {
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
+  const [dashboardInitialized, setDashboardInitialized] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [foldermodal, setfoldermodal] = useState(false);
   const [deletefoldermodal, setdeletefoldermodal] = useState(false);
@@ -114,7 +115,7 @@ function Dashboard() {
         },
       });
       toast.success(response.data.message);
-      getFolders(); 
+      await getFolders(); 
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Failed to delete folder.");
@@ -184,24 +185,20 @@ function Dashboard() {
 
   useEffect(() => {
     const initializeDashboard = async () => {
-      if (userDetails) {
-        // Call createDashboard first
+      if (userDetails && !dashboardInitialized) {
+        // Call createDashboard only once
         await createdashboard();
-        
-        // After createDashboard finishes, proceed with the other API calls
-        await getFolders();
-        await fetchTypeBot(selectedFolderId)
+        setDashboardInitialized(true); // Mark as initialized
       }
+      
+      // Proceed with the other API calls, regardless of createDashboard
+      await getFolders();
+      await fetchTypeBot(selectedFolderId);
     };
-  
+
     initializeDashboard();
   }, [userDetails]);
    
-
- 
-  
-  
-  
 
   return (
       <>

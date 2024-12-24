@@ -84,7 +84,7 @@ export const getTypeBot = async(req,res) =>{
     }
 
     if (!forms || forms.length === 0) {
-        return res.status(404).json({ message: 'No forms found' });
+        return res.status(404).json({ message: 'No forms found!.' });
       }
   
       return res.status(200).json(forms);
@@ -93,6 +93,11 @@ export const getTypeBot = async(req,res) =>{
 
 export const deleteTypeBot = async(req,res) =>{
     const { typeBotId } = req.query;
+
+    await Folder.updateMany(
+      { forms: typeBotId },  // Assuming `forms` is an array of form IDs in the folder
+      { $pull: { forms: typeBotId } }  // Remove the formId from the `forms` array in the folder
+    );
 
     await Form.findByIdAndDelete(typeBotId)
 
