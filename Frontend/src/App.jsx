@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ThemeProvider } from './Contexts/ThemeContext';
+import { AuthProvider } from './Contexts/AuthContext';
 import Landingpage from './Pages/Landingpage';
 import Settings from './Pages/Settings';
 import Dashboard from './Pages/Dashboard';
@@ -11,6 +12,7 @@ export default function App() {
   return (
     <ThemeProvider>
       <Router>
+      <AuthProvider>
       <div>
         <Routes>
           <Route path="/" element={<Landingpage />} />
@@ -20,6 +22,7 @@ export default function App() {
           <Route path="/settings" element={<Settings />} />
         </Routes>
       </div>
+      </AuthProvider>
     </Router>
     </ThemeProvider>
   );

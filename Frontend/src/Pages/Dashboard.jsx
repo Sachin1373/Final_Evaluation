@@ -46,9 +46,9 @@ function Dashboard() {
   const closedeletetypebotmodal = () =>setdeletetypebotmodal(false)
   
 
-  const handleFolderClick = (folderId) => {
-    
+  const handleFolderClick = async(folderId) => { 
       setSelectedFolderId(folderId);
+      await  fetchTypeBot(folderId)
     
   };
 
@@ -62,12 +62,13 @@ function Dashboard() {
   }
 
   const createdashboard = async () => {
+  
     try {
   
       // Make API request
       const response = await axios.post(
         "http://localhost:8000/api/v1/dashboard/createdashboard",
-        { username: userDetails.Username }, // Send username in the body
+        { username: userDetails.username }, // Send username in the body
         {
           headers: {
             Authorization: `Bearer ${userDetails.token}`, // Include token in headers
@@ -182,16 +183,20 @@ function Dashboard() {
   }
 
   useEffect(() => {
-    // Fetch folders after user details are loaded
-    if (userDetails) {
-      getFolders();  
-      fetchTypeBot(selectedFolderId)
-    }
-    if(selectedFolderId){
-      fetchTypeBot(selectedFolderId);
-    }
+    const initializeDashboard = async () => {
+      if (userDetails) {
+        // Call createDashboard first
+        await createdashboard();
+        
+        // After createDashboard finishes, proceed with the other API calls
+        await getFolders();
+        await fetchTypeBot(selectedFolderId)
+      }
+    };
   
-  }, [userDetails, selectedFolderId]);  
+    initializeDashboard();
+  }, [userDetails]);
+   
 
  
   
@@ -206,7 +211,7 @@ function Dashboard() {
         <div className={`${styles.workspace_dropdown} ${isDarkMode ? styles.dark : styles.light}`}>
           <div className={`${styles.workspace_name} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={toggleDropdown}>
             <span className={`${styles.workspace_text} ${isDarkMode ? styles.textDark : styles.textLight}`}>
-              {userDetails?.Username} Workspace
+              {userDetails?.username} Workspace
             </span>
             {isDropdownOpen ? <IoIosArrowUp className={styles.arrow_icon} /> : <IoIosArrowDown className={styles.arrow_icon} />}
           </div>

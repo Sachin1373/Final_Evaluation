@@ -6,10 +6,12 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { AuthContext } from '../Contexts/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
+import {createDashboard} from '../Api/dashboard'
 import styles from "../Styles/Sign_in.module.css"
 function Login() {
 
   const {isLoggedIn,login,logout} = useContext(AuthContext)
+ 
 
     const [logindata,setlogindata] = useState({
       email : "",
@@ -44,12 +46,13 @@ function Login() {
             });
       
             if (response.data) {
-              const data = response.data
-              console.log(data)
+              const data = response.data;
+              const expiryTime = new Date().getTime() + 12 * 60 * 60 * 1000; // 12 hours
               const userdata = {
-                token : data.token,
-                Username: data.username,
-              }
+                  token: data.token,
+                  username: data.username,
+                  expiry: expiryTime,
+              };
               login(userdata)
               toast.success("Loggedin successful");
               setlogindata({
@@ -68,6 +71,9 @@ function Login() {
           }
 
     }
+
+
+    
 
   return (
     <>    

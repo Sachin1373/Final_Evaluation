@@ -1,25 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState,useContext } from 'react'
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../Contexts/AuthContext';
 import styles from "../Styles/Landing.module.css";
 
 function Landingpage() {
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+ const {isLoggedIn,login,logout} = useContext(AuthContext)
 
-  // Check if the user is logged in
-  const checkLoginStatus = () => {
-    const storedUser = localStorage.getItem("UserDetails");
-    return storedUser ? JSON.parse(storedUser) : null;
-  }
-
-  // Handle the Create FormBot button click
-  const handleClick = () => {
-    const user = checkLoginStatus();
-
-    if (user) {
-      navigate('/dashboard'); // Navigate to dashboard if user is logged in
-    } else {
-      navigate('/sign-in'); // Navigate to sign-in if the user is not logged in
+  const handleClick = ()=>{
+    if(isLoggedIn){
+      console.log(isLoggedIn)
+      navigate('/dashboard')
+    }else{
+      navigate('/login')
     }
   }
 
