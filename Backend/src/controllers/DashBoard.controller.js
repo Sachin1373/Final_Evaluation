@@ -51,14 +51,15 @@ export const dashboard = async (req, res) => {
 
 export const sharedashboard = async(req,res) =>{
   const { email, permission } = req.body;
-  const {userAId} = req.userId;
+  const { userId } = req;
+  
 
   if (!email || !permission) {
     return res.status(400).json({ message: "Email and permission are required" });
   }
   
   // find User A's dashboard
-  const dashboardA = await Dashboard.findOne({ owner: userAId });
+  const dashboardA = await Dashboard.findOne({ owner: userId });
     if (!dashboardA) {
       return res.status(404).json({ message: "User A's dashboard not found" });
     }
