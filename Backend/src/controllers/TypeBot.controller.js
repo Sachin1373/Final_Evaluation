@@ -4,18 +4,26 @@ import Form from "../models/TypeBotSchema.modal.js";
 
 
  export const createtypebot = async(req,res) =>{
-    const { name, folderId } = req.body;
+    const { name, folderId, dashboardID } = req.body;
     const { userId } = req;
 
     if (!userId) {
         return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
-    }
+    } 
 
-    const userDashboard = await dashboard.findOne({ owner: userId });
+    let dashboardId
+    let userDashboard
+    if(dashboardID){
+        dashboardId = dashboardID   
+    }else{
+            userDashboard = await dashboard.findOne({ owner: userId });
 
-    if (!userDashboard) {
-        return res.status(404).json({ message: "Dashboard not found for the user." });
-    }
+        if (!userDashboard) {
+            return res.status(404).json({ message: "Dashboard not found for the user." });
+        }
+
+        dashboardId = userDashboard._id;
+    }  
 
     let newTypeBot;
     
@@ -43,7 +51,7 @@ import Form from "../models/TypeBotSchema.modal.js";
         newTypeBot = new Form({
           name,
           folderId: null,
-          dashboardId: userDashboard._id,
+          dashboardId,
         });
   
         await newTypeBot.save();
@@ -59,26 +67,37 @@ import Form from "../models/TypeBotSchema.modal.js";
 
 export const getTypeBot = async(req,res) =>{
     const { userId } = req;
-    const { folderId } = req.query;
+    const { folderId,dashboardID } = req.query;
 
     if (!userId) {
         return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
     }
     
+
+    let dashboardId 
+    let userDashboard
+
+    if(dashboardID){
+        dashboardId = dashboardID 
+    }else{  
+        userDashboard = await dashboard.findOne({ owner: userId });
+
+        if (!userDashboard) {
+            return res.status(404).json({ message: "Dashboard not found for the user." });
+        }
+
+        dashboardId = userDashboard._id;
+    }
+
     let forms;
 
     if (folderId) {
       // Fetch forms by folderId
       forms = await Form.find({ folderId });
     } else {
-        const userDashboard = await dashboard.findOne({ owner: userId });
-
-        if (!userDashboard) {
-            return res.status(404).json({ message: "Dashboard not found for the user." });
-        }
 
       forms = await Form.find({
-        dashboardId: userDashboard._id, // Assuming dashboardId corresponds to userId
+        dashboardId, // Assuming dashboardId corresponds to userId
         folderId: null, // Only standalone forms
       });
     }

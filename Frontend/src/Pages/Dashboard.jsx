@@ -154,7 +154,11 @@ function Dashboard() {
   const fetchTypeBot = async(folderId) =>{
       try {
         
-        const params = folderId ? { folderId } : {};
+       
+        const params = {
+          dashboardID: sharedDashboardID, 
+          folderId: folderId || undefined, 
+        };
 
         const response = await axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/typebot/getTypeBot',
           {
@@ -266,7 +270,7 @@ function Dashboard() {
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders} shareddashid={sharedDashboardID}/>}
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
-      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId}/>}
+      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId} shareddashid={sharedDashboardID}/>}
       {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
       {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setSharedDashboards}/>}  
 

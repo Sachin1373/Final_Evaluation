@@ -5,7 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from 'axios';
 import styles from "../Styles/CreateFolder.module.css"
 
-function CreateTypeBot({closemodal,refreshtypebot,folderId}) {
+function CreateTypeBot({closemodal,refreshtypebot,folderId,shareddashid}) {
 
   const [typeBotName, setTypeBotName] = useState("");
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
@@ -14,7 +14,9 @@ function CreateTypeBot({closemodal,refreshtypebot,folderId}) {
     try {
       const response = await axios.post(
         "https://final-evaluation-qbj9.onrender.com/api/v1/typebot/createtypebot",
-        { name : typeBotName, folderId },
+        { name : typeBotName, 
+          folderId,
+          dashboardID : shareddashid,},
         {
           headers: {
             Authorization: `Bearer ${userDetails.token}`,
