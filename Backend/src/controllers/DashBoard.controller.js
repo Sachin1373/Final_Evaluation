@@ -72,6 +72,23 @@ export const sharedashboard = async(req,res) =>{
 
     // Find  User B's dashboard
     let dashboardB = await Dashboard.findOne({ owner: userB._id });
+
+     // Check if the dashboard is already shared
+     const sharedIndex = dashboardB.sharedWith.findIndex(
+      (shared) => shared.dashboard.toString() === dashboardA._id.toString()
+    );
+
+    if (sharedIndex !== -1) {
+      // If already shared, check the permission
+      if (dashboardB.sharedWith[sharedIndex].permission === permission) {
+        return res.status(400).json({ message: "Dashboard already shared with the same permission." });
+      } else {
+        // Update the permission if it's different
+        dashboardB.sharedWith[sharedIndex].permission = permission;
+        await dashboardB.save();
+        return res.status(200).json({ message: "Permission updated successfully." });
+      }
+    }
     
     // Add User A's dashboard to User B's shared list with permission
     dashboardB.sharedWith.push({
