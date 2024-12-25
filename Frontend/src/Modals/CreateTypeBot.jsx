@@ -23,7 +23,7 @@ function CreateTypeBot({closemodal,refreshtypebot,folderId}) {
       );
       toast.success(response.data.message);
       closemodal();
-      await refreshtypebot(folderId)
+      await refreshtypebot()
     } catch (error) {
       console.error(error);
       toast.error(error.response?.data?.message || "Failed to create TypeBot.");

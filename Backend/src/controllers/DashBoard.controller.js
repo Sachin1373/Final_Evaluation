@@ -47,3 +47,39 @@ export const dashboard = async (req, res) => {
   // If the dashboard already exists, return it
   res.status(200).json({ message: "Dashboard fetched successfully.", dashboard: userDashboard });
 };
+
+
+export const sharedashboard = async(req,res) =>{
+  const { email, permission } = req.body;
+  const {userAId} = req.userId;
+
+  if (!email || !permission) {
+    return res.status(400).json({ message: "Email and permission are required" });
+  }
+  
+  // find User A's dashboard
+  const dashboardA = await Dashboard.findOne({ owner: userAId });
+    if (!dashboardA) {
+      return res.status(404).json({ message: "User A's dashboard not found" });
+    }
+
+    // Find User B by email
+    const userB = await User.findOne({ email });
+    if (!userB) {
+      return res.status(404).json({ message: "User B not found" });
+    }
+
+    // Find  User B's dashboard
+    let dashboardB = await Dashboard.findOne({ owner: userB._id });
+    
+    // Add User A's dashboard to User B's shared list with permission
+    dashboardB.sharedWith.push({
+      dashboard: dashboardA._id,
+      permission,
+    });
+    
+    await dashboardB.save();
+
+    res.status(200).json({ message: "Dashboard shared successfully" });
+
+}

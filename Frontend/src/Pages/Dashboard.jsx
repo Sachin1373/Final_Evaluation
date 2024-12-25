@@ -2,6 +2,7 @@ import React, { useState,useEffect,useRef,useContext } from 'react';
 import { useTheme } from '../Contexts/ThemeContext'; 
 import CreateFolder from '../Modals/CreateFolder';
 import CreateTypeBot from '../Modals/CreateTypeBot';
+import InviteModal from '../Modals/ShareDashboard';
 import DeleteTypeBot from '../Modals/DeleteTypeBot';
 import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
@@ -24,6 +25,7 @@ function Dashboard() {
   const [deletefoldermodal, setdeletefoldermodal] = useState(false);
   const [createtypebotmodal,setcreatetypebotmodal] = useState(false);
   const [deletetypebotmodal,setdeletetypebotmodal] = useState(false)
+  const [invitemodal,setinvitemodal] = useState(false)
   const [folders, setFolders] = useState([]); 
   const [forms, setforms] = useState();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
@@ -44,7 +46,10 @@ function Dashboard() {
   const closetypeBotmodal = () =>setcreatetypebotmodal(false);
 
   const opendeletetypebotmodal = () => setdeletetypebotmodal(true);
-  const closedeletetypebotmodal = () =>setdeletetypebotmodal(false)
+  const closedeletetypebotmodal = () =>setdeletetypebotmodal(false);
+
+  const openinvitemodal = () => setinvitemodal(true);
+  const closeinvitemodal = () => setinvitemodal(false);
   
 
   const handleFolderClick = async(folderId) => { 
@@ -185,7 +190,7 @@ function Dashboard() {
             </label>
             <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
           </span>
-          <button className={`${styles.share_button} ${isDarkMode ? styles.dark : styles.light}`}>
+          <button className={`${styles.share_button} ${isDarkMode ? styles.dark : styles.light}`} onClick={openinvitemodal}>
             Share
           </button>
         </div>
@@ -219,8 +224,9 @@ function Dashboard() {
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
-      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={fetchTypeBot} folderId={selectedFolderId}/>}
+      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId}/>}
       {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
+      {invitemodal && <InviteModal closeModal={closeinvitemodal}/>}  
 
         <div className={styles.forms_wrapper}>
             <div className={styles.Create_TypeBot}>

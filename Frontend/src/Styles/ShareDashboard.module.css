@@ -1,0 +1,186 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    display: flex;
+    position: relative;
+    flex-direction: column;
+    justify-content: space-evenly;
+    background-color: #18181B;
+    padding: 24px;
+    height: 500px;
+    border-radius: 20px;
+    border: 0.2px solid #FFFFFF80;
+    box-shadow: 0px 0px 3.8px 0px #FFFFFF40;
+    width: 90%;
+    max-width: 900px;
+  }
+  
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .header h2 {
+    color: white;
+    font-family: Open Sans;
+    font-weight: 600;
+    line-height: 41px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    font-size: 24px;
+  }
+  
+  .headerRight {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .editDropdown {
+    position: relative;
+  }
+  
+  .editButton {
+    position: absolute;
+    top: -25px;
+    right: 50px;
+    background: none;
+    border: none;
+    color: white;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    font-family: Open Sans;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 41px;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+  }
+  
+  .dropdownMenu {
+    position: absolute;
+    right: 40px;
+    top: 100%;
+    margin-top: 5px;
+    background-color: #2a2a2a;
+    border-radius: 4px;
+    padding: 3px 0;
+    min-width: 80px;
+  }
+  
+  .dropdownItem {
+    color: white;
+    font-family: Open Sans;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    cursor: pointer;
+  }
+  
+  .dropdownItem:hover {
+    background-color: #3a3a3a;
+  }
+  
+  .closeButton {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    color : #F55050;
+    background: none;
+    border: none;
+    height: 14px;
+    width: 14px;
+    cursor: pointer;
+    font-size: 20px;
+    padding: 4px;
+  }
+  
+  .emailSection {
+    margin-bottom: 32px;
+  }
+  
+  .emailInput {
+    width: 100%;
+    height: 63px;
+    padding: 12px;
+    background-color: #1F1F23;
+    border: 1px solid #ffd700;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    margin-bottom: 16px;
+    outline: none;
+    border: none;
+  }
+  
+  .emailInput::placeholder {
+    color: #888;
+    font-family: Open Sans;
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 41px;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+  }
+  
+  .sendButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #1a75ff;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .sendButton:hover {
+    background-color: #0052cc;
+  }
+  
+  .linkSection h2 {
+    color: white;
+    margin: 0 0 16px 0;
+    font-family: Open Sans;
+    font-size: 27.33px;
+    font-weight: 600;
+    line-height: 41px;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;  
+    font-size: 24px;
+  }
+  
+  .copyLinkButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #1a75ff;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .copyLinkButton:hover {
+    background-color: #0052cc;
+  }
