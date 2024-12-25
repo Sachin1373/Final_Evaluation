@@ -44,7 +44,7 @@ export const createfolder = async (req, res) => {
 
 export const getfolders = async (req, res) => {
     const { userId } = req;
-    const {dashboardID} = req.params
+    const {dashboardID} = req.query;
   
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
