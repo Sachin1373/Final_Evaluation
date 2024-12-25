@@ -32,11 +32,15 @@ function Dashboard() {
   const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
   const [sharedDashboards,setSharedDashboards] = useState([])
   const [sharedDashboardID,setshareDashboardID] = useState()
+  
 
- 
+  console.log(sharedDashboardID)
 
  const handledashID = (id) =>{
     setshareDashboardID(id)
+    getFolders()
+    fetchTypeBot()
+
  }
   
 
