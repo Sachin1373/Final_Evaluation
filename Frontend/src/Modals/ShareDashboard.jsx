@@ -6,7 +6,7 @@ import axios from 'axios';
 import { IoMdArrowDropdown } from "react-icons/io";
 import styles from '../Styles/ShareDashboard.module.css';
 
-const InviteModal = ({ closeModal }) => {
+const InviteModal = ({ closeModal,setshareddashboard }) => {
   const [email, setEmail] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
@@ -30,6 +30,7 @@ const InviteModal = ({ closeModal }) => {
 
           if (response.status === 200) {
             toast.success("Dashboard shared successfully!");
+            setshareddashboard(response.data.shareddashboarId)
             closeModal(); 
           }
     

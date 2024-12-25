@@ -1,5 +1,6 @@
 import Dashboard from "../models/DashBoardSchema.model.js";
 import User from "../models/UserSchema.model.js"
+import Form from "../models/TypeBotSchema.modal.js";
 
 export const dashboard = async (req, res) => {
   // Extract username from req.body and userId from the middleware
@@ -98,6 +99,33 @@ export const sharedashboard = async(req,res) =>{
     
     await dashboardB.save();
 
-    res.status(200).json({ message: "Dashboard shared successfully" });
+    res.status(200).json({ message: "Dashboard shared successfully", shareddashboarId: dashboardA._id, });
 
+}
+
+export const shareddashboardID = async(req,res)=>{
+
+}
+
+export const sharedashboarddetails = async(req,res) =>{
+  const { dashboardId } = req.params;
+
+  const dashboard = await Dashboard.findById(dashboardId)
+  .populate({
+    path: "folders",
+    populate: {
+      path: "forms", // Assuming "forms" is an array inside "FolderSchema"
+      model: "Form", // Referencing the Form model
+    },
+  })
+  .populate("standaloneForms");
+
+  if (!dashboard) {
+    return res.status(404).json({ message: "Dashboard not found" });
+  }
+
+  res.status(200).json({
+    message: "Dashboard details fetched successfully",
+    dashboard,
+  });
 }

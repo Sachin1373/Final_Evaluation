@@ -30,6 +30,9 @@ function Dashboard() {
   const [forms, setforms] = useState();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
+  const [sharedashboard,setshareddashboard] = useState([])
+
+  console.log(sharedashboard)
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
@@ -88,6 +91,20 @@ function Dashboard() {
       toast.error(error.response?.data?.message || "Server error. Please try again later.");
     }
   };
+
+
+
+  const getshareddashboardid = async() =>{
+     const response = axios.get('')
+  }
+
+  // const shareddashboard = async() =>{
+  //   try {
+  //     const response = axios.get()
+  //   } catch (error) {
+      
+  //   }
+  // }
 
 
   const getFolders = async () => {
@@ -226,7 +243,7 @@ function Dashboard() {
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
       {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId}/>}
       {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
-      {invitemodal && <InviteModal closeModal={closeinvitemodal}/>}  
+      {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setshareddashboard}/>}  
 
         <div className={styles.forms_wrapper}>
             <div className={styles.Create_TypeBot}>
