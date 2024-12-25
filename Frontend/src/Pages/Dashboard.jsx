@@ -30,9 +30,15 @@ function Dashboard() {
   const [forms, setforms] = useState();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
-  const [sharedashboardId,setshareddashboardId] = useState([])
+  const [sharedDashboards,setSharedDashboards] = useState([])
+  const [sharedDashboardID,setshareDashboardID] = useState()
 
-  console.log(sharedashboardId)
+ 
+
+ const handledashID = (id) =>{
+    setshareDashboardID(id)
+ }
+  
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
@@ -98,16 +104,24 @@ function Dashboard() {
 
   const getshareddashboard = async() =>{
     try {
-      const response = axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shareddashboardID',{
+      const response = await axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shareddashboardID',{
         headers: {
           Authorization: `Bearer ${userDetails.token}`, // Include token in headers
         },
       })
       if(response.status==200){
-        console.log(setshareddashboardId(response))
+        const formattedDashboards = response.data.sharedWith.map(item => ({
+          id: item.dashboard._id,
+          name: item.dashboard.name,
+          permission: item.permission
+        }));
+
+        setSharedDashboards(formattedDashboards);
+        
       }
     } catch (error) {
-      
+      console.log("error while getting shared dashboard")
+      toast.error(error.response?.data?.message)
     }
   }
 
@@ -115,6 +129,7 @@ function Dashboard() {
   const getFolders = async () => {
     try {
       const response = await axios.get("https://final-evaluation-qbj9.onrender.com/api/v1/folder/getfolders", {
+        params: { dashboardID: sharedDashboardID },
         headers: {
           Authorization: `Bearer ${userDetails.token}`, // Include token in headers
         },
@@ -170,6 +185,7 @@ function Dashboard() {
       if (userDetails && !dashboardInitialized) {
         // Call createDashboard only once
         await createdashboard();
+        await getshareddashboard();
         setDashboardInitialized(true); // Mark as initialized
       }
       
@@ -196,7 +212,11 @@ function Dashboard() {
           </div>
           {isDropdownOpen && (
             <div className={styles.dropdown_menu}>
-              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`}>Shared Dashboard 1</div>
+                 {sharedDashboards.map(dashboard => (
+                    <div key={dashboard.id} className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={()=>handledashID(dashboard.id)}>
+                            {dashboard.name}'s Workspace 
+                    </div>
+                  ))}
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={()=> navigate('/settings')}>Settings</div>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }} onClick={handlelogout}>Logout</div>
             </div>
@@ -244,11 +264,11 @@ function Dashboard() {
 
       </div>
 
-      {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
+      {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders} shareddashid={sharedDashboardID}/>}
       {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
       {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId}/>}
       {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
-      {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setshareddashboard}/>}  
+      {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setSharedDashboards}/>}  
 
         <div className={styles.forms_wrapper}>
             <div className={styles.Create_TypeBot}>

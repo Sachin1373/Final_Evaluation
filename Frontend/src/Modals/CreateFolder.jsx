@@ -4,8 +4,9 @@ import axios from 'axios';
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../Styles/CreateFolder.module.css";
+import { dashboard } from '../../../Backend/src/controllers/DashBoard.controller';
 
-function CreateFolder({ closeModal, refreshFolders }) {
+function CreateFolder({ closeModal, refreshFolders, shareddashid }) {
   const [folderName, setFolderName] = useState("");
   const { isDarkMode, toggleTheme } = useTheme(); 
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
@@ -19,7 +20,9 @@ function CreateFolder({ closeModal, refreshFolders }) {
       // Send folder creation request to backend API
       const response = await axios.post(
         "https://final-evaluation-qbj9.onrender.com/api/v1/folder/createfolder",
-        { name: folderName }, // Sending folder name in the request body
+        { name: folderName,
+          dashboardID : shareddashid,
+         }, // Sending folder name in the request body
         {
           headers: {
             Authorization: `Bearer ${userDetails.token}`, // Include token in headers

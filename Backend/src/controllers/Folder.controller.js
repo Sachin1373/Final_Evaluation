@@ -3,21 +3,27 @@ import Folder from "../models/FolderSchema.model.js";
 import Form from "../models/TypeBotSchema.modal.js";
 
 export const createfolder = async (req, res) => {
-  const { name } = req.body;
+  const { name, dashboardID } = req.body;
   const { userId } = req;
+
 
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
   }
 
-  // Find user's dashboard
-  const userDashboard = await dashboard.findOne({ owner: userId });
+  let dashboardId
 
-  if (!userDashboard) {
-    return res.status(404).json({ message: "Dashboard not found for the user." });
+  if(dashboardID){
+      dashboardId = dashboardID
+  }else{
+    const userDashboard = await dashboard.findOne({ owner: userId });
+
+    if (!userDashboard) {
+      return res.status(404).json({ message: "Dashboard not found for the user." });
+    }
+
+    dashboardId = userDashboard._id;
   }
-
-  const dashboardId = userDashboard._id; // Use consistent variable naming
 
   // Check if the folder already exists in the dashboard
   const existingFolder = await Folder.findOne({ name, dashboardId });
@@ -38,20 +44,28 @@ export const createfolder = async (req, res) => {
 
 export const getfolders = async (req, res) => {
     const { userId } = req;
+    const {dashboardID} = req.params
   
     if (!userId) {
       return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
     }
+    
+    
+    let dashboardId
+
+    if(dashboardID){
+           dashboardId = dashboardID
+    }else{
+      const userDashboard = await dashboard.findOne({ owner: userId });
   
-    // Find user's dashboard
-    const userDashboard = await dashboard.findOne({ owner: userId });
+        if (!userDashboard) {
+         return res.status(404).json({ message: "Dashboard not found for the user." });
+        }
   
-    if (!userDashboard) {
-      return res.status(404).json({ message: "Dashboard not found for the user." });
+         dashboardId = userDashboard._id; 
     }
-  
-    const dashboardId = userDashboard._id; // Use consistent variable naming
-  
+
+   
     // Find folders associated with the user's dashboard
     const folders = await Folder.find({ dashboardId });
 
