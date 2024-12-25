@@ -104,7 +104,29 @@ export const sharedashboard = async(req,res) =>{
 }
 
 export const shareddashboardID = async(req,res)=>{
+       const {userId} = req;
 
+       if (!userId) {
+        res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
+        return;
+      }
+
+      const userdashboard = await Dashboard.findOne({ owner: userId }).populate({
+        path: 'sharedWith.dashboard', // Populate the 'dashboard' field inside 'sharedWith'
+        select: 'name owner' // Select the fields you need from the dashboard (e.g., name and owner)
+      });
+
+      if (!userdashboard) {
+        res.status(404).json({ message: "Dashboard not found" });
+        return;
+      }
+
+      const sharedData = userdashboard.sharedWith.map((shared) => ({
+        dashboard: shared.dashboard,  // Full populated dashboard data
+        permission: shared.permission // Permission for the shared dashboard
+      }));
+  
+      res.status(200).json({ sharedWith: sharedData });
 }
 
 export const sharedashboarddetails = async(req,res) =>{

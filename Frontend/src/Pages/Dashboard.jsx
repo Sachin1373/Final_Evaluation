@@ -30,9 +30,9 @@ function Dashboard() {
   const [forms, setforms] = useState();
   const [selectedFolderId, setSelectedFolderId] = useState(null);
   const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
-  const [sharedashboard,setshareddashboard] = useState([])
+  const [sharedashboardId,setshareddashboardId] = useState([])
 
-  console.log(sharedashboard)
+  console.log(sharedashboardId)
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
@@ -94,17 +94,22 @@ function Dashboard() {
 
 
 
-  const getshareddashboardid = async() =>{
-     const response = axios.get('')
-  }
+ 
 
-  // const shareddashboard = async() =>{
-  //   try {
-  //     const response = axios.get()
-  //   } catch (error) {
+  const getshareddashboard = async() =>{
+    try {
+      const response = axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shareddashboardID',{
+        headers: {
+          Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+        },
+      })
+      if(response.status==200){
+        console.log(setshareddashboardId(response))
+      }
+    } catch (error) {
       
-  //   }
-  // }
+    }
+  }
 
 
   const getFolders = async () => {

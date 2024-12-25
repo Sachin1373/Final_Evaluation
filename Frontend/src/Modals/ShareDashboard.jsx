@@ -30,7 +30,7 @@ const InviteModal = ({ closeModal,setshareddashboard }) => {
 
           if (response.status === 200) {
             toast.success("Dashboard shared successfully!");
-            setshareddashboard(response.data.shareddashboarId)
+            console.log(setshareddashboard(response.data.shareddashboarId))
             closeModal(); 
           }
     
