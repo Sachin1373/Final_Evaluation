@@ -87,7 +87,7 @@ export const sharedashboard = async(req,res) =>{
         // Update the permission if it's different
         dashboardB.sharedWith[sharedIndex].permission = permission;
         await dashboardB.save();
-        return res.status(200).json({ message: "Permission updated successfully." });
+        return res.status(200).json({ message: "Permission updated successfully.", shareddashboarId: dashboardA._id });
       }
     }
     
