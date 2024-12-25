@@ -97,51 +97,18 @@ function Dashboard() {
       }
     } catch (error) {
       console.error(error);
-      toast.error(error.response?.data?.message || "Failed to load folders.");
+      // toast.error(error.response?.data?.message || "Failed to load folders.");
     }
   };
   
 
-  const handleDeleteFolderClick = (folderId) => {
-    setSelectedFolderId(folderId); // Set the folder ID when delete is clicked
-    opendeletefoldermodal(); // Open the modal
+  const handleDeleteFolderClick = (folderId,e) => {
+    e.stopPropagation();
+    setSelectedFolderId(folderId); 
+    opendeletefoldermodal(); 
   };
 
-  const handleDeleteFolder = async (folderId) => {
-    try {
-      const response = await axios.delete(`https://final-evaluation-qbj9.onrender.com/api/v1/folder/deletefolder/${folderId}`, {
-        headers: {
-          Authorization: `Bearer ${userDetails.token}`,
-        },
-      });
-      toast.success(response.data.message);
-      await getFolders(); 
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to delete folder.");
-    }
-  };
-  
-  const createTypeBot = async (name) => {
-    try {
-      const response = await axios.post(
-        "https://final-evaluation-qbj9.onrender.com/api/v1/typebot/createtypebot",
-        { name, folderId: selectedFolderId },
-        {
-          headers: {
-            Authorization: `Bearer ${userDetails.token}`,
-          },
-        }
-      );
-      toast.success(response.data.message);
-      closetypeBotmodal();
-      fetchTypeBot(selectedFolderId)
-    } catch (error) {
-      console.error(error);
-      toast.error(error.response?.data?.message || "Failed to create TypeBot.");
-    }
-  };
-
+ 
   const fetchTypeBot = async(folderId) =>{
       try {
         
@@ -160,7 +127,7 @@ function Dashboard() {
 
       } catch (error) {
         setforms([]);
-        toast.error(error.response?.data?.message || 'Failed to load forms');
+        // toast.error(error.response?.data?.message || 'Failed to load forms');
       }
   }
 
@@ -169,19 +136,7 @@ function Dashboard() {
     opendeletetypebotmodal()
   }
 
-  const deleteform = async(TypeBotId) =>{
-    try {
-      const response = axios.delete(`https://final-evaluation-qbj9.onrender.com/api/v1/typebot/deleteTypeBot?typeBotId=${TypeBotId}`,{
-        headers: {
-          Authorization: `Bearer ${userDetails.token}`,
-        },
-      })
-      toast.success(response?.data?.message)
-      fetchTypeBot(selectedFolderId);
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Failed to delete form.')
-    }
-  }
+  
 
   useEffect(() => {
     const initializeDashboard = async () => {
@@ -263,9 +218,9 @@ function Dashboard() {
       </div>
 
       {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders}/>}
-      {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} handleDeleteFolder={handleDeleteFolder} folderId={selectedFolderId} />}
-      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} createTypeBot={createTypeBot}/>}
-      {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal} deleteform={deleteform} typebot={selectedTypeBotId}/>}
+      {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
+      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={fetchTypeBot} folderId={selectedFolderId}/>}
+      {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
 
         <div className={styles.forms_wrapper}>
             <div className={styles.Create_TypeBot}>
@@ -281,7 +236,7 @@ function Dashboard() {
                       </div>
                   ))
                 ) : (
-                  <p>No forms available.</p> // Optional message if no forms
+                  <p>No forms available.</p> 
                 )}
                 
             </div>

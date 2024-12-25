@@ -1,15 +1,32 @@
 import React,{useState} from 'react'
 import { useTheme } from '../Contexts/ThemeContext';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import axios from 'axios';
 import styles from "../Styles/CreateFolder.module.css"
-function CreateTypeBot({closemodal,createTypeBot}) {
+
+function CreateTypeBot({closemodal,refreshtypebot,folderId}) {
 
   const [typeBotName, setTypeBotName] = useState("");
-
-  const handleDone = () => {
-    if (typeBotName.trim()) {
-      createTypeBot(typeBotName);
-    } else {
-      alert("TypeBot name cannot be empty.");
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
+ 
+  const createTypeBot = async () => {
+    try {
+      const response = await axios.post(
+        "https://final-evaluation-qbj9.onrender.com/api/v1/typebot/createtypebot",
+        { name : typeBotName, folderId },
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails.token}`,
+          },
+        }
+      );
+      toast.success(response.data.message);
+      closemodal();
+      await refreshtypebot(folderId)
+    } catch (error) {
+      console.error(error);
+      toast.error(error.response?.data?.message || "Failed to create TypeBot.");
     }
   };
       
@@ -34,7 +51,7 @@ function CreateTypeBot({closemodal,createTypeBot}) {
        placeholder="Enter folder name"
      />
      <div className={styles.buttons}>
-       <button className={styles.doneButton} onClick={handleDone}>Done</button>
+       <button className={styles.doneButton} onClick={createTypeBot}>Done</button>
        <div className={styles.divider}></div>
        <button className={styles.cancelButton} onClick={handleCancel}>Cancel</button>
      </div>
