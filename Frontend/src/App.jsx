@@ -7,6 +7,7 @@ import Settings from './Pages/Settings';
 import Dashboard from './Pages/Dashboard';
 import Login from './Pages/Login';
 import Sign_in from './Pages/Sign_in';
+import SharedDashboard from './Pages/SharedDashboard';
 
 export default function App() {
   return (
@@ -20,6 +21,7 @@ export default function App() {
           <Route path="/sign-in" element={<Sign_in />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/shared-dashboard" element={<SharedDashboard />} />
         </Routes>
       </div>
       </AuthProvider>
