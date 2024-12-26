@@ -1,6 +1,12 @@
 import Dashboard from "../models/DashBoardSchema.model.js";
 import User from "../models/UserSchema.model.js"
 import Form from "../models/TypeBotSchema.modal.js";
+import dotenv from "dotenv";
+
+
+dotenv.config({
+  path: "./.env",
+});
 
 export const dashboard = async (req, res) => {
   // Extract username from req.body and userId from the middleware
