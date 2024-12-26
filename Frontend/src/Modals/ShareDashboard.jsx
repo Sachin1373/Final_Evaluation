@@ -6,11 +6,15 @@ import axios from 'axios';
 import { IoMdArrowDropdown } from "react-icons/io";
 import styles from '../Styles/ShareDashboard.module.css';
 
+
 const InviteModal = ({ closeModal,setshareddashboard }) => {
   const [email, setEmail] = useState('');
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
   const [permission, setPermission] = useState('view'); 
+  const [link, setLink] = useState('');
+
+  console.log(userDetails.token)
 
   const handleSendInvite = async() => {
     if (!email) {
@@ -42,8 +46,29 @@ const InviteModal = ({ closeModal,setshareddashboard }) => {
 
   };
 
+  const generateLink = async () => {
+    try {
+        const response = await axios.post('https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/share-link',
+          { permission },
+          {
+            headers: {
+              Authorization: `Bearer ${userDetails.token}`,
+            },
+          }
+        );
+        setLink(response.data.link);
+
+        // Copy the link to the clipboard
+        navigator.clipboard.writeText(response.data.link);
+        alert('Link copied to clipboard!');
+    } catch (error) {
+        console.error('Error generating link', error);
+        alert('Failed to generate link');
+    }
+};
+
   const handleCopyLink = () => {
-    console.log('Copying invite link');
+    generateLink ();
   };
 
   const togglePermission = (newPermission) => {
