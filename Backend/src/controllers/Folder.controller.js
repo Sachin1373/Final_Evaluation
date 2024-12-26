@@ -6,6 +6,10 @@ export const createfolder = async (req, res) => {
   const { name, dashboardID } = req.body;
   const { userId } = req;
 
+  if (!name || !dashboardID) {
+    return res.status(400).json({ message: 'Folder name and Dashboard ID are required.' });
+  }
+ 
 
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
