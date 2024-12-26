@@ -12,11 +12,11 @@ export const createfolder = async (req, res) => {
   }
 
   let dashboardId
-
+  let userDashboard
   if(dashboardID){
       dashboardId = dashboardID
   }else{
-    const userDashboard = await dashboard.findOne({ owner: userId });
+     userDashboard = await dashboard.findOne({ owner: userId });
 
     if (!userDashboard) {
       return res.status(404).json({ message: "Dashboard not found for the user." });

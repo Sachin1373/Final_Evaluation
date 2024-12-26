@@ -32,17 +32,37 @@ function Dashboard() {
   const [selectedTypeBotId, setSelectedTypeBotId] = useState(null)
   const [sharedDashboards,setSharedDashboards] = useState([])
   const [sharedDashboardID,setshareDashboardID] = useState()
+  const [activeWorkspaceName, setActiveWorkspaceName] = useState(userDetails?.username || "Workspace");
+  const [permission, setPermissions] = useState('edit'); 
   
 
   console.log(sharedDashboardID)
-
- const handledashID = (id) =>{
-    setshareDashboardID(id)
-    getFolders()
-    fetchTypeBot()
-
- }
+  const handledashID = async (id, name) => {
+    const selectedDashboard = sharedDashboards.find(dashboard => dashboard.id === id);
+    setPermissions(selectedDashboard?.permission || 'edit');
+    setshareDashboardID(id);
+    setActiveWorkspaceName(name);
+    setSelectedFolderId(null);
+    setforms([]); 
+    
+    // Close dropdown
+    toggleDropdown();
+    
+    // Use setTimeout to ensure state updates have completed
+    
+      await getFolders(sharedDashboardID);
+      await fetchTypeBot();
   
+  };
+  
+  const handleownerdash = async (id, name) => {
+    setPermissions('edit');
+    setshareDashboardID(null);
+    setActiveWorkspaceName(name);
+    getFolders();
+    fetchTypeBot();
+    toggleDropdown();
+  }
 
  const {isLoggedIn,login,logout} = useContext(AuthContext)
  const navigate = useNavigate()
@@ -55,7 +75,12 @@ function Dashboard() {
   const closedeletefoldermodal = () => setdeletefoldermodal(false); 
   
 
-  const opentypeBotmodal = () => setcreatetypebotmodal(true);
+  const opentypeBotmodal = () => {
+    if(permission === 'edit')
+      {
+        setcreatetypebotmodal(true)
+      }else{toast.error("You can only view the dashboard. Editing is not allowed.")}
+    };
   const closetypeBotmodal = () =>setcreatetypebotmodal(false);
 
   const opendeletetypebotmodal = () => setdeletetypebotmodal(true);
@@ -71,8 +96,20 @@ function Dashboard() {
     
   };
 
+
+const handleCreateFolderClick = () => {
+  if (permission === 'view') {
+    toast.error("You can only view the dashboard. Editing is not allowed.");
+    return;
+  }
+  openfoldermodal(); // Proceed to open the modal for authorized users
+};
+
+
+
   const toggleDropdown = () => {
     setIsDropdownOpen((prevState) => !prevState);
+    
   };
 
   const handlelogout = () =>{
@@ -149,7 +186,11 @@ function Dashboard() {
   
 
   const handleDeleteFolderClick = (folderId,e) => {
-    e.stopPropagation();
+    // e.stopPropagation();
+    // if(permission === 'view'){    
+    //   toast.error("You can only view the dashboard. Editing is not allowed.");
+    //   return;
+    // }
     setSelectedFolderId(folderId); 
     opendeletefoldermodal(); 
   };
@@ -182,6 +223,10 @@ function Dashboard() {
   }
 
   const handledeletetypebotclick = (typebotId) =>{
+    if(permission === 'view'){
+      toast.error("You can only view the dashboard. Editing is not allowed.");
+      return;
+    }
     setSelectedTypeBotId(typebotId)
     opendeletetypebotmodal()
   }
@@ -211,21 +256,31 @@ function Dashboard() {
            <ToastContainer />
          <div className={`${styles.wrapper} ${isDarkMode ? styles.dark : styles.light}`}>
       <nav className={`${styles.navbar} ${isDarkMode ? styles.dark : styles.light}`}>
-        <div className={`${styles.workspace_dropdown} ${isDarkMode ? styles.dark : styles.light}`}>
+      <div className={`${styles.workspace_dropdown} ${isDarkMode ? styles.dark : styles.light}`}>
           <div className={`${styles.workspace_name} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={toggleDropdown}>
             <span className={`${styles.workspace_text} ${isDarkMode ? styles.textDark : styles.textLight}`}>
-              {userDetails?.username}'s Workspace
+              {activeWorkspaceName}'s Workspace
             </span>
             {isDropdownOpen ? <IoIosArrowUp className={styles.arrow_icon} /> : <IoIosArrowDown className={styles.arrow_icon} />}
           </div>
           {isDropdownOpen && (
             <div className={styles.dropdown_menu}>
-                 {sharedDashboards.map(dashboard => (
-                    <div key={dashboard.id} className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={()=>handledashID(dashboard.id)}>
-                            {dashboard.name}'s Workspace 
-                    </div>
-                  ))}
-              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={()=> navigate('/settings')}>Settings</div>
+              <div 
+                className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} 
+                onClick={() => handleownerdash(null, userDetails.username)}
+              >
+                {userDetails.username}'s Workspace
+              </div>
+              {sharedDashboards.map(dashboard => (
+                <div 
+                  key={dashboard.id} 
+                  className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} 
+                  onClick={() => handledashID(dashboard.id, dashboard.name)}
+                >
+                  {dashboard.name}'s Workspace 
+                </div>
+              ))}
+              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={() => navigate('/settings')}>Settings</div>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }} onClick={handlelogout}>Logout</div>
             </div>
           )}
@@ -249,7 +304,7 @@ function Dashboard() {
       <div className={styles.folder_wrapper}>
           <div className={`${styles.create_folder} ${isDarkMode ? styles.dark : styles.light}`}>
             <FaFolderPlus className={styles.folder_icon} />
-            <p onClick={openfoldermodal} >Create a folder</p>
+            <p  onClick={handleCreateFolderClick} >Create a folder</p>
           </div>
           
 
@@ -272,10 +327,10 @@ function Dashboard() {
 
       </div>
 
-      {foldermodal && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders} shareddashid={sharedDashboardID}/>}
-      {deletefoldermodal && <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
-      {createtypebotmodal && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId} shareddashid={sharedDashboardID}/>}
-      {deletetypebotmodal && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
+      {foldermodal   &&  permission === 'edit' && <CreateFolder closeModal={closefoldermodal} refreshFolders={getFolders} shareddashid={sharedDashboardID}/>}
+      {deletefoldermodal &&  permission === 'edit'&& <DeleteFolder closeModal={closedeletefoldermodal} refreshFolders={getFolders} folderId={selectedFolderId} />}
+      {createtypebotmodal && permission === 'edit' && <CreateTypeBot closemodal={closetypeBotmodal} refreshtypebot={() => fetchTypeBot(selectedFolderId)} folderId={selectedFolderId} shareddashid={sharedDashboardID}/>}
+      {deletetypebotmodal && permission === 'edit' && <DeleteTypeBot closeModal={closedeletetypebotmodal}  refreshtypebot={() => fetchTypeBot(selectedFolderId)} typebotId={selectedTypeBotId}/>}
       {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setSharedDashboards}/>}  
 
         <div className={styles.forms_wrapper}>
