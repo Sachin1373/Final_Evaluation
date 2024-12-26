@@ -6,6 +6,7 @@ const SharedDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);  
 
   const { dashboardId } = useParams(); // Extract from URL path
   const permission = searchParams.get("permission"); // Extract from query params
@@ -13,10 +14,15 @@ const SharedDashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           `https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shared-dashboard`,
           {
             params: { dashboardId, permission },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${userDetails.token}`,
+            },
           }
         );
         setDashboard(response.data.dashboard);
