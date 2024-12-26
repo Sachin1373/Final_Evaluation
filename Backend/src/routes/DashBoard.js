@@ -1,7 +1,7 @@
 import express from "express";
 import asynchandler from "../utils/asynchandler.js"
 import verifyToken from "../middlewares/Verify.middleware.js";
-import { dashboard,sharedashboard,sharedashboarddetails,shareddashboardID,sharelink,dashboardlink} from "../controllers/DashBoard.controller.js";
+import { dashboard,sharedashboard,shareddashboardID,sharelink,dashboardlink} from "../controllers/DashBoard.controller.js";
 
 
 const router = express.Router();
