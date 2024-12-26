@@ -151,3 +151,24 @@ export const sharedashboarddetails = async(req,res) =>{
     dashboard,
   });
 }
+
+export const sharelink = async(req,res) =>{   
+  const {userId} = req;
+  
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
+  }
+
+  const userDashboard = await Dashboard.findOne({ owner: userId });
+
+  if (!userDashboard) return res.status(400).json({ error: 'Dashboard ID is required' });
+
+  const dashboardId = userDashboard._id;
+  
+  // Base URL of your frontend (could be an environment variable or hardcoded)
+  const baseUrl = process.env.FRONTEND_URL 
+  const shareLink = `${baseUrl}/shared-dashboard/${dashboardId}`;
+
+  res.json({ link: shareLink });
+
+}
