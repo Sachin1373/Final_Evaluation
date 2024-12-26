@@ -6,7 +6,7 @@ export const createfolder = async (req, res) => {
   const { name, dashboardID } = req.body;
   const { userId } = req;
 
-  if (!name || !dashboardID) {
+  if (!name) {
     return res.status(400).json({ message: 'Folder name and Dashboard ID are required.' });
   }
  
