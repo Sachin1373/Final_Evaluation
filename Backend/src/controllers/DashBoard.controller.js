@@ -192,7 +192,7 @@ export const sharelink = async (req, res) => {
 
 export const dashboardlink = async (req, res) => {
   
-    const { dashboardId, permission } = req.params; // ID of User B's dashboard
+    const { dashboardId, permission } = req.query; // ID of User B's dashboard
     const { userId } = req; // ID of User A
 
     // Validate inputs

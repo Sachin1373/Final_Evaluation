@@ -18,9 +18,7 @@ const SharedDashboard = () => {
       try {
         const response = await axios.post(
           `https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shared-dashboard?dashboardId=${dashboardId}&permission=${permission}`,
-          {
-            params: { dashboardId, permission },
-          },
+          {},
           {
             headers: {
               Authorization: `Bearer ${userDetails.token}`,
