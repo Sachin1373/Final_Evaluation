@@ -14,7 +14,7 @@ const SharedDashboard = () => {
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
-        const response = await axios.get(
+        const response = await axios.post(
           `https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shared-dashboard`,
           {
             params: { dashboardId, permission },

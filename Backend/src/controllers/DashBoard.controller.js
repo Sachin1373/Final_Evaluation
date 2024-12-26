@@ -189,3 +189,68 @@ export const sharelink = async (req, res) => {
 
   res.json({ link: shareLink });
 };
+
+export const dashboardlink = async (req, res) => {
+  
+    const { dashboardId, permission } = req.params; // ID of User B's dashboard
+    const { userId } = req; // ID of User A
+
+    // Validate inputs
+    if (!dashboardId || !permission) {
+      return res
+        .status(400)
+        .json({ message: "Dashboard ID and permission are required" });
+    }
+
+    // Find User A's dashboard
+    const dashboardA = await Dashboard.findOne({ owner: userId });
+    if (!dashboardA) {
+      return res.status(404).json({ message: "User A's dashboard not found" });
+    }
+
+    // Find User B's dashboard
+    const dashboardB = await Dashboard.findById(dashboardId);
+    if (!dashboardB) {
+      return res.status(404).json({ message: "User B's dashboard not found" });
+    }
+
+    // Check if the dashboard is already shared
+    const sharedIndex = dashboardA.sharedWith.findIndex(
+      (shared) => shared.dashboard.toString() === dashboardId
+    );
+
+    if (sharedIndex !== -1) {
+      // If already shared, check the permission
+      if (dashboardA.sharedWith[sharedIndex].permission === permission) {
+        return res.status(400).json({
+          message: "Dashboard already shared with the same permission.",
+        });
+      } else {
+        // Update the permission if it's different
+        dashboardA.sharedWith[sharedIndex].permission = permission;
+        await dashboardA.save();
+        return res
+          .status(200)
+          .json({
+            message: "Permission updated successfully.",
+            sharedDashboardId: dashboardB._id,
+          });
+      }
+    }
+
+    // Add User B's dashboard to User A's shared list with permission
+    dashboardA.sharedWith.push({
+      dashboard: dashboardB._id,
+      permission,
+    });
+
+    await dashboardA.save();
+
+    return res
+      .status(200)
+      .json({
+        message: "Dashboard shared successfully",
+        sharedDashboardId: dashboardB._id,
+      });
+  
+};
