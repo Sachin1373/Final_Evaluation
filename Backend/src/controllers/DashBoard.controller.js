@@ -152,23 +152,34 @@ export const sharedashboarddetails = async(req,res) =>{
   });
 }
 
-export const sharelink = async(req,res) =>{   
-  const {userId} = req;
-  
+export const sharelink = async (req, res) => {
+  const { userId } = req;
+  const { permission } = req.body; // Get the permission from the request body
+
+  // Check if permission is provided and valid
+  if (!permission || (permission !== 'view' && permission !== 'edit')) {
+    return res.status(400).json({ message: "Invalid or missing permission. Must be 'view' or 'edit'." });
+  }
+
+  // Ensure user is authenticated
   if (!userId) {
     return res.status(401).json({ message: "Unauthorized access. Token is invalid or missing." });
   }
 
+  // Find the user's dashboard
   const userDashboard = await Dashboard.findOne({ owner: userId });
 
-  if (!userDashboard) return res.status(400).json({ error: 'Dashboard ID is required' });
+  if (!userDashboard) {
+    return res.status(400).json({ error: 'Dashboard ID is required' });
+  }
 
   const dashboardId = userDashboard._id;
-  
+
   // Base URL of your frontend (could be an environment variable or hardcoded)
-  const baseUrl = process.env.FRONTEND_URL 
-  const shareLink = `${baseUrl}/shared-dashboard/${dashboardId}`;
+  const baseUrl = process.env.FRONTEND_URL || 'http://localhost:3000'; // Fallback URL for local development
+
+  // Create the shareable link with the permission query parameter
+  const shareLink = `${baseUrl}/shared-dashboard/${dashboardId}?permission=${permission}`;
 
   res.json({ link: shareLink });
-
-}
+};
