@@ -47,12 +47,7 @@ function Dashboard() {
     
     // Close dropdown
     toggleDropdown();
-    
-    // Use setTimeout to ensure state updates have completed
-    
-      await getFolders(id);
-      await fetchTypeBot();
-  
+     
   };
   
   const handleownerdash = async (id, name) => {
@@ -245,10 +240,15 @@ const handleCreateFolderClick = () => {
       // Proceed with the other API calls, regardless of createDashboard
       await getFolders();
       await fetchTypeBot(selectedFolderId);
+
+      if (sharedDashboardID) {
+        await getFolders(sharedDashboardID);
+        await fetchTypeBot();
+      }
     };
 
     initializeDashboard();
-  }, [userDetails]);
+  }, [userDetails,sharedDashboardID]);
    
 
   return (
