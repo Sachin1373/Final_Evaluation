@@ -8,6 +8,7 @@ import Dashboard from './Pages/Dashboard';
 import Login from './Pages/Login';
 import Sign_in from './Pages/Sign_in';
 import SharedDashboard from './Pages/SharedDashboard';
+import Forms from './Pages/Forms';
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-dashboard/:dashboardId" element={<SharedDashboard />} />
+          <Route path="/forms/:id" element={<Forms />} />
         </Routes>
       </div>
       </AuthProvider>

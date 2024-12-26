@@ -341,10 +341,12 @@ const handleCreateFolderClick = () => {
             <div className={styles.form_wrapper}>
                 {forms?.length > 0 ? (
                   forms?.map((item) => (
-                       <div key={item._id} className={`${styles.form} ${isDarkMode ? styles.dark : styles.light}`}>
-                         <p>{item.name}</p> 
+                       <div className={styles.form_container}>
+                         <div key={item._id} className={`${styles.form} ${isDarkMode ? styles.dark : styles.light}`} onClick={() => navigate(`/forms/${item._id}/${item.name}`)}>
+                           <p>{item.name}</p> 
+                         </div>
                          <RiDeleteBin6Line className={styles.form_delete_icon} onClick={()=>handledeletetypebotclick(item._id)}/>
-                      </div>
+                       </div>
                   ))
                 ) : (
                   <p>No forms available.</p> 
