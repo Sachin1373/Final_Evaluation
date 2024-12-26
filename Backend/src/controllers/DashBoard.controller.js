@@ -135,28 +135,28 @@ export const shareddashboardID = async(req,res)=>{
       res.status(200).json({ sharedWith: sharedData });
 }
 
-export const sharedashboarddetails = async(req,res) =>{
-  const { dashboardId } = req.params;
+// export const sharedashboarddetails = async(req,res) =>{
+//   const { dashboardId } = req.params;
 
-  const dashboard = await Dashboard.findById(dashboardId)
-  .populate({
-    path: "folders",
-    populate: {
-      path: "forms", // Assuming "forms" is an array inside "FolderSchema"
-      model: "Form", // Referencing the Form model
-    },
-  })
-  .populate("standaloneForms");
+//   const dashboard = await Dashboard.findById(dashboardId)
+//   .populate({
+//     path: "folders",
+//     populate: {
+//       path: "forms", // Assuming "forms" is an array inside "FolderSchema"
+//       model: "Form", // Referencing the Form model
+//     },
+//   })
+//   .populate("standaloneForms");
 
-  if (!dashboard) {
-    return res.status(404).json({ message: "Dashboard not found" });
-  }
+//   if (!dashboard) {
+//     return res.status(404).json({ message: "Dashboard not found" });
+//   }
 
-  res.status(200).json({
-    message: "Dashboard details fetched successfully",
-    dashboard,
-  });
-}
+//   res.status(200).json({
+//     message: "Dashboard details fetched successfully",
+//     dashboard,
+//   });
+// }
 
 export const sharelink = async (req, res) => {
   const { userId } = req;
