@@ -50,7 +50,7 @@ function Dashboard() {
     
     // Use setTimeout to ensure state updates have completed
     
-      await getFolders(sharedDashboardID);
+      await getFolders(id);
       await fetchTypeBot();
   
   };
