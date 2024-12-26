@@ -11,6 +11,8 @@ const SharedDashboard = () => {
   const { dashboardId } = useParams(); // Extract from URL path
   const permission = searchParams.get("permission"); // Extract from query params
 
+  console.log(dashboardId, permission);
+
   useEffect(() => {
     const fetchDashboard = async () => {
       try {
