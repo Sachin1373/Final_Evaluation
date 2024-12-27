@@ -1,22 +1,28 @@
-import React,{useState} from "react";
+import React,{useState,useEffect} from "react";
 import { useTheme } from "../Contexts/ThemeContext";
 import { FiMessageSquare } from "react-icons/fi";
 import { MessageSquare, Image, Video, Camera, Flag, Type, Hash, Mail, Phone, Calendar, Star, CheckSquare, X, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
 import inputItems from "../Constants/inputItems.js";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import bubbleItems from "../Constants/bubbleItems.js";
 import styles from "../Styles/Forms.module.css";
+
 
 
 function Forms() {
      const { formId, name } = useParams();
      const { isDarkMode, toggleTheme } = useTheme(); 
+     const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
      const [formname, setformname] = useState(name);
      const [flowItems, setFlowItems] = useState([]);
-     const [bubblesdata, setbubbledata] = useState([]);
-     const [inputdata, setinputdata] = useState([]);
+     const [content, setContent] = useState([]);
+     const [isContentReady, setIsContentReady] = useState(false);
+     
+     
 
-    
     const handleAddItem = (item) => {
       setFlowItems([...flowItems, { 
         ...item, 
@@ -28,6 +34,14 @@ function Forms() {
     const handleRemoveItem = (uniqueId) => {
       setFlowItems(flowItems.filter(item => item.uniqueId !== uniqueId));
     };
+    
+    const handleShare = () => {
+      const baseUrl = "https://final-evaluation-ebon.vercel.app";
+      const shareableLink = `${baseUrl}/fill-form/${formId}`;
+      navigator.clipboard.writeText(shareableLink);
+      toast.success("Shareable link copied to clipboard!");
+    };
+    
 
     const handleSave = async () => {
       const dataToSave = flowItems.map(item => {
@@ -43,15 +57,43 @@ function Forms() {
           return { type: 'input', data: item.id }; // Save input type (e.g., text, number)
         }
         return null; // Skip any unsupported items
-      }).filter(item => item !== null); // Remove null values
+      }).filter(item => item !== null); 
+      setContent(dataToSave);
+      setIsContentReady(true); 
       console.log(dataToSave);
     };
 
+    const upadtecontent = async () => {
+      try {
+        const res = await axios.put(`https://final-evaluation-qbj9.onrender.com/api/v1/typebot/update-form/${formId}`, { content },
+          {
+            headers: {
+              Authorization: `Bearer ${userDetails.token}`,
+            },
+          } 
+        );
+        if (res.status === 200) {
+          toast.success("Form content saved successfully!");
+        } else {
+          toast.error("Failed to save form content. Please try again.");
+        }
+      } catch (error) {
+        toast.error("Failed to save form. Please try again.",error.message);
+      }
+    }
+    
+    useEffect(() => {
+      if (isContentReady) {
+        upadtecontent();
+        setIsContentReady(false); // Reset readiness
+      }
+    }, [content, isContentReady]);
      
     
 
   return (
     <div className={`${styles.formContainer} ${isDarkMode ? styles.dark : styles.light}`}>
+      <ToastContainer />
       <div className={`${styles.wrapper} ${isDarkMode ? styles.dark : styles.light}`}>
         {/* Header */}
         <div className={`${styles.header} ${isDarkMode ? styles.dark : styles.light}`}>
@@ -77,7 +119,7 @@ function Forms() {
                     <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
                  </span>
             </div>
-            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` }>Share</button>
+            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` } onClick={handleShare}>Share</button>
             <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} onClick={handleSave}>Save</button>
             <button className={styles.closeButton}>
               <X size={24} />

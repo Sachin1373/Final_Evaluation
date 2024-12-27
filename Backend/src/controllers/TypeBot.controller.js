@@ -140,4 +140,17 @@ export const addtypebotcontent = async(req,res) =>{
     res.status(200).json({ message: "Form content updated successfully", updatedTypeBot });
   }
 
+export const gettypebotcontent = async(req,res) =>{
+    const { formId } = req.params;
+
+    const typeBot = await Form.findById(formId);
+    
+    if (!typeBot) { 
+      return res.status(404).json({ message: "Form not found" });
+    } 
+
+    res.status(200).json({ content: typeBot.content });
+
+}
+
     
