@@ -23,7 +23,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/shared-dashboard/:dashboardId" element={<SharedDashboard />} />
-          <Route path="/forms/:id" element={<Forms />} />
+          <Route path="/forms/:id/:name" element={<Forms />} />
         </Routes>
       </div>
       </AuthProvider>

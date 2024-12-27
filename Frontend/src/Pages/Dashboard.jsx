@@ -112,6 +112,10 @@ const handleCreateFolderClick = () => {
     navigate('/')
   }
 
+  const handleformclick = (formId,name) => {
+    navigate(`/forms/${formId}/${name}`)
+  }
+
   const createdashboard = async () => {
   
     try {
@@ -342,7 +346,7 @@ const handleCreateFolderClick = () => {
                 {forms?.length > 0 ? (
                   forms?.map((item) => (
                        <div className={styles.form_container}>
-                         <div key={item._id} className={`${styles.form} ${isDarkMode ? styles.dark : styles.light}`} onClick={() => navigate(`/forms/${item._id}/${item.name}`)}>
+                         <div key={item._id} className={`${styles.form} ${isDarkMode ? styles.dark : styles.light}`} onClick={()=>handleformclick(item._id,item.name)}>
                            <p>{item.name}</p> 
                          </div>
                          <RiDeleteBin6Line className={styles.form_delete_icon} onClick={()=>handledeletetypebotclick(item._id)}/>
