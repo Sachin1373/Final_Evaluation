@@ -124,16 +124,20 @@ export const deleteTypeBot = async(req,res) =>{
 }
 
 export const addtypebotcontent = async(req,res) =>{
-    const { typeBotId } = req.query;
+    const { formId } = req.params;
     const { content } = req.body;
 
     const updatedTypeBot = await Form.findByIdAndUpdate ( 
-        typeBotId,
+      formId,
         { content },
         { new: true }
     );   
-    res.status(200).json({ message : "form content addeed"} ,updatedForm);
+    
+    if (!updatedTypeBot) {
+      return res.status(404).json({ message: "Form not found" });
+    }
 
+    res.status(200).json({ message: "Form content updated successfully", updatedTypeBot });
   }
 
     
