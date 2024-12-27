@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SharedDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
-  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);  
+  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null); 
+  const navigate = useNavigate(); 
 
   const { dashboardId } = useParams(); // Extract from URL path
   const permission = searchParams.get("permission"); // Extract from query params
@@ -26,6 +28,8 @@ const SharedDashboard = () => {
           }
         );
         setDashboard(response.data.dashboard);
+        navigate(`/dashboard`);
+        
       } catch (err) {
         setError(err.response?.data?.message || "Error fetching dashboard.");
       }
