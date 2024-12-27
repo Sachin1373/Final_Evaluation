@@ -1,11 +1,10 @@
 import React,{useState} from "react";
 import { useTheme } from "../Contexts/ThemeContext";
-import { 
-  MessageSquare, Image, Video, Camera, Flag, 
-  Type, Hash, Mail, Phone, Calendar, Star, 
-  CheckSquare, X 
-} from "lucide-react";
+import { FiMessageSquare } from "react-icons/fi";
+import { MessageSquare, Image, Video, Camera, Flag, Type, Hash, Mail, Phone, Calendar, Star, CheckSquare, X, Trash2 } from "lucide-react";
 import { useParams } from "react-router-dom";
+import inputItems from "../Constants/inputItems.js";
+import bubbleItems from "../Constants/bubbleItems.js";
 import styles from "../Styles/Forms.module.css";
 
 
@@ -13,27 +12,62 @@ function Forms() {
      const { formId, name } = useParams();
      const { isDarkMode, toggleTheme } = useTheme(); 
      const [formname, setformname] = useState(name);
-     console.log(formId, name);
+     const [flowItems, setFlowItems] = useState([]);
+     const [bubblesdata, setbubbledata] = useState([]);
+     const [inputdata, setinputdata] = useState([]);
+
+    
+    const handleAddItem = (item) => {
+      setFlowItems([...flowItems, { 
+        ...item, 
+        uniqueId: `${item.id}-${Date.now()}`,
+        hint: item.type === 'input' ? 'Hint: User will input a text on his form' : ''
+      }]);
+    };
+  
+    const handleRemoveItem = (uniqueId) => {
+      setFlowItems(flowItems.filter(item => item.uniqueId !== uniqueId));
+    };
+
+    const handleSave = async () => {
+      const dataToSave = flowItems.map(item => {
+        if (item.type === 'bubble') {
+          if (item.id === 'text') {
+            return { type: 'text', data: item.userInput || '' }; // Ensure userInput is captured
+          } else if (item.id === 'img') {
+            return { type: 'image', data: item.imgLink || '' }; // Ensure imgLink is captured
+          } else if (item.id === 'video' || item.id === 'gif') {
+            return null; // Skip video and GIF
+          }
+        } else if (item.type === 'input') {
+          return { type: 'input', data: item.id }; // Save input type (e.g., text, number)
+        }
+        return null; // Skip any unsupported items
+      }).filter(item => item !== null); // Remove null values
+      console.log(dataToSave);
+    };
+
+     
     
 
   return (
-    <div className={styles.formContainer}>
-      <div className={styles.wrapper}>
+    <div className={`${styles.formContainer} ${isDarkMode ? styles.dark : styles.light}`}>
+      <div className={`${styles.wrapper} ${isDarkMode ? styles.dark : styles.light}`}>
         {/* Header */}
-        <div className={styles.header}>
+        <div className={`${styles.header} ${isDarkMode ? styles.dark : styles.light}`}>
           <input
             type="text"
             placeholder="Enter Form Name"
             value={formname}
-            className={styles.formNameInput}
+            className={`${styles.formNameInput} ${isDarkMode ? styles.dark : styles.light}`}
           />
-          <div className={styles.headerControls}>
-            <div className={styles.navigationButtons}>
-              <button className={`${styles.navButton} ${styles.navButtonActive}`}>Flow</button>
-              <button className={styles.navButton_res}>Response</button>
+          <div className={`${styles.headerControls} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.navigationButtons} ${isDarkMode ? styles.dark : styles.light}`}>
+              <button className={`${styles.navButton} ${styles.navButtonActive} ${isDarkMode ? styles.dark : styles.light}`}>Flow</button>
+              <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` }>Response</button>
             </div>
-            <div className={styles.headerActions}>
-            <div className={styles.toggleContainer}>
+            <div className={`${styles.headerActions} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.toggleContainer} ${isDarkMode ? styles.dark : styles.light}`}>
                <span className={`${styles.theme_label} ${isDarkMode ? styles.textDark : styles.textLight}`}>
                     <p className={`${styles.light_mode} ${isDarkMode ? styles.dark : styles.light}`}>Light</p>
                         <label className={styles.switch}>
@@ -43,8 +77,8 @@ function Forms() {
                     <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
                  </span>
             </div>
-            <button className={styles.shareButton}>Share</button>
-            <button className={styles.saveButton}>Save</button>
+            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` }>Share</button>
+            <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} onClick={handleSave}>Save</button>
             <button className={styles.closeButton}>
               <X size={24} />
             </button>
@@ -53,72 +87,94 @@ function Forms() {
         </div>
 
         {/* Main Content */}
-        <div className={styles.mainContent}>
+        <div className={`${styles.mainContent} ${isDarkMode ? styles.dark : styles.light}`}>
           {/* Left Sidebar */}
-          <div className={styles.sidebar}>
-            <div className={styles.sidebarSection}>
-              <h2 className={styles.sectionTitle}>Bubbles</h2>
-              <div className={styles.buttonGrid}>
-                <button className={styles.itemButton}>
-                  <MessageSquare size={20} className={styles.blueIcon} />
-                  <span>Text</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Image size={20} className={styles.blueIcon} />
-                  <span>Image</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Video size={20} className={styles.blueIcon} />
-                  <span>Video</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Camera size={20} className={styles.blueIcon} />
-                  <span>GIF</span>
-                </button>
+          <div className={`${styles.sidebar} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.sidebarSection} ${isDarkMode ? styles.dark : styles.light}`}>
+              <h2 className={`${styles.sectionTitle} ${isDarkMode ? styles.dark : styles.light}`}>Bubbles</h2>
+              <div className={`${styles.buttonGrid} ${isDarkMode ? styles.dark : styles.light}`}>
+                {bubbleItems.map((item) => (
+                  <button 
+                    key={item.id}
+                    onClick={() => handleAddItem(item)}
+                    className={`${styles.itemButton} ${isDarkMode ? styles.dark : styles.light}`}
+                  >
+                    <item.icon size={20} className={styles.blueIcon} />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className={styles.sidebarSection}>
-              <h2 className={styles.sectionTitle}>Inputs</h2>
-              <div className={styles.buttonGrid}>
-                <button className={styles.itemButton}>
-                  <Type size={20} className={styles.orangeIcon} />
-                  <span>Text</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Hash size={20} className={styles.orangeIcon} />
-                  <span>Number</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Mail size={20} className={styles.orangeIcon} />
-                  <span>Email</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Phone size={20} className={styles.orangeIcon} />
-                  <span>Phone</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Calendar size={20} className={styles.orangeIcon} />
-                  <span>Date</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <Star size={20} className={styles.orangeIcon} />
-                  <span>Rating</span>
-                </button>
-                <button className={styles.itemButton}>
-                  <CheckSquare size={20} className={styles.orangeIcon} />
-                  <span>Buttons</span>
-                </button>
+            <div className={`${styles.sidebarSection} ${isDarkMode ? styles.dark : styles.light}`}>
+              <h2 className={`${styles.sectionTitle} ${isDarkMode ? styles.dark : styles.light}`}>Inputs</h2>
+              <div className={`${styles.buttonGrid} ${isDarkMode ? styles.dark : styles.light}`}>
+                {inputItems.map((item) => (
+                  <button 
+                    key={item.id}
+                    onClick={() => handleAddItem(item)}
+                    className={`${styles.itemButton} ${isDarkMode ? styles.dark : styles.light}`}
+                  >
+                    <item.icon size={20} className={styles.orangeIcon} />
+                    <span>{item.label}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>
-
           {/* Main Canvas */}
-          <div className={styles.canvas}>
-            <div className={styles.startIndicator}>
-              <Flag size={20} />
+          <div className={`${styles.canvas} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.startIndicator} ${isDarkMode ? styles.dark : styles.light}`}>
+              <img src={isDarkMode ? "/flag.png" : "/flag1.png"} alt="flag" />
               <span>Start</span>
             </div>
+
+            {flowItems.map((item) => (
+              <div 
+                key={item.uniqueId}
+                className={`${styles.flowItem} ${isDarkMode ? styles.dark : styles.light}`}
+              >
+                <div className={styles.flowItemHeader}>
+                  <span>{item.label} {item.type === 'input' ? 'Input' : ''}</span>
+                  <button 
+                    onClick={() => handleRemoveItem(item.uniqueId)}
+                    className={styles.removeButton}
+                  >
+                    <Trash2 size={16} className={styles.trash_icon} />
+                  </button>
+                </div>
+                {item.hint && (
+                  <div className={styles.flowItemHint}>
+                    {item.hint}
+                  </div>
+                )}
+                <div className={styles.flowItemContent}>
+                  {item.type === 'input' ? (
+                    ""
+                  ) : (
+                    
+                   <div className={styles.flowItemInputContainer}>
+                     {item.id === 'text' ? <FiMessageSquare className={styles.message_icon} /> : ''}
+                     <input 
+                      type="text" 
+                      placeholder={item.id === 'text' ? "Click here to edit" : "Click to add link"}
+                      value={item.userInput || ''}
+                      onChange={(e) => {
+                        setFlowItems(prevItems =>
+                          prevItems.map(i =>
+                            i.uniqueId === item.uniqueId ? { ...i, userInput: e.target.value } : i
+                          )
+                        );
+                      }}
+                      className={`${styles.flowItemInput} ${isDarkMode ? styles.dark : styles.light}`}
+                    />
+                   </div> 
+                    
+                  )}
+                </div>
+              </div>
+            ))}
+
           </div>
         </div>
       </div>

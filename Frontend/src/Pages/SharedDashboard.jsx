@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../Contexts/ThemeContext";
 import axios from "axios";
 
 const SharedDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
+   const { isDarkMode, toggleTheme } = useTheme(); 
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null); 
