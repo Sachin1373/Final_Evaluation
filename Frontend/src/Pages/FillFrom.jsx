@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../Styles/FillForm.module.css";
 import axios from "axios";
-import { IoSend } from "react-icons/io5";
+import sendIcon from '../assets/SendIcon.png'; 
 
 function FillForm() {
   const { formId } = useParams();
@@ -179,7 +179,7 @@ function FillForm() {
             onClick={() => handleSend()}
             className={styles.sendButton}
           >
-            <IoSend className={styles.sendIcon} /> 
+            <img src={sendIcon} alt="Send" className={styles.sendIcon} />
           </button>
         </div>
       );
