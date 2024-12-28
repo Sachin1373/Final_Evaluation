@@ -4,7 +4,6 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../Styles/FillForm.module.css";
 import axios from "axios";
-import sendIcon from '../assets/SendIcon.png'; 
 
 function FillForm() {
   const { formId } = useParams();
@@ -41,9 +40,11 @@ function FillForm() {
   const handleNextMessage = () => {
     if (currentIndex < messages.length) {
       const currentMessage = messages[currentIndex];
-      if (currentMessage.type === "system") {
+      if (currentMessage.type === "text" || currentMessage.type === "image") {
         setChatHistory((prev) => [...prev, currentMessage]);
         setCurrentIndex((prev) => prev + 1);
+      } else if (currentMessage.type === "input") {
+        setChatHistory((prev) => [...prev, currentMessage]);
       }
     }
   };
@@ -58,25 +59,39 @@ function FillForm() {
     }
   };
 
-  
-
-  
-  React.useEffect(() => {
+  useEffect(() => {
     handleNextMessage(); // Start with the first system message
   }, []);
 
   return (
-    <div className="chat-container">
-      <div className="chat-box">
+    <div className={styles.chatContainer}>
+      <div className={styles.chatBox}>
         {chatHistory.map((msg, index) => (
-          <div key={index} className={`message ${msg.type}`}>
-            {msg.type === "system" && <div dangerouslySetInnerHTML={{ __html: msg.data }} />}
+          <div key={index} className={`${styles.message} ${msg.type}`}>
+            {msg.type === "text" && <div>{msg.data}</div>}
+            {msg.type === "image" && <img src={msg.data} alt="chat" />}
+            {msg.type === "input" && (
+              <input
+                type={msg.data}
+                placeholder={`Enter ${msg.data}`}
+                onKeyPress={(e) => {
+                  if (e.key === "Enter" && e.target.value.trim()) {
+                    setChatHistory((prev) => [
+                      ...prev,
+                      { type: "user", data: e.target.value },
+                    ]);
+                    setUserInput("");
+                    setCurrentIndex((prev) => prev + 1);
+                  }
+                }}
+              />
+            )}
             {msg.type === "user" && <div>{msg.data}</div>}
           </div>
         ))}
       </div>
-      {currentIndex < messages.length && messages[currentIndex].type === "user" && (
-        <div className="input-container">
+      {currentIndex < messages.length && messages[currentIndex].type === "input" && (
+        <div className={styles.inputContainer}>
           <input
             type="text"
             placeholder="Type your message..."
@@ -86,10 +101,9 @@ function FillForm() {
           <button onClick={handleSend}>Send</button>
         </div>
       )}
+      <ToastContainer />
     </div>
   );
-};
-     
+}
+
 export default FillForm;
-
-
