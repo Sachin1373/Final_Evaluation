@@ -1,6 +1,7 @@
 .chatContainer {
     display: flex;
     flex-direction: column;
+    padding: 4rem 2rem;
     gap: 1rem;
   }
   

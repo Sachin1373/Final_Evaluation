@@ -23,11 +23,13 @@ function Forms() {
      
      
 
-    const handleAddItem = (item) => {
-      setFlowItems([...flowItems, { 
-        ...item, 
+     const handleAddItem = (item) => {
+      setFlowItems([...flowItems, {
+        ...item,
         uniqueId: `${item.id}-${Date.now()}`,
-        hint: item.type === 'input' ? 'Hint: User will input a text on his form' : ''
+        hint: item.type === 'input' ? 'Hint: User will input a text on his form' : '',
+        userInput: '', // Initialize userInput for all items
+        imgLink: ''    // Initialize imgLink for image items
       }]);
     };
   
@@ -41,26 +43,40 @@ function Forms() {
       navigator.clipboard.writeText(shareableLink);
       toast.success("Shareable link copied to clipboard!");
     };
+
+
+    const handleInputChange = (uniqueId, value, field = 'userInput') => {
+      setFlowItems(prevItems =>
+        prevItems.map(item =>
+          item.uniqueId === uniqueId ? { ...item, [field]: value } : item
+        )
+      );
+    };
     
 
     const handleSave = async () => {
       const dataToSave = flowItems.map(item => {
         if (item.type === 'bubble') {
-          if (item.id === 'text') {
-            return { type: 'text', data: item.userInput || '' }; // Ensure userInput is captured
-          } else if (item.id === 'img') {
-            return { type: 'image', data: item.imgLink || '' }; // Ensure imgLink is captured
-          } else if (item.id === 'video' || item.id === 'gif') {
-            return null; // Skip video and GIF
+          switch (item.id) {
+            case 'text':
+              return { type: 'text', data: item.userInput || '' };
+            case 'image':
+              return { type: 'image', data: item.userInput || '' }; // Use userInput for image URL
+            case 'video':
+            case 'gif':
+              return null;
+            default:
+              return null;
           }
         } else if (item.type === 'input') {
-          return { type: 'input', data: item.id }; // Save input type (e.g., text, number)
+          return { type: 'input', data: item.id };
         }
-        return null; // Skip any unsupported items
-      }).filter(item => item !== null); 
+        return null;
+      }).filter(item => item !== null);
+      
       setContent(dataToSave);
-      setIsContentReady(true); 
-      console.log(dataToSave);
+      setIsContentReady(true);
+      console.log('Saving data:', dataToSave);
     };
 
     const upadtecontent = async () => {
@@ -172,50 +188,54 @@ function Forms() {
             </div>
 
             {flowItems.map((item) => (
-              <div 
-                key={item.uniqueId}
-                className={`${styles.flowItem} ${isDarkMode ? styles.dark : styles.light}`}
-              >
-                <div className={styles.flowItemHeader}>
-                  <span>{item.label} {item.type === 'input' ? 'Input' : ''}</span>
-                  <button 
-                    onClick={() => handleRemoveItem(item.uniqueId)}
-                    className={styles.removeButton}
-                  >
-                    <Trash2 size={16} className={styles.trash_icon} />
-                  </button>
+            <div
+              key={item.uniqueId}
+              className={`${styles.flowItem} ${isDarkMode ? styles.dark : styles.light}`}
+            >
+              <div className={styles.flowItemHeader}>
+                <span>{item.label} {item.type === 'input' ? 'Input' : ''}</span>
+                <button
+                  onClick={() => handleRemoveItem(item.uniqueId)}
+                  className={styles.removeButton}
+                >
+                  <Trash2 size={16} className={styles.trash_icon} />
+                </button>
+              </div>
+              {item.hint && (
+                <div className={styles.flowItemHint}>
+                  {item.hint}
                 </div>
-                {item.hint && (
-                  <div className={styles.flowItemHint}>
-                    {item.hint}
-                  </div>
-                )}
-                <div className={styles.flowItemContent}>
-                  {item.type === 'input' ? (
-                    ""
-                  ) : (
-                    
-                   <div className={styles.flowItemInputContainer}>
-                     {item.id === 'text' ? <FiMessageSquare className={styles.message_icon} /> : ''}
-                     <input 
-                      type="text" 
-                      placeholder={item.id === 'text' ? "Click here to edit" : "Click to add link"}
+              )}
+              <div className={styles.flowItemContent}>
+                {item.type === 'input' ? (
+                  ""
+                ) : (
+                  <div className={styles.flowItemInputContainer}>
+                    {item.id === 'text' && <FiMessageSquare className={styles.message_icon} />}
+                    {item.id === 'image' && <Image className={styles.message_icon} />}
+                    <input
+                      type="text"
+                      placeholder={
+                        item.id === 'text' 
+                          ? "Click here to edit" 
+                          : item.id === 'image'
+                            ? "Enter image URL"
+                            : "Click to add link"
+                      }
                       value={item.userInput || ''}
-                      onChange={(e) => {
-                        setFlowItems(prevItems =>
-                          prevItems.map(i =>
-                            i.uniqueId === item.uniqueId ? { ...i, userInput: e.target.value } : i
-                          )
-                        );
-                      }}
+                      onChange={(e) => handleInputChange(item.uniqueId, e.target.value)}
                       className={`${styles.flowItemInput} ${isDarkMode ? styles.dark : styles.light}`}
                     />
-                   </div> 
-                    
-                  )}
-                </div>
+                    {item.id === 'image' && item.userInput && (
+                      <div className={styles.imagePreview}>
+                         
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
-            ))}
+            </div>
+          ))}
 
           </div>
         </div>

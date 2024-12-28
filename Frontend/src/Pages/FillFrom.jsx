@@ -4,13 +4,19 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import styles from "../Styles/FillForm.module.css";
 import axios from "axios";
+import sendIcon from '../assets/send.png'; // Make sure to add this image
 
 function FillForm() {
   const { formId } = useParams();
-  const [messages, setMessages] = useState([]); // Initialize as an empty array
-  const [currentInput, setCurrentInput] = useState("");
-  const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
-  console.log(messages, "hiiii");
+  const [messages, setMessages] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [userResponses, setUserResponses] = useState({});
+  const [inputValue, setInputValue] = useState('');
+  const [rating, setRating] = useState(0);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [userDetails, setUserDetails] = useState(
+    JSON.parse(localStorage.getItem("UserDetails")) || null
+  );
 
   useEffect(() => {
     const fetchFormContent = async () => {
@@ -23,7 +29,7 @@ function FillForm() {
             },
           }
         );
-        setMessages(res.data.content); // Set the fetched content to messages
+        setMessages(res.data.content);
         toast.success("Form content fetched successfully!");
       } catch (error) {
         console.error("Error fetching form content:", error);
@@ -32,122 +38,174 @@ function FillForm() {
     };
 
     fetchFormContent();
-  }, [formId, userDetails?.token]); // Add dependency for userDetails.token
+  }, [formId, userDetails?.token]);
 
-  const handleSend = () => {
-    if (currentInput.trim()) {
-      const newMessage = { type: "reply", data: currentInput };
-      setMessages((prev) => [...prev, newMessage]);
-      setCurrentInput(""); // Clear the input field
+  const getInputType = (dataType) => {
+    switch (dataType) {
+      case 'text-input':
+        return 'text';
+      case 'number':
+        return 'number';
+      case 'email':
+        return 'email';
+      case 'phone':
+        return 'tel';
+      case 'date':
+        return 'date';
+      default:
+        return 'text';
     }
   };
 
-  const getInputField = (inputType) => {
-    switch (inputType) {
-      case "text-input":
-        return (
-          <input
-            type="text"
-            placeholder="Enter text"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "number":
-        return (
-          <input
-            type="number"
-            placeholder="Enter number"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "email":
-        return (
-          <input
-            type="email"
-            placeholder="Enter email"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "phone":
-        return (
-          <input
-            type="tel"
-            placeholder="Enter phone number"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "date":
-        return (
-          <input
-            type="date"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "rating":
-        return (
-          <input
-            type="number"
-            placeholder="Enter rating (1-5)"
-            value={currentInput}
-            min="1"
-            max="5"
-            onChange={(e) => setCurrentInput(e.target.value)}
-            className={styles.input}
-          />
-        );
-      case "button":
-        return (
-          <button
-            onClick={handleSend}
-            disabled={!currentInput.trim()}
-            className={styles.submitButton}
-          >
-            Submit
-          </button>
-        );
+  const getPlaceholder = (dataType) => {
+    switch (dataType) {
+      case 'text-input':
+        return 'Enter your response';
+      case 'number':
+        return 'Enter a number';
+      case 'email':
+        return 'Enter your email';
+      case 'phone':
+        return 'Enter your phone number';
+      case 'date':
+        return 'Select date';
       default:
+        return 'Type your response';
+    }
+  };
+
+  const handleSend = (value = inputValue) => {
+    if (value.toString().trim()) {
+      setUserResponses(prev => ({
+        ...prev,
+        [currentStep]: value
+      }));
+      setInputValue('');
+      setRating(0);
+      setCurrentStep(prev => prev + 1);
+    }
+  };
+
+  const handleRatingSelect = (selectedRating) => {
+    setRating(selectedRating);
+    handleSend(selectedRating.toString());
+  };
+
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    try {
+      // Add your API call here to submit the form responses
+      // const response = await axios.post('your-api-endpoint', { responses: userResponses });
+      toast.success('Form submitted successfully!');
+    } catch (error) {
+      toast.error('Failed to submit form!');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const renderRatingInput = () => {
+    return (
+      <div className={styles.ratingContainer}>
+        {[1, 2, 3, 4, 5].map((star) => (
+          <button
+            key={star}
+            className={`${styles.ratingButton} ${rating >= star ? styles.active : ''}`}
+            onClick={() => handleRatingSelect(star)}
+          >
+            {star}
+          </button>
+        ))}
+      </div>
+    );
+  };
+
+  const renderStep = (item, index) => {
+    if (index > currentStep) return null;
+
+    if (item.type === 'text') {
+      return (
+        <div key={index} className={styles.botMessageContainer}>
+          <div className={styles.botMessage}>
+            <p>{item.data}</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (item.type === 'image') {
+      return (
+        <div key={index} className={styles.botMessageContainer}>
+          <div className={styles.botMessage}>
+            <img src={item.data} alt="Chat image" className={styles.chatImage} />
+          </div>
+        </div>
+      );
+    }
+
+    if (item.type === 'input' && index === currentStep) {
+      if (item.data === 'button') {
         return (
+          <div key={index} className={styles.submitButtonContainer}>
+            <button
+              onClick={handleSubmit}
+              disabled={isSubmitting}
+              className={styles.submitButton}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit Form'}
+            </button>
+          </div>
+        );
+      }
+
+      if (item.data === 'rating') {
+        return (
+          <div key={index} className={styles.inputContainer}>
+            {renderRatingInput()}
+          </div>
+        );
+      }
+
+      return (
+        <div key={index} className={styles.inputContainer}>
           <input
-            type="text"
-            placeholder="Enter text"
-            value={currentInput}
-            onChange={(e) => setCurrentInput(e.target.value)}
+            type={getInputType(item.data)}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder={getPlaceholder(item.data)}
             className={styles.input}
           />
-        );
+          <button
+            onClick={() => handleSend()}
+            className={styles.sendButton}
+          >
+            <img src={sendIcon} alt="Send" className={styles.sendIcon} />
+          </button>
+        </div>
+      );
     }
+
+    if (item.type === 'input' && userResponses[index]) {
+      return (
+        <div key={index} className={styles.userMessageContainer}>
+          <div className={styles.userMessage}>
+            <p>{userResponses[index]}</p>
+          </div>
+        </div>
+      );
+    }
+
+    return null;
   };
 
   return (
-    <div className={styles.chatMessages}>
+    <div className={styles.chatContainer}>
       <ToastContainer />
-      <h1>Fill Form</h1>
-      {messages.map((message, index) => {
-        if (message.type === "text") {
-          return (
-            <div key={index} className={styles.chatText}>
-              {message.data}
-            </div>
-          );
-        } else if (message.type === "input") {
-          return (
-            <div key={index} className={styles.chatInput}>
-              {getInputField(message.data)}
-            </div>
-          );
-        }
-        return null;
-      })}
+      <div className={styles.chatBox}>
+        <div className={styles.messagesContainer}>
+          {messages.map((item, index) => renderStep(item, index))}
+        </div>
+      </div>
     </div>
   );
 }
