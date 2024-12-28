@@ -121,7 +121,7 @@ function FillForm() {
   };
 
   const renderStep = (item, index) => {
-    if (index > currentStep) return null;
+    // if (index > currentStep) return null;
 
     if (item.type === 'text') {
       return (
