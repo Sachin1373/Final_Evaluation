@@ -150,6 +150,11 @@
   width: 100%;
 }
 
+.chatImage{
+  height: 100px;
+  width: 100px;
+}
+
 .ratingButton {
   width: 40px;
   height: 40px;
