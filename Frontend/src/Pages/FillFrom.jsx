@@ -131,30 +131,34 @@ function FillForm() {
   };
 
   const handleRatingSelect = (rating) => {
-    const currentInputIndex = findNextInputIndex();
-    if (currentInputIndex !== null) {
-      setUserResponses(prev => ({
-        ...prev,
-        [currentInputIndex]: rating.toString()
-      }));
-    }
+    setSelectedRating(rating);
+    setInputValue(rating.toString());
   };
 
   const renderRating = () => (
     <div className={styles.ratingContainer}>
-      {[1, 2, 3, 4, 5].map((rating) => (
-        <button
-          key={rating}
-          onClick={() => handleRatingSelect(rating)}
-          className={`${styles.ratingButton} ${
-            inputValue === rating.toString() ? styles.ratingButtonSelected : ''
-          }`}
-        >
-          {rating}
-        </button>
-      ))}
+      <div className={styles.rating_wrapper}>
+        {[1, 2, 3, 4, 5].map((rating) => (
+          <button
+            key={rating}
+            onClick={() => handleRatingSelect(rating)}
+            className={`${styles.ratingButton} ${
+              selectedRating === rating ? styles.ratingButtonSelected : ''
+            }`}
+          >
+            {rating}
+          </button>
+        ))}
+      </div>
+      <button 
+        className={styles.button}
+        onClick={handleSend}
+        disabled={!selectedRating}
+      >
+        <IoSend className={styles.send_btn}/>
+      </button>
     </div>
-  );
+  );;
 
   const renderInputField = (inputType, currentIndex) => {
     if (inputType === 'rating') {
@@ -176,6 +180,7 @@ function FillForm() {
 
     return (
       <>
+        <div className={styles.inputWrapper}> 
         <input
           type={inputConfig.type}
           value={inputValue}
@@ -187,8 +192,9 @@ function FillForm() {
           className={styles.button}
           onClick={handleSend}
         >
-          Send
+          <IoSend className={styles.send_btn}/>
         </button>
+        </div>
         {inputErrors[currentIndex] && (
           <div className={styles.error}>{inputErrors[currentIndex]}</div>
         )}

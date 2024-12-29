@@ -1,138 +1,299 @@
-.container {
-  min-height: 100vh;
-  background: #f5f5f5;
-  padding: 20px;
+.container{
+  width: 800px;
 }
 
+/* Chatbot Container */
 .chatContainer {
-  width: 100%;
-  max-width: 600px;
-  margin: 0 auto;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.messagesContainer {
   display: flex;
   flex-direction: column;
-  gap: 16px;
-  padding: 20px;
-  max-height: calc(100vh - 40px);
-  overflow-y: auto;
-}
-
-.messageWrapper {
   width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
+/* Chat Row for Left and Right Content */
+.chatRow {
+  display: flex;
+  justify-content: space-between; /* Space between left and right content */
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+
+/* Left Content (Messages, Images) */
 .messageLeft {
   display: flex;
+  flex: 1; /* Take up space on the left */
   justify-content: flex-start;
-}
-
-.messageRight {
-  display: flex;
-  justify-content: flex-end;
+  align-items: flex-start;
 }
 
 .messageBubble {
   max-width: 70%;
   padding: 12px 16px;
-  border-radius: 16px;
-  background: #FF8E21;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.messageRight .messageBubble {
-  background: #2196f3;
-  color: white;
+  border-radius: 12px;
+  font-family: Open Sans;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20.43px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;    
+  background-color: #f1f3fc;
+  color: #847F7F;
+  margin-bottom: 15px;
+  text-align: left;
 }
 
 .messageImage {
-  max-width: 300px;
-  border-radius: 8px;
+  max-width: 200px;
+  border-radius: 12px;
+  margin-right: 12px;
+  margin-bottom: 15px;
 }
 
-.inputContainer {
+/* Right Content (Inputs, User Messages) */
+.messageRight {
   display: flex;
-  flex-direction: column;
+  flex: 1; /* Take up space on the right */
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+
+.messageRight .messageBubble {
+  background-color: #ff8e21;
+  color: white;
+  font-family: Open Sans;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 20.43px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;    
+  text-align: right;
+}
+
+.inputWrapper {
+  display: flex;
+  align-items: center;
   gap: 8px;
-  padding: 12px;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  width: 50%;
+  margin-left: auto;
 }
 
 .input {
   flex: 1;
-  padding: 12px;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 4px 6.3px 0px #00000040;
   font-size: 14px;
-  outline: none;
+  color: #333;
 }
 
 .input:focus {
-  border-color: #2196f3;
+  outline: none;
 }
 
+/* Button styles */
 .button {
-  padding: 12px 24px;
-  background: #2196f3;
-  color: white;
+  min-width: 40px;
+  height: 40px;
   border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
-}
-
-.button:hover {
-  background: #1976d2;
-}
-
-.submitButton {
-  width: 100%;
-  padding: 12px;
-  background: #2196f3;
+  border-radius: 8px;
+  background-color: #0066ff;
   color: white;
-  border: none;
-  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  font-weight: 500;
-  transition: background 0.2s;
 }
 
-.submitButton:hover {
-  background: #1976d2;
+.send_btn {
+  width: 20px;
+  height: 20px;
+  color: white;
 }
 
+/* Rating specific styles */
 .ratingContainer {
   display: flex;
+  align-items: center;
   gap: 8px;
-  justify-content: center;
-  width: 100%;
+  width: 400px;
+  margin-left: auto;
+}
+
+.rating_wrapper {
+  display: flex;
+  gap: 8px;
+  padding: 8px;
+  background-color: white;
+  border-radius: 8px;
+  flex: 1;
 }
 
 .ratingButton {
-  padding: 8px 16px;
-  border: 1px solid #2196f3;
-  border-radius: 4px;
-  background: white;
-  color: #2196f3;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background-color: #e0e0e0;
+  color: #333;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
 }
 
+/* .ratingButton:hover {
+  background-color: #d0d0d0;
+} */
+
 .ratingButtonSelected {
-  background: #2196f3;
+  background-color: #ff6b00;
   color: white;
 }
 
+
+/* Submit button styles */
+.submitButton {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #0066ff;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Date input specific styles */
+input[type="date"] {
+  width: 100%;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}
+
+/* Number input specific styles */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Phone input specific styles */
+input[type="tel"] {
+  letter-spacing: 0.5px;
+}
+
+/* Error message styles */
 .error {
-  color: #f44336;
+  color: #ff4444;
   font-size: 12px;
   margin-top: 4px;
+  padding-left: 16px;
+}
+
+/* Container styles */
+.inputContainer {
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+@media screen and (max-width: 768px) {
+  .inputWrapper,
+  .ratingContainer,
+  .submitButton,
+  .error {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .container {
+    width:250px;
+  }
+
+  .chatContainer {
+    padding: 10px;
+    height: calc(100vh - 20px);
+  }
+
+  .rating_wrapper {
+    justify-content: space-between;
+  }
+
+  .ratingButton {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+
+  .button {
+    min-width: 36px;
+    height: 36px;
+  }
+
+  .send_btn {
+    width: 18px;
+    height: 18px;
+  }
+
+  .input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Small mobile devices */
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 8px;
+  }
+
+  .chatContainer {
+    padding: 8px;
+  }
+
+  .input {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+
+  .button {
+    min-width: 32px;
+    height: 32px;
+  }
+
+  .send_btn {
+    width: 16px;
+    height: 16px;
+  }
+
+  .rating_wrapper {
+      gap: 4px;
+    }
+    
+    .ratingButton {
+      width: 24px;
+      height: 24px;
+      font-size: 11px;
+    }
 }

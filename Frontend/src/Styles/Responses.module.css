@@ -1,0 +1,418 @@
+.container {
+    background-color: #1a1a1a;
+    /* padding: 24px; */
+    min-height: 100vh;
+    color: white;
+  }
+
+  .container.light{
+    background-color: #F3F4F6;
+    color: black;
+  }
+  
+  .header {
+    display: flex;
+    width: 100%;
+    height: 58px;
+    padding: 0 1rem;
+    background-color: #18181B;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid #FFFFFF29
+  }
+  .header.light{
+    background-color: #F3F4F6;
+    color: black;
+    border-bottom: 1px solid rgb(179, 179, 179);
+  }
+
+  .headerControls{
+    display: flex;
+    margin-left: 40%;
+    width: 58%;
+    justify-content: space-between;
+  }
+
+  .headerActions{
+    display: flex;
+    gap: 1.5rem;
+  }
+
+  .navigationButtons {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .navButton {
+    padding: 0.25rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    background: transparent;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: white;
+    cursor: pointer;
+  }
+
+  .navButton.light{
+    color: black;
+  } 
+  
+  .navButton_res{
+    padding: 0.25rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    background: transparent;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
+    color: #7EA6FF;
+    border: 1px solid #7EA6FF;
+    cursor: pointer;
+  }
+
+  /* .navButton_res.light{
+    color: black;
+  } */
+  
+  .navButtonActive {
+    /* background-color: #2563eb; */
+    /* border: 1px solid #7EA6FF; */
+  }
+  
+  .toggleContainer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .theme_label {
+    font-size: 14px;
+    color: white;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  .light_mode.light{
+    color: black;
+  }
+
+  .Dark_mode.light{
+    color: black;
+  }
+  
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 20px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #007bff;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(14px);
+  }
+  
+  .toggle {
+    width: 3rem;
+    height: 1.5rem;
+    background-color: #2563eb;
+    border-radius: 9999px;
+    padding: 0.125rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .toggleKnob {
+    width: 1.25rem;
+    height: 1.25rem;
+    background-color: white;
+    border-radius: 50%;
+    margin-left: auto;
+  }
+  
+  .shareButton {
+    padding: 0.25rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    background-color: #4b5563;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    color: white;
+    cursor: pointer;
+  }
+
+  
+  
+  .saveButton {
+    padding: 0.25rem 1rem;
+    border-radius: 0.375rem;
+    border: none;
+    background-color: #059669;
+    font-family: Open Sans;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16.8px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    color: white;
+    cursor: pointer;
+  }
+
+ 
+  .closeButton {
+    background: none;
+    border: none;
+    color: #F55050;
+    cursor: pointer;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .statsContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 100px;
+    margin-bottom: 32px;
+  }
+
+  
+  .statCard {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    height: 120px;
+    min-width: 195px;
+  }
+
+  .statCard.light{
+    background-color: rgb(189, 176, 176);
+  }
+
+  
+  .statLabel {
+    color: #ffffff;
+    font-family: Open Sans;
+    font-size: 25.78px;
+    font-weight: 600;
+    line-height: 35.1px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    margin-bottom: 8px;
+  }
+
+  .statLabel.light{
+    color: black;
+  }
+  
+  .statValue {
+    font-size: 24px;
+    font-family: Open Sans;
+    font-size: 25.78px;
+    font-weight: 600;
+    line-height: 35.1px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    font-weight: bold;
+  }
+  
+  .statValue.light{
+    color: black;
+  }
+  
+  .tableContainer {
+    border-radius: 8px;
+    margin-left: 15%;
+    width: 70%;
+    padding: 16px;
+    margin-bottom: 32px;
+    height: auto;
+    overflow: hidden;
+  }
+  
+  .table, th, td {
+    width: 100%;
+    border: 1px solid white;
+    border-collapse: collapse;
+  }
+
+  .table.light, th.light, td.light{
+    border: 1px solid black;
+  }
+
+  .cal{
+    height: 20px;
+    width: 20px;
+  }
+
+  .tableWrapper {
+    overflow: auto;
+    max-height: 268px; /* 300px - 32px padding */
+    scrollbar-width: thin;
+    scrollbar-color: #666666 #2a2a2a;
+  }
+  
+  .tableWrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  
+  .tableWrapper::-webkit-scrollbar-track {
+    background: #2a2a2a;
+  }
+  
+  .tableWrapper::-webkit-scrollbar-thumb {
+    background-color: #666666;
+    border-radius: 4px;
+  }
+  
+  .th {
+    text-align: left;
+    padding: 12px;
+    font-family: Open Sans;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 17.7px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    border-bottom: 1px solid #404040;
+    color: #ffffff;
+    font-weight: normal;
+    white-space: nowrap;
+  }
+  .th.light{
+    color: black;
+  }
+  
+  .td {
+    padding: 12px;
+    font-family: Open Sans;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 17.7px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;    
+    border-bottom: 1px solid #404040;
+    white-space: nowrap;
+  }
+  
+  .metricsContainer {
+    padding: 0 20%;
+    display: flex;
+    align-items: center;
+  }
+  
+  .metricCard {
+    padding: 20px;
+    position: relative;
+    border-radius: 8px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  
+  .submited{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .progressCircle {
+    position: relative;
+    display: flex;
+    width: 300px;
+    height: 300px;
+  }
+
+  .progressStats{
+    position: absolute;
+    top: 25px;
+    right: 200px;
+  }
+  
+  .progressText {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .completionRateCard{
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 8px;
+    height: 120px;
+    min-width: 195px;
+  }
+
+  .completionRateCard.light{
+    background-color: rgb(189, 176, 176);
+  }

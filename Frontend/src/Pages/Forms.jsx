@@ -5,6 +5,7 @@ import { MessageSquare, Image, Video, Camera, Flag, Type, Hash, Mail, Phone, Cal
 import { useParams } from "react-router-dom";
 import inputItems from "../Constants/inputItems.js";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import bubbleItems from "../Constants/bubbleItems.js";
@@ -21,7 +22,11 @@ function Forms() {
      const [content, setContent] = useState([]);
      const [isContentReady, setIsContentReady] = useState(false);
      
-     
+     const navigate = useNavigate();
+
+     const handleResponse = (formId) => { 
+      navigate(`/responses/${formId}/${name}`);
+    };
 
      const handleAddItem = (item) => {
       setFlowItems([...flowItems, {
@@ -122,7 +127,7 @@ function Forms() {
           <div className={`${styles.headerControls} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.navigationButtons} ${isDarkMode ? styles.dark : styles.light}`}>
               <button className={`${styles.navButton} ${styles.navButtonActive} ${isDarkMode ? styles.dark : styles.light}`}>Flow</button>
-              <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` }>Response</button>
+              <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` } onClick={()=>handleResponse(formId)}>Response</button>
             </div>
             <div className={`${styles.headerActions} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.toggleContainer} ${isDarkMode ? styles.dark : styles.light}`}>
