@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import styles from '../../Styles/FillForm.module.css'
+import styles from '../Styles/FillForm.module.css';
 import { IoSend } from "react-icons/io5";
 import axios from "axios";
 
