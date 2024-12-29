@@ -238,6 +238,7 @@ input[type="tel"] {
 
   .container {
     width:250px;
+    margin: 40px auto;
   }
 
   .chatContainer {
@@ -275,6 +276,7 @@ input[type="tel"] {
 @media screen and (max-width: 480px) {
   .container {
     padding: 8px;
+    margin: 40px auto;
   }
 
   .chatContainer {
