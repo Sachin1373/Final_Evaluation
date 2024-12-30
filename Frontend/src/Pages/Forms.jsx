@@ -20,6 +20,7 @@ function Forms() {
   const [content, setContent] = useState([]);
   const [isContentReady, setIsContentReady] = useState(false);
   const [elementCounts, setElementCounts] = useState({});
+  const [hasButton, setHasButton] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,11 +38,15 @@ function Forms() {
   };
 
   const handleAddItem = (item) => {
-    const isButtonPresent = flowItems.some((flowItem) => flowItem.type === 'button');
-
-    if (isButtonPresent) {
-      toast.info("You've reached the end of your form. Save or share your form now!");
-      return; // Prevent adding any new items
+    if (item.id === 'button') {
+      if (hasButton) {
+        toast.error("Only one button allowed per form!");
+        return;
+      }
+      setHasButton(true);
+    } else if (hasButton) {
+      toast.error("Cannot add more fields after button. Remove the button first.");
+      return;
     }
 
     const newCount = (elementCounts[item.id] || 0) + 1;
@@ -65,6 +70,10 @@ function Forms() {
 
   const handleRemoveItem = (uniqueId) => {
     const removedItem = flowItems.find((item) => item.uniqueId === uniqueId);
+    if (removedItem && removedItem.id === 'button') {
+      setHasButton(false);
+    }
+    
     if (removedItem) {
       setElementCounts(prevCounts => ({
         ...prevCounts,
