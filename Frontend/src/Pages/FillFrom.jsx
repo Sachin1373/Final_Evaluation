@@ -97,7 +97,7 @@ function FillForm() {
           data: message.data
         };
       }
-      if (message.type === 'input') {
+      if (message.type === 'input' && message.data !== 'button') {
         return {
           label: message.label || `Input ${index + 1}`,
           type: 'input',
@@ -106,7 +106,7 @@ function FillForm() {
       }
       return null;
     }).filter(response => response !== null);
-
+  
     return formattedResponses;
   };
 
