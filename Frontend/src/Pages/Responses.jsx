@@ -24,6 +24,10 @@ const Responses = () => {
     navigate(`/forms/${formId}/${name}`);
   }
 
+  const handleclosebtn = () => {
+    navigate(`/dashboard`);
+  }
+
   const mockData = [
     { 
       id: 1, 
@@ -162,7 +166,7 @@ const Responses = () => {
               <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` } >Share</button>
               <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} >Save</button>
               <button className={styles.closeButton}>
-                <X size={24} />
+                <X size={24} onClick={handleclosebtn} />
               </button>
             </div>
           </div>

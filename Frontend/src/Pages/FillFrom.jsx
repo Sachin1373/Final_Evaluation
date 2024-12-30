@@ -81,11 +81,44 @@ function FillForm() {
     return null;
   };
 
+  const formatResponsesForSubmission = () => {
+    const formattedResponses = messages.map((message, index) => {
+      if (message.type === 'text') {
+        return {
+          label: message.label || `Text ${index + 1}`,
+          type: 'text',
+          data: message.data
+        };
+      }
+      if (message.type === 'image') {
+        return {
+          label: message.label || `Image ${index + 1}`,
+          type: 'image',
+          data: message.data
+        };
+      }
+      if (message.type === 'input') {
+        return {
+          label: message.label || `Input ${index + 1}`,
+          type: 'input',
+          data: userResponses[index] || ''
+        };
+      }
+      return null;
+    }).filter(response => response !== null);
+
+    return formattedResponses;
+  };
+
   const handleSubmitForm = async () => {
     try {
+      const formattedResponses = formatResponsesForSubmission();
+      
       await axios.post(
         `https://final-evaluation-qbj9.onrender.com/api/v1/typebot/submit-form/${formId}`,
-        { responses: userResponses },
+        { 
+          responses: formattedResponses
+        },
         {
           headers: {
             Authorization: `Bearer ${userDetails?.token}`,
@@ -97,8 +130,6 @@ function FillForm() {
       console.error("Error submitting form:", error);
       toast.error("Error submitting form!");
     }
-
-    console.log('User responses:', userResponses);
   };
 
   const handleSend = () => {
@@ -130,6 +161,12 @@ function FillForm() {
     }));
     setInputValue('');
     setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
+
+    // If this was the last input, submit the form
+    const nextIndex = findNextInputIndex();
+    if (nextIndex === null) {
+      handleSubmitForm();
+    }
   };
 
   const handleRatingSelect = (rating) => {
@@ -183,19 +220,19 @@ function FillForm() {
     return (
       <>
         <div className={styles.inputWrapper}> 
-        <input
-          type={inputConfig.type}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className={styles.input}
-          placeholder={inputConfig.placeholder}
-        />
-        <button 
-          className={styles.button}
-          onClick={handleSend}
-        >
-          <IoSend className={styles.send_btn}/>
-        </button>
+          <input
+            type={inputConfig.type}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className={styles.input}
+            placeholder={inputConfig.placeholder}
+          />
+          <button 
+            className={styles.button}
+            onClick={handleSend}
+          >
+            <IoSend className={styles.send_btn}/>
+          </button>
         </div>
         {inputErrors[currentIndex] && (
           <div className={styles.error}>{inputErrors[currentIndex]}</div>
@@ -256,6 +293,7 @@ function FillForm() {
 
   return (
     <div className={styles.container}>
+      <ToastContainer />
       <div className={styles.chatContainer}>
         <div className={styles.messagesContainer}>
           {messages.map((message, index) => (

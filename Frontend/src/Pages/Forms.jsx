@@ -27,12 +27,23 @@ function Forms() {
     navigate(`/responses/${formId}/${name}`);
   };
 
+  const handleclosebtn = () => {
+    navigate("/dashboard");
+  };
+
   const generateItemLabel = (item, count) => {
     const baseLabel = item.type === 'input' ? `Input ${item.label}` : item.label;
     return `${baseLabel} ${count}`;
   };
 
   const handleAddItem = (item) => {
+    const isButtonPresent = flowItems.some((flowItem) => flowItem.type === 'button');
+
+    if (isButtonPresent) {
+      toast.info("You've reached the end of your form. Save or share your form now!");
+      return; // Prevent adding any new items
+    }
+
     const newCount = (elementCounts[item.id] || 0) + 1;
     
     setElementCounts(prevCounts => ({
@@ -207,7 +218,7 @@ function Forms() {
                 Save
               </button>
               <button className={styles.closeButton}>
-                <X size={24} />
+                <X size={24} onClick={handleclosebtn} />
               </button>
             </div>
           </div>

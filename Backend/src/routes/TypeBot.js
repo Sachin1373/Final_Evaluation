@@ -9,7 +9,7 @@ router.post('/createtypebot', verifyToken, asynchandler(createtypebot))
 router.get('/getTypeBot', verifyToken, asynchandler(getTypeBot))
 router.delete('/deleteTypeBot', verifyToken, asynchandler(deleteTypeBot))
 router.put('/update-form/:formId' , verifyToken , asynchandler(addtypebotcontent))
-router.get('/get-form-content/:formId' , verifyToken , asynchandler(gettypebotcontent))
+router.get('/get-form-content/:formId' ,  asynchandler(gettypebotcontent))
 
 
 export default router
