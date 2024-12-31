@@ -25,8 +25,7 @@ import FormResponse from "../models/TypeBotResponses.model.js";
     
   };  
 
-  import mongoose from 'mongoose';
-  import FormResponse from '../models/TypeBotResponses.model.js';
+
   
   export const addFormResponse = async (req, res) => {
     try {
