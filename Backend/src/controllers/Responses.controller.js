@@ -38,8 +38,8 @@ import mongoose from "mongoose";
 
         // Create the response entry with the formatted data
         const responseEntry = {
-            date: responses.date || new Date(),
-            data: responses.date.data  // This is already formatted from frontend
+            date: responses[0].date || new Date(),
+            data: responses[0].data  // This is already formatted from frontend
         };
 
         const result = await FormResponse.findOneAndUpdate(
