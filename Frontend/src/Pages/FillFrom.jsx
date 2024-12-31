@@ -307,6 +307,7 @@ function FillForm() {
     if (message.type === 'text') {
       return (
         <div className={styles.messageLeft}>
+           <img src="/Chatbot_img.png" alt="chat"  className={styles.chatbotimg}/>
           <div className={styles.messageBubble}>{message.data}</div>
         </div>
       );

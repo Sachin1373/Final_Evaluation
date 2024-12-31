@@ -16,6 +16,11 @@
   box-sizing: border-box;
 }
 
+.chatbotimg{
+  height: 15px;
+  width: 15px;
+}
+
 /* Chat Row for Left and Right Content */
 .chatRow {
   display: flex;
