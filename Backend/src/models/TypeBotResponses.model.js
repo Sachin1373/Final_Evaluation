@@ -29,4 +29,6 @@ const formResponseSchema = new mongoose.Schema({
 
 const FormResponse = mongoose.model('FormResponse', formResponseSchema);
 
+export default FormResponse
+
 
