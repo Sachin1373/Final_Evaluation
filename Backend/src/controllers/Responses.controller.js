@@ -55,20 +55,14 @@ export const addFormResponse = async (req, res) => {
         return res.status(400).json({ message: "Invalid input data" });
       }
       
-      let formResponse = await FormResponse.findOne({ formId });
+      
 
       // Create a new form response
-      if (formResponse) {
-        // Update the existing document
-        if (incrementView) formResponse.viewCount += 1; // Increment viewCount if requested
-        if (incrementStart) formResponse.startCount += 1; // Increment startCount if requested
-        formResponse.responses.push(...responses); // Append new responses
-        formResponse.submittedAt = new Date(); // Update the submitted timestamp
-        await formResponse.save(); // Save the updated document
-      } else {
-        // Create a new document
-        formResponse = new FormResponse({ formId, responses, submittedAt: new Date() });
-      }
+      const formResponse = new FormResponse({
+        formId,
+        responses,
+        submittedAt: new Date(),
+      });
   
       await formResponse.save();
   
