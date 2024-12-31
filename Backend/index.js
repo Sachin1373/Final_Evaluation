@@ -6,6 +6,7 @@ import dashboard from "./src/routes/DashBoard.js"
 import folder from "./src/routes/Folder.js"
 import update from './src/routes/Update.js'
 import typebot from "./src/routes/TypeBot.js"
+import Response from "./src/routes/Response.js"
 import cors from "cors";
 
 
@@ -42,6 +43,9 @@ app.use('/api/v1/update',update)
 
 //typeBot
 app.use('/api/v1/typebot',typebot)
+
+//Responses
+app.use('/api/v1/responses',Response)
 
 // Error Handling Middleware
 app.use((err, req, res, next) => {
