@@ -31,7 +31,7 @@ function FillForm() {
   useEffect(() => {
     const updateViewCount = async () => {
       try {
-        await axios.post(
+        await axios.patch(
           `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-view-count/${formId}`,
           {},
         );
@@ -72,7 +72,7 @@ function FillForm() {
     if (!hasStarted) {
       setHasStarted(true);
       try {
-        await axios.post(
+        await axios.patch(
           `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-start-count/${formId}`,
           {},
           {
