@@ -16,6 +16,15 @@ function Landingpage() {
     }
   }
 
+  const handlebtn = () =>{
+    if(isLoggedIn){
+      console.log(isLoggedIn)
+      navigate('/dashboard')
+    }else{
+      navigate('/login')
+    }
+  }
+
   return (
     <div className={styles.landing_wrapper}>
       <nav>
@@ -31,7 +40,18 @@ function Landingpage() {
       </nav>
 
       <div className={styles.hero}>
-        <img src="/Hero_Section.png" alt="" />
+        <div className={styles.hero_section}>
+              <p className={styles.heading}>Build advanced chatbots
+              visually</p>
+
+              <p className={styles.sub_heading}>Typebot gives you powerful blocks to create unique chat experiences. Embed them
+              anywhere on your web/mobile apps and start collecting results like magic.</p>
+
+              <button onClick={handlebtn}>Create a FormBot  for free</button>
+        </div>
+         <div>
+         <img src="/Hero_img.png" alt="" />
+         </div>
       </div>
 
       <footer>
