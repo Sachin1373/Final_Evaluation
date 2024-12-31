@@ -26,6 +26,24 @@ function FillForm() {
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
+  const [hasStarted, setHasStarted] = useState(false);
+
+  useEffect(() => {
+    const updateViewCount = async () => {
+      try {
+        await axios.post(
+          `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-view-count/${formId}`,
+          {},
+        );
+        console.log("View count updated");
+      } catch (error) {
+        console.error("Error updating view count:", error);
+      }
+    };
+
+    updateViewCount();
+  }, [formId]);
+
 
   useEffect(() => {
     const fetchFormContent = async () => {
@@ -48,6 +66,28 @@ function FillForm() {
 
     fetchFormContent();
   }, [formId, userDetails?.token]);
+
+
+  const updateStartCount = async () => {
+    if (!hasStarted) {
+      setHasStarted(true);
+      try {
+        await axios.post(
+          `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-start-count/${formId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${userDetails?.token}`,
+            },
+          }
+        );
+        console.log("Start count updated");
+      } catch (error) {
+        console.error("Error updating start count:", error);
+      }
+    }
+  };
+
 
   const validateInput = (type, value) => {
     if (!value.trim()) return 'This field is required';
@@ -168,6 +208,7 @@ function FillForm() {
     if (nextIndex === null) {
       handleSubmitForm();
     }
+    updateStartCount();
   };
 
   const handleRatingSelect = (rating) => {

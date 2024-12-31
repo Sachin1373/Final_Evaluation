@@ -34,7 +34,7 @@ function CreateFolder({ closeModal, refreshFolders, shareddashid }) {
       closeModal();
 
       // Show success message
-      // toast.success(response.data.message);
+      toast.success(response.data.message);
       await  refreshFolders()
     } catch (error) {
       console.error(error);
