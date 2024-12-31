@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { useParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
@@ -18,15 +18,17 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 const Responses = () => {
   const { isDarkMode, toggleTheme } = useTheme();
   const { formId, name } = useParams();
+  const [views, setViews] = useState(0);
+  const [starts, setStarts] = useState(0);
   const navigate = useNavigate();
 
   const handleflow = () => {
     navigate(`/forms/${formId}/${name}`);
-  }
+  };
 
   const handleclosebtn = () => {
     navigate(`/dashboard`);
-  }
+  };
 
   const mockData = [
     { 
@@ -40,83 +42,7 @@ const Responses = () => {
       marks : 20,
       totalMarks : 25
     },
-    { 
-      id: 2, 
-      submittedAt: 'Jul 17, 02:48 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: 'fsdfasd',
-      button2: '',
-      rating1: 3,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
-    { 
-      id: 3, 
-      submittedAt: 'Jul 14, 04:25 PM', 
-      button1: 'Hi!', 
-      email1: '',
-      text1: '',
-      button2: '',
-      rating1: 4,
-      marks : 20,
-      totalMarks : 25
-    },
+    // other mock data...
   ];
 
   const chartData = {
@@ -146,91 +72,104 @@ const Responses = () => {
 
   return (
     <div className={`${styles.container} ${isDarkMode ? styles.dark : styles.light}`}>
-        <div className={`${styles.header} ${isDarkMode ? styles.dark : styles.light}`}>
-          <div className={`${styles.headerControls} ${isDarkMode ? styles.dark : styles.light}`}>
-            <div className={`${styles.navigationButtons} ${isDarkMode ? styles.dark : styles.light}`}>
-              <button className={`${styles.navButton} ${styles.navButtonActive} ${isDarkMode ? styles.dark : styles.light}`} onClick={handleflow}>Flow</button>
-              <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` }>Response</button>
+      <div className={`${styles.header} ${isDarkMode ? styles.dark : styles.light}`}>
+        <div className={`${styles.headerControls} ${isDarkMode ? styles.dark : styles.light}`}>
+          <div className={`${styles.navigationButtons} ${isDarkMode ? styles.dark : styles.light}`}>
+            <button className={`${styles.navButton} ${styles.navButtonActive} ${isDarkMode ? styles.dark : styles.light}`} onClick={handleflow}>Flow</button>
+            <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` }>Response</button>
+          </div>
+          <div className={`${styles.headerActions} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.toggleContainer} ${isDarkMode ? styles.dark : styles.light}`}>
+              <span className={`${styles.theme_label} ${isDarkMode ? styles.textDark : styles.textLight}`}>
+                <p className={`${styles.light_mode} ${isDarkMode ? styles.dark : styles.light}`}>Light</p>
+                <label className={styles.switch}>
+                  <input type="checkbox" checked={isDarkMode} onChange={toggleTheme} />
+                  <span className={`${styles.slider} ${styles.round}`}></span>
+                </label>
+                <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
+              </span>
             </div>
-            <div className={`${styles.headerActions} ${isDarkMode ? styles.dark : styles.light}`}>
-              <div className={`${styles.toggleContainer} ${isDarkMode ? styles.dark : styles.light}`}>
-                 <span className={`${styles.theme_label} ${isDarkMode ? styles.textDark : styles.textLight}`}>
-                      <p className={`${styles.light_mode} ${isDarkMode ? styles.dark : styles.light}`}>Light</p>
-                          <label className={styles.switch}>
-                               <input type="checkbox" checked={isDarkMode} onChange={toggleTheme} />
-                               <span className={`${styles.slider} ${styles.round}`}></span>
-                          </label>
-                      <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
-                   </span>
+            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` } >Share</button>
+            <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} >Save</button>
+            <button className={styles.closeButton}>
+              <X size={24} onClick={handleclosebtn} />
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Check if views is greater than 1 */}
+      {views > 1 ? (
+        <div className={styles.statsContainer}>
+          <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Views</div>
+            <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>6</div>
+          </div>
+          <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
+            <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Starts</div>
+            <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>100</div>
+          </div>
+        </div>
+      ) : (
+        <div className={`${styles.noResponseContainer} ${isDarkMode ? styles.dark : styles.light}`}>
+          <p className={`${styles.noResponseText} ${isDarkMode ? styles.dark : styles.light}`}>No Response yet</p>
+        </div>
+      )}
+
+      {/* Table and Metrics (if views > 1) */}
+      {views > 1 && (
+        <>
+          <div className={styles.tableContainer}>
+            <div className={styles.tableWrapper}>
+              <table className={`${styles.table} ${isDarkMode ? styles.dark : styles.light}`}>
+                <thead>
+                  <tr>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}></th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}> <p className={styles.submited}><CiCalendar className={styles.cal} /> Submitted at</p></th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 1</th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Email 1</th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Text 1</th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 2</th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Rating 1</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {mockData.map((row) => (
+                    <tr key={row.id}>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}>{row.id}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.submittedAt}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button1}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.email1}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.text1}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button2}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{textAlign : 'center'}}>{row.rating1}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div className={styles.metricsContainer}>
+            <div className={styles.metricCard}>
+              <div className={styles.progressCircle}>
+                <Doughnut data={chartData} options={chartOptions} />
               </div>
-              <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` } >Share</button>
-              <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} >Save</button>
-              <button className={styles.closeButton}>
-                <X size={24} onClick={handleclosebtn} />
-              </button>
+              <div className={styles.progressStats}>
+                <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completed</div>
+                <div className={styles.statValue}>33</div>
+              </div>
+            </div>
+
+            <div className={`${styles.completionRateCard} ${isDarkMode ? styles.dark : styles.light}`}>
+              <div>
+                <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completion rate</div>
+                <div className={styles.statValue}>33%</div>
+              </div>
             </div>
           </div>
-        </div>
-      <div className={styles.statsContainer}>
-        <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
-          <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Views</div>
-          <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>6</div>
-        </div>
-        <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
-          <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Starts</div>
-          <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>100</div>
-        </div>
-      </div>
-
-      <div className={styles.tableContainer}>
-        <div className={styles.tableWrapper}>
-          <table className={`${styles.table} ${isDarkMode ? styles.dark : styles.light}` } >
-            <thead>
-              <tr>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}></th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}> <p className={styles.submited}><CiCalendar className={styles.cal} /> Submitted at</p></th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 1</th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Email 1</th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Text 1</th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 2</th>
-                <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Rating 1</th>
-              </tr>
-            </thead>
-            <tbody>
-              {mockData.map((row) => (
-                <tr key={row.id}>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}` } style={{ width: '20px' }}>{row.id}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.submittedAt}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button1}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.email1}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.text1}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button2}</td>
-                  <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{textAlign : 'center'}}>{row.rating1}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div className={styles.metricsContainer}>
-        <div className={styles.metricCard}>
-          <div className={styles.progressCircle}>
-            <Doughnut data={chartData} options={chartOptions} />
-          </div>
-          <div className={styles.progressStats}>
-            <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completed</div>
-            <div className={styles.statValue}>33</div>
-          </div>
-        </div>
-
-        <div className={`${styles.completionRateCard} ${isDarkMode ? styles.dark : styles.light}`}>
-          <div>
-            <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completion rate</div>
-            <div className={styles.statValue}>33%</div>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };
