@@ -1,4 +1,4 @@
-import FormResponse from "../models/FormResponse.model.js";
+import FormResponse from "../models/TypeBotResponses.model.js"; 
 
 export const incrementViewCount = async (req, res) => {
  
