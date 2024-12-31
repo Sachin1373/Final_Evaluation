@@ -23,7 +23,7 @@ export const incrementViewCount = async (req, res) => {
   };
 
 
-  const incrementStartCount = async (req, res) => {
+export  const incrementStartCount = async (req, res) => {
     
       const { formId } = req.params;
   
@@ -46,7 +46,7 @@ export const incrementViewCount = async (req, res) => {
   };  
 
 
-const addFormResponse = async (req, res) => {
+export const addFormResponse = async (req, res) => {
     
       const { formId, responses } = req.body;
   

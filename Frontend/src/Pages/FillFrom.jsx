@@ -151,26 +151,27 @@ function FillForm() {
   };
 
   const handleSubmitForm = async () => {
-    // try {
+    try {
       const formattedResponses = formatResponsesForSubmission();
       console.log(formattedResponses)
       
-    //   await axios.post(
-    //     `https://final-evaluation-qbj9.onrender.com/api/v1/typebot/submit-form/${formId}`,
-    //     { 
-    //       responses: formattedResponses
-    //     },
-    //     {
-    //       headers: {
-    //         Authorization: `Bearer ${userDetails?.token}`,
-    //       },
-    //     }
-    //   );
-    //   toast.success("Form submitted successfully!");
-    // } catch (error) {
-    //   console.error("Error submitting form:", error);
-    //   toast.error("Error submitting form!");
-    // }
+      await axios.post(
+        'https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response',
+        { 
+          formId,
+          responses: formattedResponses
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails?.token}`,
+          },
+        }
+      );
+      toast.success("Form submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error("Error submitting form!");
+    }
   };
 
   const handleSend = () => {
