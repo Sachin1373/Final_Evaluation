@@ -26,40 +26,36 @@ import FormResponse from "../models/TypeBotResponses.model.js";
   };  
 
 
-  
+
   export const addFormResponse = async (req, res) => {
+    const { formId, responses } = req.body;
+  
+    // Validate input data
+    if (!formId || !Array.isArray(responses)) {
+      return res.status(400).json({ message: "Invalid input data" });
+    }
+  
+    // Structure the response to match the schema
+    const responseEntry = {
+      date: new Date(),
+      data: responses, // Attach the array of responses here
+    };
+  
     try {
-      const { formId, responses } = req.body;
-  
-      // Validate formId and responses
-      if (!formId || !mongoose.Types.ObjectId.isValid(formId)) {
-        return res.status(400).json({ message: "Invalid formId" });
-      }
-      if (!responses || !Array.isArray(responses)) {
-        return res.status(400).json({ message: "Invalid responses format" });
-      }
-  
-      // Prepare the response entry
-      const responseEntry = { data: responses };
-  
-      // Update the form response by pushing the new responses
+      // Find the form response by formId and update it by pushing the new response
       const updatedFormResponse = await FormResponse.findOneAndUpdate(
         { formId },
-        { $push: { responses: responseEntry } },
-        { upsert: true, new: true }
+        { $push: { responses: responseEntry } }, // Push the new response
+        { upsert: true, new: true } // Create the document if it doesn't exist
       );
   
-      // Send back the updated form response
       res.status(200).json({
         message: "Response added successfully",
         updatedFormResponse,
       });
-  
     } catch (error) {
-      // Handle any errors that occur during the update process
       console.error("Error adding form response:", error);
       res.status(500).json({ message: "Error adding form response" });
     }
   };
-  
   
