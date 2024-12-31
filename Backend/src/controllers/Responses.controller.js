@@ -25,15 +25,29 @@ import FormResponse from "../models/TypeBotResponses.model.js";
     
   };  
 
-
-export  const addFormResponse = async (req, res) => {
+  export const addFormResponse = async (req, res) => {
     
       const { formId, responses } = req.body;
-      await FormResponse.findOneAndUpdate(
+  
+      if (!formId || !Array.isArray(responses)) {
+        return res.status(400).json({ message: "Invalid input data" });
+      }
+  
+      // Structure the response to match the schema
+      const responseEntry = {
+        data: responses, // Attach the array of responses here
+      };
+  
+      const updatedFormResponse = await FormResponse.findOneAndUpdate(
         { formId },
-        { $push: { responses: { data: responses } } },
-        // { upsert: true }
+        { $push: { responses: responseEntry } }, // Push the structured response
+        { upsert: true, new: true } // Create the document if it doesn't exist
       );
-      res.status(200).json({ message: 'Response added successfully' });
-    
-  }; 
+  
+      res.status(200).json({
+        message: "Response added successfully",
+        updatedFormResponse,
+      });
+   
+  };
+  
