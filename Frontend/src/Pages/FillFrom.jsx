@@ -155,12 +155,12 @@ function FillForm() {
         const formattedResponses = formatResponsesForSubmission();
         
         const requestData = {
-            formId,
-            responses: {
-                date: new Date(),
-                data: formattedResponses
-            }
-        };
+          formId,
+          responses: [{
+              date: new Date(),
+              data: formattedResponses
+          }]
+      };
 
         console.log('Sending data:', requestData);
 
