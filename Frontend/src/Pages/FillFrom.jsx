@@ -153,7 +153,7 @@ function FillForm() {
   const handleSubmitForm = async () => {
     try {
         const formattedResponses = formatResponsesForSubmission();
-        
+        console.log(formattedResponses)
         const requestData = {
           formId,
           responses: [{
