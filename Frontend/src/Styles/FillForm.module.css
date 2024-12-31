@@ -17,8 +17,8 @@
 }
 
 .chatbotimg{
-  height: 15px;
-  width: 15px;
+  height: 35px;
+  width: 35px;
 }
 
 /* Chat Row for Left and Right Content */
@@ -32,6 +32,7 @@
 /* Left Content (Messages, Images) */
 .messageLeft {
   display: flex;
+  gap: 5px;
   flex: 1; /* Take up space on the left */
   justify-content: flex-start;
   align-items: flex-start;
