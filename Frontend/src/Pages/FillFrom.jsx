@@ -152,10 +152,8 @@ function FillForm() {
 
   const handleSubmitForm = async () => {
     try {
-      const formattedResponses = [{
-        date: new Date(),
-        data: formatResponsesForSubmission()  // Make sure your formatResponsesForSubmission() outputs the correct data
-      }];
+      const formattedResponses = formatResponsesForSubmission();
+      console.log(formattedResponses)
       
       await axios.post(
         'https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response',
