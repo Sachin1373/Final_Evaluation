@@ -1,24 +1,32 @@
-import mongoose from "mongoose";
+import mongoose from 'mongoose';
 
-const responseSchema = new mongoose.Schema({
-  label: { type: String, required: true },
-  type: { type: String, required: true },
-  data: { type: mongoose.Schema.Types.Mixed, required: true }, 
-});
-
-const formResponseSchema = new mongoose.Schema(
-  {
-    formId: { type: mongoose.Schema.Types.ObjectId, required: true, ref: "Form" },
-    viewCount: { type: Number, default: 0 },
-    startCount: { type: Number, default: 0 },
-    responses: [responseSchema],
-    submittedAt: { type: Date }, 
+const formResponseSchema = new mongoose.Schema({
+  formId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Form',
+    required: true
   },
-  { timestamps: true }
-);
+  viewCount: {
+    type: Number,
+    default: 0
+  },
+  startCount: {
+    type: Number,
+    default: 0
+  },
+  responses: [{
+    date: {
+      type: Date,
+      default: Date.now
+    },
+    data: [{
+      label: String,
+      type: String,
+      data: String
+    }]
+  }]
+}, { timestamps: true });
 
-const FormResponse = mongoose.model("FormResponse", formResponseSchema);
-
-export default FormResponse;
+const FormResponse = mongoose.model('FormResponse', formResponseSchema);
 
 

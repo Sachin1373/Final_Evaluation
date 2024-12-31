@@ -5,7 +5,7 @@ import {incrementViewCount,incrementStartCount,addFormResponse} from "../control
 const router = express.Router();
 
 router.post('/add-form-response',asynchandler(addFormResponse))
-router.patch('/increment-view-count/:formId',asynchandler(incrementViewCount))
-router.patch('/increment-start-count/:formId',asynchandler(incrementStartCount))
+router.post('/increment-view-count/:formId',asynchandler(incrementViewCount))
+router.post('/increment-start-count/:formId',asynchandler(incrementStartCount))
 
 export default router
