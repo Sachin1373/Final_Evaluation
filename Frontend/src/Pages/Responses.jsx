@@ -112,7 +112,7 @@ const Responses = () => {
         </div>
       ) : (
         <div className={`${styles.noResponseContainer} ${isDarkMode ? styles.dark : styles.light}`}>
-          <p className={`${styles.noResponseText} ${isDarkMode ? styles.dark : styles.light}`}>No Response yet</p>
+          <p className={`${styles.noResponseText} ${isDarkMode ? styles.dark : styles.light}`}>No Response yet collected</p>
         </div>
       )}
 
