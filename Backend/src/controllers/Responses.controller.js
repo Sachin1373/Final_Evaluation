@@ -30,9 +30,14 @@ import FormResponse from "../models/TypeBotResponses.model.js";
  export const addFormResponse = async (req, res) => {
     try {
       const { formId, responses } = req.body;
+      const responseEntry = {
+        date: new Date(), // current date
+        data: responses, // this is the array of responses passed from the client
+      };
+  
       await FormResponse.findOneAndUpdate(
         { formId },
-        { $push: { responses: { data: responses } } },
+        { $push: { responses: responseEntry } },
         { upsert: true }
       );
       res.status(200).json({ message: 'Response added successfully' });
