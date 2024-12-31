@@ -29,28 +29,32 @@ import FormResponse from "../models/TypeBotResponses.model.js";
 
   export const addFormResponse = async (req, res) => {
     try {
-      const { formId, responses } = req.body;
-      
-      // Process the responses to ensure all data is in string format
-      const processedResponses = responses.map(item => ({
-        ...item,
-        data: String(item.data)
-      }));
-  
-      const responseEntry = {
-        date: new Date(),
-        data: processedResponses,
-      };
-      
-      await FormResponse.findOneAndUpdate(
-        { formId },
-        { $push: { responses: responseEntry } },
-        { upsert: true }
-      );
-      
-      res.status(200).json({ message: 'Response added successfully' });
+        const { formId, responses } = req.body;
+
+        // Validate formId
+        if (!mongoose.Types.ObjectId.isValid(formId)) {
+            return res.status(400).json({ error: 'Invalid formId format' });
+        }
+
+        // Create the response entry with the formatted data
+        const responseEntry = {
+            date: responses.date || new Date(),
+            data: responses.data  // This is already formatted from frontend
+        };
+
+        const result = await FormResponse.findOneAndUpdate(
+            { formId },
+            { $push: { responses: responseEntry } },
+            { upsert: true, new: true }
+        );
+
+        res.status(200).json({ 
+            message: 'Response added successfully', 
+            data: result 
+        });
+
     } catch (error) {
-      res.status(500).json({ error: error.message });
+        console.error('Error adding form response:', error);
+        res.status(500).json({ error: error.message });
     }
-  };
-  
+};

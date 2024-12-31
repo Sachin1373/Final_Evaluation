@@ -123,56 +123,64 @@ function FillForm() {
 
   const formatResponsesForSubmission = () => {
     const formattedResponses = messages.map((message, index) => {
-      if (message.type === 'text') {
-        return {
-          label: message.label || `Text ${index + 1}`,
-          type: 'text',
-          data: message.data
-        };
-      }
-      if (message.type === 'image') {
-        return {
-          label: message.label || `Image ${index + 1}`,
-          type: 'image',
-          data: message.data
-        };
-      }
-      if (message.type === 'input' && message.data !== 'button') {
-        return {
-          label: message.label || `Input ${index + 1}`,
-          type: 'input',
-          data: userResponses[index] || ''
-        };
-      }
-      return null;
+        if (message.type === 'text') {
+            return {
+                label: message.label || `Text ${index + 1}`,
+                type: 'text',
+                data: message.data
+            };
+        }
+        if (message.type === 'image') {
+            return {
+                label: message.label || `Image ${index + 1}`,
+                type: 'image',
+                data: message.data
+            };
+        }
+        if (message.type === 'input' && message.data !== 'button') {
+            return {
+                label: message.label || `Input ${index + 1}`,
+                type: 'input',
+                data: userResponses[index] || ''
+            };
+        }
+        return null;
     }).filter(response => response !== null);
-  
+
     return formattedResponses;
-  };
+};
 
   const handleSubmitForm = async () => {
     try {
-      const formattedResponses = formatResponsesForSubmission();
-      console.log(formattedResponses)
-      
-      await axios.post(
-        'https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response',
-        { 
-          formId,
-          responses: formattedResponses
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${userDetails?.token}`,
-          },
-        }
-      );
-      toast.success("Form submitted successfully!");
+        const formattedResponses = formatResponsesForSubmission();
+        
+        const requestData = {
+            formId,
+            responses: {
+                date: new Date(),
+                data: formattedResponses
+            }
+        };
+
+        console.log('Sending data:', requestData);
+
+        const response = await axios.post(
+            'https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response',
+            requestData,
+            {
+                headers: {
+                    Authorization: `Bearer ${userDetails?.token}`,
+                },
+            }
+        );
+
+        console.log('Form submission successful:', response.data);
+        toast.success("Form submitted successfully!");
     } catch (error) {
-      console.error("Error submitting form:", error);
-      toast.error("Error submitting form!");
+        console.error("Error submitting form:", error);
+        toast.error(error.response?.data?.error || "Error submitting form!");
     }
-  };
+};
 
   const handleSend = () => {
     const currentInputIndex = findNextInputIndex();
