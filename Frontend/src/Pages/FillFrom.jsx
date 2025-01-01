@@ -31,7 +31,7 @@ function FillForm() {
   useEffect(() => {
     const updateViewCount = async () => {
       try {
-        await axios.post(
+        await axios.put(
           `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-view-count/${formId}`,
           {},
         );
@@ -72,7 +72,7 @@ function FillForm() {
     if (!hasStarted) {
       setHasStarted(true);
       try {
-        await axios.post(
+        await axios.put(
           `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-start-count/${formId}`,
           {},
           {
@@ -155,12 +155,11 @@ function FillForm() {
         const formattedResponses = formatResponsesForSubmission();
         console.log(formattedResponses)
         const requestData = {
-          formId, // Ensure formId is correctly defined in the component
           responses: formattedResponses,
       };
 
         const response = await axios.post(
-            'https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response',
+            `https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response/${formId}`,
             requestData,
             {
                 headers: {
