@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.put('/increment-view-count/:formId',asynchandler(incrementViews))
 router.put('/increment-start-count/:formId',asynchandler(incrementStarts))
-router.post('/add-form-response',asynchandler(saveSubmission))
+router.post('/add-form-response/:formId',asynchandler(saveSubmission))
 
 export default router
