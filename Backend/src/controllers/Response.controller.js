@@ -36,6 +36,31 @@ export  const incrementViews = async (req, res) => {
       res.status(500).json({ message: "Error saving submission", error: error.message });
     }
   };
+
+  export const getviews = async (req, res) => {
+    const { formId } = req.params;
+    
+      const form = await FormResponse
+        .findById(formId)
+        .select("views")
+        .exec();
+      if (!form) return res.status(404).json({ message: "Form not found" });
+      res.status(200).json({ views: form.views });
+
+
+  };
+
+  export const getstarts = async (req, res) => {
+    const { formId } = req.params;
+    
+      const form = await FormResponse
+        .findById(formId)
+        .select("starts")
+        .exec();
+      if (!form) return res.status(404).json({ message: "Form not found" });
+      res.status(200).json({ starts: form.starts });
+    
+  };
   
   
   

@@ -12,6 +12,8 @@ import {
 import styles from '../Styles/Responses.module.css';
 import { X } from 'lucide-react';
 import { useTheme } from "../Contexts/ThemeContext";
+import axios from 'axios';
+import { use } from 'react';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -29,21 +31,30 @@ const Responses = () => {
   const handleclosebtn = () => {
     navigate(`/dashboard`);
   };
+  
 
-  const mockData = [
-    { 
-      id: 1, 
-      submittedAt: 'Jul 17, 03:23 PM', 
-      button1: 'Hi!', 
-      email1: 'abc@g.com',
-      text1: 'alpha',
-      button2: 'Studio App to Manage Clients, Tracking App for Clients',
-      rating1: 5,
-      marks : 20,
-      totalMarks : 25
-    },
-    // other mock data...
-  ];
+  const getViews = async () => {
+    try { 
+      const response = await axios.get(`https://final-evaluation-qbj9.onrender.com/api/v1/responses/get-views/${formId}`);
+      if(response.status === 200) {
+        setViews(response.data.views);
+      }
+      
+    } catch (error) {
+      console.error('Error fetching views:', error);
+    }
+  };
+
+  const getStarts = async () => {
+    try {
+      const response = await axios.get(`https://final-evaluation-qbj9.onrender.com/api/v1/responses/get-starts/${formId}`);
+      if(response.status === 200) {
+        setStarts(response.data.starts);
+      }
+    } catch (error) {
+      console.error('Error fetching starts:', error);
+    }
+  };
 
   const chartData = {
     labels: ['Completed', 'Remaining'],
@@ -69,6 +80,11 @@ const Responses = () => {
     },
     cutout: '70%', // For a more circular appearance
   };
+
+  useEffect(() => {
+    getViews();
+    getStarts();
+  }, []);
 
   return (
     <div className={`${styles.container} ${isDarkMode ? styles.dark : styles.light}`}>
@@ -103,11 +119,11 @@ const Responses = () => {
         <div className={styles.statsContainer}>
           <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Views</div>
-            <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>6</div>
+            <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>{views}</div>
           </div>
           <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Starts</div>
-            <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>100</div>
+            <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>{starts}</div>
           </div>
         </div>
       ) : (
