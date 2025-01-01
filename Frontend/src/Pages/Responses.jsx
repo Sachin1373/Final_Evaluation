@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { useParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
@@ -13,7 +13,7 @@ import styles from '../Styles/Responses.module.css';
 import { X } from 'lucide-react';
 import { useTheme } from "../Contexts/ThemeContext";
 import axios from 'axios';
-import { use } from 'react';
+
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
