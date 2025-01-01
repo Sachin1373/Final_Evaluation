@@ -15,12 +15,14 @@ nav{
 }
 
 .hero_section{
+    position: relative;
     height: 425px;
     display: flex;
     align-items: center;
     justify-content: center;
     justify-content: space-evenly;
     flex-direction: column;
+    margin-top: 25px;
     background-color: rgb(0, 0, 14);
 }
 
@@ -43,6 +45,18 @@ nav{
     color: white;    
     cursor: pointer;
 
+}
+
+.icon_left{
+    position: absolute;
+    left: -40px;
+    top: -20px;
+}
+
+.icon_right{
+    position: absolute;
+    right: -20px;
+    top: 0;
 }
 
 .heading{

@@ -48,6 +48,8 @@ function Landingpage() {
               anywhere on your web/mobile apps and start collecting results like magic.</p>
 
               <button onClick={handlebtn}>Create a FormBot  for free</button>
+              <img src="/SVG_1.png" alt="icon" className={styles.icon_left}/>
+              <img src="/SVG_2.png" alt="icon" className={styles.icon_right}/>
         </div>
          <div>
          <img src="/Hero_img.png" alt="" />
