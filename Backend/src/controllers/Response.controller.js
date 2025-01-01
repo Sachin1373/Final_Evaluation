@@ -5,7 +5,7 @@ import FormResponse from "../models/TypeBotResponse.modal.js";
 export  const incrementViews = async (req, res) => {
     const { formId } = req.params;
     
-      const form = await FormResponse.findByIdAndUpdate(formId, { $inc: { views: 1 } }, { new: true });
+      const form = await FormResponse.findByIdAndUpdate(formId, { $inc: { views: 1 } }, { new: true,  upsert: true, setDefaultsOnInsert: true });
       if (!form) return res.status(404).json({ message: "Form not found" });
       res.status(200).json({ message: "Views incremented", views: form.views });
    
@@ -14,7 +14,7 @@ export  const incrementViews = async (req, res) => {
   export const incrementStarts = async (req, res) => {
     const { formId } = req.params;
     
-      const form = await FormResponse.findByIdAndUpdate(formId, { $inc: { starts: 1 } }, { new: true });
+      const form = await FormResponse.findByIdAndUpdate(formId, { $inc: { starts: 1 } }, { new: true,  upsert: true, setDefaultsOnInsert: true });
       if (!form) return res.status(404).json({ message: "Form not found" });
       res.status(200).json({ message: "Starts incremented", starts: form.starts });
     
