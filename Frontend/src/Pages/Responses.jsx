@@ -67,6 +67,21 @@ const Responses = () => {
     ],
   };
 
+  const mockData = [
+    { 
+      id: 1, 
+      submittedAt: 'Jul 17, 03:23 PM', 
+      button1: 'Hi!', 
+      email1: 'abc@g.com',
+      text1: 'alpha',
+      button2: 'Studio App to Manage Clients, Tracking App for Clients',
+      rating1: 5,
+      marks : 20,
+      totalMarks : 25
+    },
+    // other mock data...
+  ];
+
   const chartOptions = {
     plugins: {
       legend: {
