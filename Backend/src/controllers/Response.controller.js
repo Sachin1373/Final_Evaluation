@@ -27,7 +27,7 @@ export  const incrementViews = async (req, res) => {
     try {
       const form = await FormResponse.findById(formId);
       if (!form) return res.status(404).json({ message: "Form not found" });
-  
+      form.formId = formId; // Set the form ID
       form.submissions.push({ responses }); // Add new submission
       await form.save(); // Save form with new submission
   
