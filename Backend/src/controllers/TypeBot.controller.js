@@ -25,11 +25,19 @@ import Form from "../models/TypeBotSchema.modal.js";
         dashboardId = userDashboard._id;
     }  
 
+    const formName = name.toLowerCase();
     let existingForm;
+
     if (folderId) {
-        existingForm = await Form.findOne({ name, folderId });
+        existingForm = await Form.findOne({
+            folderId,
+            name: { $regex: new RegExp(`^${formName}$`, "i") }, // Case-insensitive regex
+        });
     } else {
-        existingForm = await Form.findOne({ name, dashboardId });
+        existingForm = await Form.findOne({
+            dashboardId,
+            name: { $regex: new RegExp(`^${formName}$`, "i") }, // Case-insensitive regex
+        });
     }
 
     if (existingForm) {
