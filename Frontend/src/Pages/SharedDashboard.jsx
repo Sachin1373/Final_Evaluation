@@ -21,8 +21,8 @@ const SharedDashboard = () => {
 
   useEffect(() => {
     if (!userDetails) {
-      const currentUrl = window.location.href;
-      localStorage.setItem("redirectAfterLogin", currentUrl);
+      const currentPath = `/shared-dashboard/${dashboardId}?permission=${permission}`;
+      localStorage.setItem("redirectAfterLogin", currentPath);
       navigate("/login");
       return;
     }
