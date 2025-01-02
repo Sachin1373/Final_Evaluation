@@ -22,6 +22,7 @@ const Responses = () => {
   const { formId, name } = useParams();
   const [views, setViews] = useState(0);
   const [starts, setStarts] = useState(0);
+  const [submissions, setSubmissions] = useState([]);
   const navigate = useNavigate();
 
   const handleflow = () => {
@@ -53,6 +54,18 @@ const Responses = () => {
       }
     } catch (error) {
       console.error('Error fetching starts:', error);
+    }
+  };
+
+  const getsubmissions = async () => {
+    try {
+      const response = await axios.get(`https://final-evaluation-qbj9.onrender.com/api/v1/responses/get-submissions/${formId}`);
+      if(response.status === 200) {
+        console.log(response.data.submissions);
+        setSubmissions(response.data.submissions);
+      }
+    } catch (error) {
+      console.error('Error fetching submissions:', error);
     }
   };
 
@@ -99,6 +112,7 @@ const Responses = () => {
   useEffect(() => {
     getViews();
     getStarts();
+    getsubmissions();
   }, []);
 
   return (
