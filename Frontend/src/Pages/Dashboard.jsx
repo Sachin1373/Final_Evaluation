@@ -47,7 +47,7 @@ function Dashboard() {
     setSelectedFolderId(null);
     setforms([]); 
     
-    // Close dropdown
+   
     toggleDropdown();
      
   };
@@ -99,7 +99,7 @@ const handleCreateFolderClick = () => {
     toast.error("You can only view the dashboard. Editing is not allowed.");
     return;
   }
-  openfoldermodal(); // Proceed to open the modal for authorized users
+  openfoldermodal(); 
 };
 
 
@@ -134,13 +134,12 @@ const handleCreateFolderClick = () => {
   
     try {
   
-      // Make API request
       const response = await axios.post(
         "https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/createdashboard",
-        { username: userDetails.username }, // Send username in the body
+        { username: userDetails.username }, 
         {
           headers: {
-            Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+            Authorization: `Bearer ${userDetails.token}`, 
           },
         }
       );
@@ -160,7 +159,7 @@ const handleCreateFolderClick = () => {
     try {
       const response = await axios.get('https://final-evaluation-qbj9.onrender.com/api/v1/dashboard/shareddashboardID',{
         headers: {
-          Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+          Authorization: `Bearer ${userDetails.token}`, 
         },
       })
       if(response.status==200){
@@ -185,11 +184,11 @@ const handleCreateFolderClick = () => {
       const response = await axios.get("https://final-evaluation-qbj9.onrender.com/api/v1/folder/getfolders", {
         params: { dashboardID: sharedDashboardID },
         headers: {
-          Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+          Authorization: `Bearer ${userDetails.token}`, 
         },
       });
       if (response.data?.folders) {
-        setFolders(response.data.folders);  // Set folders in state
+        setFolders(response.data.folders);  
       }
     } catch (error) {
       console.error(error);
@@ -249,13 +248,12 @@ const handleCreateFolderClick = () => {
   useEffect(() => {
     const initializeDashboard = async () => {
       if (userDetails && !dashboardInitialized) {
-        // Call createDashboard only once
         await createdashboard();
         await getshareddashboard();
-        setDashboardInitialized(true); // Mark as initialized
+        setDashboardInitialized(true); 
       }
       
-      // Proceed with the other API calls, regardless of createDashboard
+  
       await getFolders();
       await fetchTypeBot(selectedFolderId);
 

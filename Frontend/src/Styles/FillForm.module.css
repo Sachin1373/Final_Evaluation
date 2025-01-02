@@ -5,7 +5,7 @@
   margin: 80px auto;
 }
 
-/* Chatbot Container */
+
 .chatContainer {
   display: flex;
   flex-direction: column;
@@ -21,19 +21,19 @@
   width: 45px;
 }
 
-/* Chat Row for Left and Right Content */
+
 .chatRow {
   display: flex;
-  justify-content: space-between; /* Space between left and right content */
+  justify-content: space-between; 
   align-items: flex-start;
   margin-bottom: 16px;
 }
 
-/* Left Content (Messages, Images) */
+
 .messageLeft {
   display: flex;
   gap: 5px;
-  flex: 1; /* Take up space on the left */
+  flex: 1; 
   justify-content: flex-start;
   align-items: flex-start;
 }
@@ -62,10 +62,10 @@
   margin-bottom: 15px;
 }
 
-/* Right Content (Inputs, User Messages) */
+
 .messageRight {
   display: flex;
-  flex: 1; /* Take up space on the right */
+  flex: 1; 
   justify-content: flex-end;
   align-items: flex-start;
 }
@@ -106,7 +106,7 @@
   outline: none;
 }
 
-/* Button styles */
+
 .button {
   min-width: 40px;
   height: 40px;
@@ -126,7 +126,7 @@
   color: white;
 }
 
-/* Rating specific styles */
+
 .ratingContainer {
   display: flex;
   align-items: center;
@@ -164,9 +164,7 @@
   transition: all 0.2s ease;
 }
 
-/* .ratingButton:hover {
-  background-color: #d0d0d0;
-} */
+
 
 .ratingButtonSelected {
   background-color: #ff6b00;
@@ -174,7 +172,7 @@
 }
 
 
-/* Submit button styles */
+
 .submitButton {
   width: 100%;
   padding: 12px;
@@ -186,7 +184,7 @@
   cursor: pointer;
 }
 
-/* Date input specific styles */
+
 input[type="date"] {
   width: 100%;
   padding: 12px 16px;
@@ -202,7 +200,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
 }
 
-/* Number input specific styles */
 input[type="number"] {
   -moz-appearance: textfield;
 }
@@ -213,12 +210,12 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
-/* Phone input specific styles */
+
 input[type="tel"] {
   letter-spacing: 0.5px;
 }
 
-/* Error message styles */
+
 .error {
   color: #ff4444;
   font-size: 12px;
@@ -226,7 +223,7 @@ input[type="tel"] {
   padding-left: 16px;
 }
 
-/* Container styles */
+
 .inputContainer {
   width: 100%;
   margin-bottom: 16px;
@@ -277,7 +274,7 @@ input[type="tel"] {
   }
 }
 
-/* Small mobile devices */
+
 @media screen and (max-width: 480px) {
   .container {
     padding: 8px;

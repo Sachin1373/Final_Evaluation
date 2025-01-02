@@ -67,13 +67,13 @@ const Responses = () => {
     }
   };
 
-  // Get unique labels from the first submission
+  
   const getLabels = () => {
     if (submissions.length === 0) return [];
     return submissions[0].responses.map(response => response.label);
   };
 
-  // Get response data for a specific label
+ 
   const getResponseData = (submission, label) => {
     const response = submission.responses.find(r => r.label === label);
     return response ? response.data : '-';
@@ -111,14 +111,14 @@ const Responses = () => {
       return;
     }
 
-    // Calculate completed submissions
+    
     const completedCount = submissions.filter(submission =>
       submission.responses.every(response => response.data !== '-')
     ).length;
 
     setCompleted(completedCount);
 
-    // Calculate completion rate
+   
     const rate = ((completedCount / starts) * 100).toFixed(0);
     setComplitionRate(rate);
   };

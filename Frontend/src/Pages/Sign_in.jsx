@@ -19,7 +19,7 @@ function Sign_in() {
 
   const [passwordError, setPasswordError] = useState("");
 
-  // Handle input change
+  
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData((prevData) => ({
@@ -27,7 +27,7 @@ function Sign_in() {
       [id]: value,
     }));
 
-    // Check password match
+   
     if (id === "confirmPassword" || id === "password") {
       if (id === "confirmPassword" && value !== formData.password) {
         setPasswordError("enter same password in both fields");
@@ -39,7 +39,7 @@ function Sign_in() {
     }
   };
 
-  // Handle form submission
+ 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -56,7 +56,7 @@ function Sign_in() {
     }
 
     try {
-      // API call
+      
       const response = await axios.post("https://final-evaluation-qbj9.onrender.com/api/v1/auth/signup", {
         username,
         email,
@@ -89,7 +89,7 @@ function Sign_in() {
 
         <div className={styles.form_wrapper}>
           <form onSubmit={handleSubmit}>
-            {/* Username */}
+
             <div className={styles.form_group}>
               <label htmlFor="username">Username</label>
               <input
@@ -101,7 +101,7 @@ function Sign_in() {
               />
             </div>
 
-            {/* Email */}
+
             <div className={styles.form_group}>
               <label htmlFor="email">Email</label>
               <input
@@ -113,7 +113,7 @@ function Sign_in() {
               />
             </div>
 
-            {/* Password */}
+      
             <div className={styles.form_group}>
               <label htmlFor="password">Password</label>
               <input
@@ -125,7 +125,7 @@ function Sign_in() {
               />
             </div>
 
-            {/* Confirm Password */}
+           
             <div className={styles.form_group}>
               <label htmlFor="confirmPassword">Confirm Password</label>
               <input
@@ -138,14 +138,14 @@ function Sign_in() {
               {passwordError && <p className={styles.error_message}>{passwordError}</p>}
             </div>
 
-            {/* Sign Up Button */}
+
             <button type="submit" className={styles.signup_btn}>
               Sign Up
             </button>
 
             <div className={styles.or_text}>OR</div>
 
-            {/* Sign Up with Google */}
+            
             <button type="button" className={styles.google_btn}>
               <div className={styles.google_wrapper}>
                 <FcGoogle className={styles.google} />
@@ -153,7 +153,7 @@ function Sign_in() {
               Sign Up with Google
             </button>
 
-            {/* Login Link */}
+    
             <p className={styles.login_text}>
               Already have an account? <a onClick={() => navigate("/login")}>Login</a>
             </p>
@@ -161,7 +161,7 @@ function Sign_in() {
         </div>
       </div>
 
-      {/* SVGs */}
+      
       <div className={styles.svgleft}>
         <img src="/svg_left.png" alt="" />
       </div>

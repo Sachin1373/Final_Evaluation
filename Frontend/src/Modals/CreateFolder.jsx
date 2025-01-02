@@ -17,24 +17,21 @@ function CreateFolder({ closeModal, refreshFolders, shareddashid }) {
 
   const handleDone = async() => {
     try {
-      // Send folder creation request to backend API
+     
       const response = await axios.post(
         "https://final-evaluation-qbj9.onrender.com/api/v1/folder/createfolder",
         { name: folderName,
           dashboardID : shareddashid,
-         }, // Sending folder name in the request body
+         }, 
         {
           headers: {
-            Authorization: `Bearer ${userDetails.token}`, // Include token in headers
+            Authorization: `Bearer ${userDetails.token}`, 
           },
         }
       );
 
-      // Close the modal after successful creation
-      closeModal();
-
-      // Show success message
       toast.success(response.data.message);
+      closeModal();
       await  refreshFolders()
     } catch (error) {
       console.error(error);
@@ -43,7 +40,7 @@ function CreateFolder({ closeModal, refreshFolders, shareddashid }) {
   };
 
   const handleCancel = () => {
-    closeModal(); // Close modal without action
+    closeModal(); 
   };
 
   

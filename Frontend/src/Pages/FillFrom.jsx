@@ -206,7 +206,6 @@ function FillForm() {
     setInputValue('');
     setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
 
-    // If this was the last input, submit the form
     const nextIndex = findNextInputIndex();
     if (nextIndex === null) {
       handleSubmitForm();

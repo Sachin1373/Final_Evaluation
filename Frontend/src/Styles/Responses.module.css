@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh; /* Full height of the page */
+  height: 100vh; 
 }
 
 .noResponseText {
@@ -102,14 +102,9 @@
     cursor: pointer;
   }
 
-  /* .navButton_res.light{
-    color: black;
-  } */
+
   
-  .navButtonActive {
-    /* background-color: #2563eb; */
-    /* border: 1px solid #7EA6FF; */
-  }
+  
   
   .toggleContainer {
     display: flex;
@@ -331,7 +326,7 @@
 
   .tableWrapper {
     overflow: auto;
-    max-height: 268px; /* 300px - 32px padding */
+    max-height: 268px; 
     scrollbar-width: thin;
     scrollbar-color: #666666 #2a2a2a;
   }

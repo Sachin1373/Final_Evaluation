@@ -6,8 +6,9 @@ import { IoArrowBackSharp } from "react-icons/io5";
 import { AuthContext } from '../Contexts/AuthContext';
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
-import {createDashboard} from '../Api/dashboard'
 import styles from "../Styles/Sign_in.module.css"
+
+
 function Login() {
 
   const {isLoggedIn,login,logout} = useContext(AuthContext)
@@ -39,7 +40,7 @@ function Login() {
           }
 
           try {
-            // API call
+            
             const response = await axios.post("https://final-evaluation-qbj9.onrender.com/api/v1/auth/login", {
               email,
               password,
@@ -47,7 +48,7 @@ function Login() {
       
             if (response.data) {
               const data = response.data;
-              const expiryTime = new Date().getTime() + 12 * 60 * 60 * 1000; // 12 hours
+              const expiryTime = new Date().getTime() + 12 * 60 * 60 * 1000; 
               const userdata = {
                   token: data.token,
                   username: data.username,
@@ -90,7 +91,6 @@ function Login() {
             <div className={styles.form_wrapper}>
               <form onSubmit={handlesubmit}>
                 
-                {/* Email */}
                 <div className={styles.form_group}>
                   <label htmlFor="email">Email</label>
                   <input type="email" id="email" 
@@ -99,7 +99,7 @@ function Login() {
                   onChange={handleChange} />
                 </div>
     
-                {/* Password */}
+                
                 <div className={styles.form_group}>
                   <label htmlFor="password">Password</label>
                   <input type="password" id="password" 
@@ -109,19 +109,19 @@ function Login() {
                 </div>
     
     
-                {/* Sign Up Button */}
+               
                 <button type="submit" className={styles.signup_btn}>
                   Log In
                 </button>
                    
                 <div className={styles.or_text}>OR</div>
     
-                {/* Sign Up with Google */}
+              
                 <button type="button" className={styles.google_btn}>
                   <div className={styles.google_wrapper}> <FcGoogle className={styles.google} /> </div> Sign Up with Google
                 </button>
     
-                {/* Login Link */}
+               
                 <p className={styles.login_text}>
                    Don’t have an account? <a onClick={()=>navigate("/sign-in")}>Register now</a>
                 </p>
@@ -129,7 +129,7 @@ function Login() {
             </div>
           </div>
     
-          {/* SVGs */}
+
           <div className={styles.svgleft}>
             <img src="/svg_left.png" alt="" />
           </div>

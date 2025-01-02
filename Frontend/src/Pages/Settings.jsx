@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { BsFillPersonFill } from "react-icons/bs";
-import { LuEye, LuEyeOff } from "react-icons/lu"; // Include LuEyeOff for the "hidden" icon
+import { LuEye, LuEyeOff } from "react-icons/lu"; 
 import { CiLock } from "react-icons/ci"; 
 import { AuthContext } from '../Contexts/AuthContext';
 import { useNavigate } from 'react-router-dom';
@@ -16,9 +16,9 @@ function Settings() {
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [userDetails, setUserDetails] = useState(JSON.parse(localStorage.getItem("UserDetails")) || null);
-  const [showEmail, setShowEmail] = useState(false); // State for email visibility
-  const [showOldPassword, setShowOldPassword] = useState(false); // State for old password visibility
-  const [showNewPassword, setShowNewPassword] = useState(false); // State for new password visibility
+  const [showEmail, setShowEmail] = useState(false); 
+  const [showOldPassword, setShowOldPassword] = useState(false); 
+  const [showNewPassword, setShowNewPassword] = useState(false); 
   const navigate = useNavigate();
   const { logout } = useContext(AuthContext);
 
@@ -29,7 +29,7 @@ function Settings() {
         { name, email, oldPassword, newPassword },
         {
           headers: {
-            Authorization: `Bearer ${userDetails?.token}`, // Include the token in the headers
+            Authorization: `Bearer ${userDetails?.token}`, 
           },
         }
       );
@@ -76,7 +76,7 @@ function Settings() {
             <div className={styles.inputWrapper}>
               <CiLock className={styles.inputIcon} />
               <input
-                type={showEmail ? "text" : "email"} // Toggle input type for email
+                type={showEmail ? "text" : "email"} 
                 className={styles.settingsInput}
                 placeholder="Update Email"
                 value={email}
@@ -85,19 +85,19 @@ function Settings() {
               {showEmail ? (
                 <LuEyeOff
                   className={styles.eyeIcon}
-                  onClick={() => setShowEmail(false)} // Hide email
+                  onClick={() => setShowEmail(false)} 
                 />
               ) : (
                 <LuEye
                   className={styles.eyeIcon}
-                  onClick={() => setShowEmail(true)} // Show email
+                  onClick={() => setShowEmail(true)} 
                 />
               )}
             </div>
             <div className={styles.inputWrapper}>
               <CiLock className={styles.inputIcon} />
               <input
-                type={showOldPassword ? "text" : "password"} // Toggle input type for old password
+                type={showOldPassword ? "text" : "password"} 
                 className={styles.settingsInput}
                 placeholder="Old Password"
                 value={oldPassword}
@@ -106,19 +106,19 @@ function Settings() {
               {showOldPassword ? (
                 <LuEyeOff
                   className={styles.eyeIcon}
-                  onClick={() => setShowOldPassword(false)} // Hide old password
+                  onClick={() => setShowOldPassword(false)} 
                 />
               ) : (
                 <LuEye
                   className={styles.eyeIcon}
-                  onClick={() => setShowOldPassword(true)} // Show old password
+                  onClick={() => setShowOldPassword(true)} 
                 />
               )}
             </div>
             <div className={styles.inputWrapper}>
               <CiLock className={styles.inputIcon} />
               <input
-                type={showNewPassword ? "text" : "password"} // Toggle input type for new password
+                type={showNewPassword ? "text" : "password"}
                 className={styles.settingsInput}
                 placeholder="New Password"
                 value={newPassword}
@@ -127,12 +127,12 @@ function Settings() {
               {showNewPassword ? (
                 <LuEyeOff
                   className={styles.eyeIcon}
-                  onClick={() => setShowNewPassword(false)} // Hide new password
+                  onClick={() => setShowNewPassword(false)} 
                 />
               ) : (
                 <LuEye
                   className={styles.eyeIcon}
-                  onClick={() => setShowNewPassword(true)} // Show new password
+                  onClick={() => setShowNewPassword(true)} 
                 />
               )}
             </div>

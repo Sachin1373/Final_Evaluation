@@ -14,7 +14,7 @@ const InviteModal = ({ closeModal,setshareddashboard }) => {
   const [permission, setPermission] = useState('view'); 
   const [link, setLink] = useState('');
 
-  console.log(userDetails.token)
+ 
 
   const handleSendInvite = async() => {
     if (!email) {
@@ -58,7 +58,6 @@ const InviteModal = ({ closeModal,setshareddashboard }) => {
         );
         setLink(response.data.link);
 
-        // Copy the link to the clipboard
         navigator.clipboard.writeText(response.data.link);
         alert('Link copied to clipboard!');
     } catch (error) {
