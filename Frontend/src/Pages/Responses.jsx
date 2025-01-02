@@ -22,6 +22,8 @@ const Responses = () => {
   const [views, setViews] = useState(0);
   const [starts, setStarts] = useState(0);
   const [submissions, setSubmissions] = useState([]);
+  const [completed, setCompleted] = useState(0);
+  const [complitionRate, setComplitionRate] = useState(0);
   const navigate = useNavigate();
 
   const handleflow = () => {
@@ -81,7 +83,7 @@ const Responses = () => {
     labels: ['Completed', 'Remaining'],
     datasets: [
       {
-        data: [33, 67],
+        data: [completed, starts - completed],
         backgroundColor: ['#0066ff', '#404040'],
         borderWidth: 0,
       },
@@ -101,6 +103,30 @@ const Responses = () => {
     },
     cutout: '70%',
   };
+
+  const calculateMetrics = () => {
+    if (!submissions.length || !starts) {
+      setCompleted(0);
+      setComplitionRate(0);
+      return;
+    }
+
+    // Calculate completed submissions
+    const completedCount = submissions.filter(submission =>
+      submission.responses.every(response => response.data !== '-')
+    ).length;
+
+    setCompleted(completedCount);
+
+    // Calculate completion rate
+    const rate = ((completedCount / starts) * 100).toFixed(0);
+    setComplitionRate(rate);
+  };
+
+  useEffect(() => {
+    calculateMetrics();
+  }, [submissions, starts]);
+
 
   useEffect(() => {
     getViews();
@@ -203,14 +229,14 @@ const Responses = () => {
               </div>
               <div className={styles.progressStats}>
                 <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completed</div>
-                <div className={styles.statValue}>33</div>
+                <div className={styles.statValue}>{completed}</div>
               </div>
             </div>
 
             <div className={`${styles.completionRateCard} ${isDarkMode ? styles.dark : styles.light}`}>
               <div>
                 <div className={`${styles.statValue} ${isDarkMode ? styles.dark : styles.light}`}>Completion rate</div>
-                <div className={styles.statValue}>33%</div>
+                <div className={styles.statValue}>{complitionRate}%</div>
               </div>
             </div>
           </div>
