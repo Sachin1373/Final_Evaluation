@@ -25,8 +25,19 @@ import Form from "../models/TypeBotSchema.modal.js";
         dashboardId = userDashboard._id;
     }  
 
+    let existingForm;
+    if (folderId) {
+        existingForm = await Form.findOne({ name, folderId });
+    } else {
+        existingForm = await Form.findOne({ name, dashboardId });
+    }
+
+    if (existingForm) {
+        return res.status(400).json({ message: "A form with the same name already exists." });
+    }
+
+
     let newTypeBot;
-    
     if (folderId) {
         // If a folder is selected, validate the folder
         const selectedFolder = await Folder.findById(folderId);
