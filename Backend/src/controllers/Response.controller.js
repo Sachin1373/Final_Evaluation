@@ -61,6 +61,19 @@ export  const incrementViews = async (req, res) => {
       res.status(200).json({ starts: form.starts });
     
   };
+
+  export const getsubmissions = async (req, res) => {
+    const { formId } = req.params;
+    
+      const form = await FormResponse
+        .findById(formId)
+        .select("submissions")
+        .exec();
+      if (!form) return res.status(404).json({ message: "Form not found" });
+      res.status(200).json({ submissions: form.submissions });
+    
+  }
+    
   
   
   
