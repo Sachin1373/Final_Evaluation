@@ -185,11 +185,11 @@ const handleCreateFolderClick = () => {
   
 
   const handleDeleteFolderClick = (folderId,e) => {
-    // e.stopPropagation();
-    // if(permission === 'view'){    
-    //   toast.error("You can only view the dashboard. Editing is not allowed.");
-    //   return;
-    // }
+    e.stopPropagation();
+    if(permission === 'view'){    
+      toast.error("You can only view the dashboard. Editing is not allowed.");
+      return;
+    }
     setSelectedFolderId(folderId); 
     opendeletefoldermodal(); 
   };
