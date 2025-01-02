@@ -2,6 +2,7 @@
 import React from 'react';
 import axios from 'axios';
 import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import styles from '../Styles/DeleteFolder.module.css';
 
 function DeleteFolder({closeModal, refreshFolders, folderId}) {
