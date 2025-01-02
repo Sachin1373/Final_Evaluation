@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { useParams } from "react-router-dom";
 import { CiCalendar } from "react-icons/ci";
@@ -13,7 +13,6 @@ import styles from '../Styles/Responses.module.css';
 import { X } from 'lucide-react';
 import { useTheme } from "../Contexts/ThemeContext";
 import axios from 'axios';
-
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -32,7 +31,6 @@ const Responses = () => {
   const handleclosebtn = () => {
     navigate(`/dashboard`);
   };
-  
 
   const getViews = async () => {
     try { 
@@ -40,7 +38,6 @@ const Responses = () => {
       if(response.status === 200) {
         setViews(response.data.views);
       }
-      
     } catch (error) {
       console.error('Error fetching views:', error);
     }
@@ -61,12 +58,23 @@ const Responses = () => {
     try {
       const response = await axios.get(`https://final-evaluation-qbj9.onrender.com/api/v1/responses/get-submissions/${formId}`);
       if(response.status === 200) {
-        console.log(response.data.submissions);
         setSubmissions(response.data.submissions);
       }
     } catch (error) {
       console.error('Error fetching submissions:', error);
     }
+  };
+
+  // Get unique labels from the first submission
+  const getLabels = () => {
+    if (submissions.length === 0) return [];
+    return submissions[0].responses.map(response => response.label);
+  };
+
+  // Get response data for a specific label
+  const getResponseData = (submission, label) => {
+    const response = submission.responses.find(r => r.label === label);
+    return response ? response.data : '-';
   };
 
   const chartData = {
@@ -80,21 +88,6 @@ const Responses = () => {
     ],
   };
 
-  const mockData = [
-    { 
-      id: 1, 
-      submittedAt: 'Jul 17, 03:23 PM', 
-      button1: 'Hi!', 
-      email1: 'abc@g.com',
-      text1: 'alpha',
-      button2: 'Studio App to Manage Clients, Tracking App for Clients',
-      rating1: 5,
-      marks : 20,
-      totalMarks : 25
-    },
-    // other mock data...
-  ];
-
   const chartOptions = {
     plugins: {
       legend: {
@@ -106,7 +99,7 @@ const Responses = () => {
         },
       },
     },
-    cutout: '70%', // For a more circular appearance
+    cutout: '70%',
   };
 
   useEffect(() => {
@@ -121,7 +114,7 @@ const Responses = () => {
         <div className={`${styles.headerControls} ${isDarkMode ? styles.dark : styles.light}`}>
           <div className={`${styles.navigationButtons} ${isDarkMode ? styles.dark : styles.light}`}>
             <button className={`${styles.navButton} ${styles.navButtonActive} ${isDarkMode ? styles.dark : styles.light}`} onClick={handleflow}>Flow</button>
-            <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}` }>Response</button>
+            <button className={`${styles.navButton_res} ${isDarkMode ? styles.dark : styles.light}`}>Response</button>
           </div>
           <div className={`${styles.headerActions} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.toggleContainer} ${isDarkMode ? styles.dark : styles.light}`}>
@@ -134,8 +127,8 @@ const Responses = () => {
                 <p className={`${styles.Dark_mode} ${isDarkMode ? styles.dark : styles.light}`}>Dark</p>
               </span>
             </div>
-            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}` } >Share</button>
-            <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} >Save</button>
+            <button className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}`}>Share</button>
+            <button className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`}>Save</button>
             <button className={styles.closeButton}>
               <X size={24} onClick={handleclosebtn} />
             </button>
@@ -143,7 +136,6 @@ const Responses = () => {
         </div>
       </div>
 
-      {/* Check if views is greater than 1 */}
       {views > 1 ? (
         <div className={styles.statsContainer}>
           <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
@@ -161,8 +153,7 @@ const Responses = () => {
         </div>
       )}
 
-      {/* Table and Metrics (if views > 1) */}
-      {views > 1 && (
+      {submissions.length > 0 && (
         <>
           <div className={styles.tableContainer}>
             <div className={styles.tableWrapper}>
@@ -170,24 +161,34 @@ const Responses = () => {
                 <thead>
                   <tr>
                     <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}></th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}> <p className={styles.submited}><CiCalendar className={styles.cal} /> Submitted at</p></th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 1</th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Email 1</th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Text 1</th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Button 2</th>
-                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>Rating 1</th>
+                    <th className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>
+                      <p className={styles.submited}><CiCalendar className={styles.cal} /> Submitted at</p>
+                    </th>
+                    {getLabels().map((label, index) => (
+                      <th key={index} className={`${styles.th} ${isDarkMode ? styles.dark : styles.light}`}>
+                        {label}
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody>
-                  {mockData.map((row) => (
-                    <tr key={row.id}>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}>{row.id}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.submittedAt}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button1}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.email1}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.text1}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>{row.button2}</td>
-                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{textAlign : 'center'}}>{row.rating1}</td>
+                  {submissions.map((submission, index) => (
+                    <tr key={submission._id}>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`} style={{ width: '20px' }}>{index + 1}</td>
+                      <td className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>
+                        {new Date(submission.submittedAt).toLocaleString('en-US', {
+                          month: 'short',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit',
+                          hour12: true
+                        })}
+                      </td>
+                      {getLabels().map((label, labelIndex) => (
+                        <td key={labelIndex} className={`${styles.td} ${isDarkMode ? styles.dark : styles.light}`}>
+                          {getResponseData(submission, label)}
+                        </td>
+                      ))}
                     </tr>
                   ))}
                 </tbody>
