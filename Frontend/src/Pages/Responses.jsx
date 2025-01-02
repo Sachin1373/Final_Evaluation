@@ -136,7 +136,7 @@ const Responses = () => {
         </div>
       </div>
 
-      {views > 1 ? (
+      {views >= 1 ? (
         <div className={styles.statsContainer}>
           <div className={`${styles.statCard} ${isDarkMode ? styles.dark : styles.light}`}>
             <div className={`${styles.statLabel} ${isDarkMode ? styles.dark : styles.light}`}>Views</div>
