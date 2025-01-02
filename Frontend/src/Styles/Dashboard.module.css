@@ -344,7 +344,8 @@
   .form_wrapper{
     display: flex;
     gap: 20px;
-    
+    height: auto;
+    flex-wrap: wrap;   
   }
 
   .form_container{

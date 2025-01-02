@@ -21,6 +21,7 @@ function Forms() {
   const [isContentReady, setIsContentReady] = useState(false);
   const [elementCounts, setElementCounts] = useState({});
   const [hasButton, setHasButton] = useState(false);
+  const [isShareEnabled, setIsShareEnabled] = useState(false);
 
   const navigate = useNavigate();
 
@@ -113,6 +114,14 @@ function Forms() {
   };
 
   const handleSave = async () => {
+
+    const hasButtonItem = flowItems.some(item => item.id === 'button');
+  
+    if (!hasButtonItem) {
+      toast.error("Please add a button at the end of the form before saving!");
+      return;
+    }
+
     const dataToSave = flowItems.map(item => {
       if (item.type === 'bubble') {
         switch (item.id) {
@@ -165,6 +174,7 @@ function Forms() {
       );
       if (res.status === 200) {
         toast.success("Form content saved successfully!");
+        setIsShareEnabled(true);
       } else {
         toast.error("Failed to save form content. Please try again.");
       }
@@ -215,13 +225,14 @@ function Forms() {
                 </span>
               </div>
               <button 
-                className={`${styles.shareButton} ${isDarkMode ? styles.dark : styles.light}`} 
+                className={`${styles.shareButton} ${isShareEnabled ? styles.shareButtonEnabled : ''}`} 
                 onClick={handleShare}
+                disabled={!isShareEnabled}
               >
                 Share
               </button>
               <button 
-                className={`${styles.saveButton} ${isDarkMode ? styles.dark : styles.light}`} 
+                className={`${styles.saveButton}`} 
                 onClick={handleSave}
               >
                 Save

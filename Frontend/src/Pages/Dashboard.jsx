@@ -338,11 +338,10 @@ const handleCreateFolderClick = () => {
       {invitemodal && <InviteModal closeModal={closeinvitemodal} setshareddashboard={setSharedDashboards}/>}  
 
         <div className={styles.forms_wrapper}>
+            <div className={styles.form_wrapper}>
             <div className={styles.Create_TypeBot}>
               <CreateFormbtn onClick={opentypeBotmodal} />
             </div>
-          
-            <div className={styles.form_wrapper}>
                 {forms?.length > 0 ? (
                   forms?.map((item) => (
                        <div className={styles.form_container}>
