@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from '../Contexts/AuthContext';
 import { useTheme } from "../Contexts/ThemeContext";
 import axios from "axios";
 
 const SharedDashboard = () => {
   const [dashboard, setDashboard] = useState(null);
+  const {isLoggedIn} = useContext(AuthContext)
    const { isDarkMode, toggleTheme } = useTheme(); 
   const [error, setError] = useState(null);
   const [searchParams] = useSearchParams();
@@ -18,6 +20,12 @@ const SharedDashboard = () => {
   console.log(dashboardId, permission);
 
   useEffect(() => {
+    if (!userDetails) {
+      const currentUrl = window.location.href;
+      localStorage.setItem("redirectAfterLogin", currentUrl);
+      navigate("/login");
+      return;
+    }
     const fetchDashboard = async () => {
       try {
         const response = await axios.post(

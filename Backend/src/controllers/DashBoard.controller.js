@@ -208,6 +208,10 @@ export const dashboardlink = async (req, res) => {
       return res.status(404).json({ message: "User A's dashboard not found" });
     }
 
+    if(dashboardA._id.toString() === dashboardId){
+      return res.status(400).json({ message: "You cannot share your own dashboard with yourself." });
+    }
+
     // Find User B's dashboard
     const dashboardB = await Dashboard.findById(dashboardId);
     if (!dashboardB) {

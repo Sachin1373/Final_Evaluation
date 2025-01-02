@@ -34,14 +34,16 @@ function Dashboard() {
   const [sharedDashboardID,setshareDashboardID] = useState()
   const [activeWorkspaceName, setActiveWorkspaceName] = useState(userDetails?.username || "Workspace");
   const [permission, setPermissions] = useState('edit'); 
+  const [owner,setowner] = useState(true)
   
 
-  console.log(sharedDashboardID)
+ 
   const handledashID = async (id, name) => {
     const selectedDashboard = sharedDashboards.find(dashboard => dashboard.id === id);
     setPermissions(selectedDashboard?.permission || 'edit');
     setshareDashboardID(id);
     setActiveWorkspaceName(name);
+    setowner(false)
     setSelectedFolderId(null);
     setforms([]); 
     
@@ -113,7 +115,19 @@ const handleCreateFolderClick = () => {
   }
 
   const handleformclick = (formId,name) => {
+    if(owner===true){
     navigate(`/forms/${formId}/${name}`)
+    }else{
+      toast.error("You are not the owner of this dashboard. You cannot access forms.")
+    }
+  }
+
+  const handlesettingclick = () =>{
+    if(owner===true){
+      navigate('/settings')
+     }else{
+    toast.error("You are not the owner of this dashboard. You cannot access settings.")
+    }
   }
 
   const createdashboard = async () => {
@@ -284,7 +298,7 @@ const handleCreateFolderClick = () => {
                   {dashboard.name}'s Workspace 
                 </div>
               ))}
-              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={() => navigate('/settings')}>Settings</div>
+              <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} onClick={handlesettingclick}>Settings</div>
               <div className={`${styles.dropdown_item} ${isDarkMode ? styles.textDark : styles.textLight}`} style={{ color: 'orange' }} onClick={handlelogout}>Logout</div>
             </div>
           )}

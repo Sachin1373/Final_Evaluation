@@ -60,8 +60,14 @@ function Login() {
                 password: "",
               });
               setTimeout(()=>{
-                navigate("/dashboard")
-              },1000)
+                const redirectUrl = localStorage.getItem("redirectAfterLogin");
+                  if (redirectUrl) {
+                    localStorage.removeItem("redirectAfterLogin");
+                    navigate(redirectUrl);
+                  } else {
+                    navigate("/dashboard");
+                  }
+                },1000)
             } else {
               toast.error(response.data.message || "Something went wrong");
             }
