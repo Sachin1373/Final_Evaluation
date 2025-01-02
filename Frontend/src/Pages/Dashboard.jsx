@@ -317,9 +317,9 @@ const handleCreateFolderClick = () => {
               folders.map((folder) => (
                 <div key={folder._id} className={`${styles.folder_item} ${
                   selectedFolderId === folder._id ? styles.active_folder : ""
-                } ${isDarkMode ? styles.dark : styles.light}`} onClick={() => handleFolderClick(folder._id)}>
+                } ${isDarkMode ? styles.dark : styles.light}`} >
                    
-                      <p>{folder.name} </p>
+                      <p onClick={() => handleFolderClick(folder._id)}>{folder.name} </p>
                       <RiDeleteBin6Line className={styles.delete_icon}  onClick={() => handleDeleteFolderClick(folder._id)} />
                    
                 </div>

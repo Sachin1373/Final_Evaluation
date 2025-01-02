@@ -31,12 +31,12 @@ import Form from "../models/TypeBotSchema.modal.js";
     if (folderId) {
         existingForm = await Form.findOne({
             folderId,
-            name: { $regex: new RegExp(`^${formName}$`, "i") }, // Case-insensitive regex
+            name: { $regex: new RegExp(`^${formName}$`, "i") }, 
         });
     } else {
         existingForm = await Form.findOne({
             dashboardId,
-            name: { $regex: new RegExp(`^${formName}$`, "i") }, // Case-insensitive regex
+            name: { $regex: new RegExp(`^${formName}$`, "i") }, 
         });
     }
 
