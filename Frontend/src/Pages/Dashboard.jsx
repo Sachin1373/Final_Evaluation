@@ -35,6 +35,10 @@ function Dashboard() {
   const [activeWorkspaceName, setActiveWorkspaceName] = useState(userDetails?.username || "Workspace");
   const [permission, setPermissions] = useState('edit'); 
   const [owner,setowner] = useState(true)
+  const [loading,setlading] = useState(true)
+
+
+
   
 
  
@@ -189,6 +193,7 @@ const handleCreateFolderClick = () => {
       });
       if (response.data?.folders) {
         setFolders(response.data.folders);  
+        setlading(false)
       }
     } catch (error) {
       console.error(error);
@@ -225,8 +230,11 @@ const handleCreateFolderClick = () => {
             params,
           }
         )
-      
-        setforms(response.data || []);
+        if(response.data){
+          setforms(response.data || []);
+          setlading(false)
+        }
+         
 
       } catch (error) {
         setforms([]);
@@ -337,7 +345,7 @@ const handleCreateFolderClick = () => {
                 </div>
               ))
             ) : (
-              <p>No folders available.</p>
+               loading ? <p>Loading...</p> : <p>No folders available.</p>
             )}
           </div>
 
@@ -364,7 +372,7 @@ const handleCreateFolderClick = () => {
                        </div>
                   ))
                 ) : (
-                  <p>No forms available.</p> 
+                  loading ? <p>Loading...</p> : <p>No forms available.</p>
                 )}
                 
             </div>
