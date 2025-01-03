@@ -431,7 +431,7 @@ function FillForm() {
         {renderInitialFields()}
         {formStage === 'main' && (
           <div className={styles.messagesContainer}>
-            {messages.map((message, index) => (
+            {messages.slice(2).map((message, index) => (
               <div key={index} className={styles.messageWrapper}>
                 {renderMessage(message, index)}
               </div>
