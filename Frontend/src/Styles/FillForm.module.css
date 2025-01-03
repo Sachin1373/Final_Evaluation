@@ -4,6 +4,13 @@
   gap: 8px;
 }
 
+.username, .email{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 50%;
+  margin-left: auto;
+}
 
 
 .container{
