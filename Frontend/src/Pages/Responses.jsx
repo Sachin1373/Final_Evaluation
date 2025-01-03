@@ -70,7 +70,8 @@ const Responses = () => {
   
   const getLabels = () => {
     if (submissions.length === 0) return [];
-    return submissions[0].responses.map(response => response.label);
+    return submissions[0].responses.map(response => response.label)
+    .filter(label => label !== 'User Email' && label !== 'User Name');
   };
 
  
