@@ -19,8 +19,14 @@ const PORT = process.env.PORT || 5000;
 
 dbconnection()
 
+const corsOptions = {
+  origin: 'https://final-evaluation-ebon.vercel.app', 
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],          
+  credentials: true,                                 
+};
+
 // Middleware
-app.use(cors()); 
+app.use(cors(corsOptions)); 
 app.use(express.json()); 
 app.use(express.urlencoded({ extended: true })); 
 
