@@ -27,6 +27,17 @@ function FillForm() {
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
   const [hasStarted, setHasStarted] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+
+  const handlename = (e) => {
+    setName(e.target.value);
+  };
+
+  const handleemail = (e) => {
+    setEmail(e.target.value);
+    setHasStarted(true);
+  };
 
   useEffect(() => {
     const updateViewCount = async () => {
@@ -340,7 +351,19 @@ function FillForm() {
   return (
     <div className={styles.container}>
       <ToastContainer />
-      <div className={styles.chatContainer}>
+      {hasStarted === false ? (
+          <div className={styles.usernameandemail}>
+              <div className={styles.username}>
+                <input type="text"  value={name} placeholder="Enter your name" onChange={handlename}/>
+                 <IoSend className={styles.send_btn}/>
+              </div>
+              <div className={styles.email}> 
+                <input type="email" value={email} placeholder="Enter your email" onChange={handleemail} />
+                 <IoSend className={styles.send_btn}/>
+              </div>
+          </div>
+      ) : (
+        <div className={styles.chatContainer}>
         <div className={styles.messagesContainer}>
           {messages.map((message, index) => (
             <div key={index} className={styles.messageWrapper}>
@@ -349,6 +372,7 @@ function FillForm() {
           ))}
         </div>
       </div>
+      )}
     </div>
   );
 }
