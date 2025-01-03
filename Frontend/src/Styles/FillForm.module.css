@@ -12,6 +12,28 @@
   margin-left: auto;
 }
 
+.username input{
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 4px 6.3px 0px #00000040;
+  font-size: 14px;
+  color: #333;
+}
+
+.email input{
+  flex: 1;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: white;
+  box-shadow: 0px 4px 6.3px 0px #00000040;
+  font-size: 14px;
+  color: #333;
+}
+
 
 .container{
   display: flex;

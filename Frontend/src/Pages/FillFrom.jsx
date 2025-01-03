@@ -36,8 +36,11 @@ function FillForm() {
 
   const handleemail = (e) => {
     setEmail(e.target.value);
-    setHasStarted(true);
   };
+
+  const handleSendEmail = () =>{
+    hasStarted(true);
+  }
 
   useEffect(() => {
     const updateViewCount = async () => {
@@ -355,13 +358,13 @@ function FillForm() {
           <div className={styles.usernameandemail}>
               <div className={styles.username}>
                 <input type="text"  value={name} placeholder="Enter your name" onChange={handlename}/>
-                <button className={styles.button} onClick={handleSend}>
+                <button className={styles.button} >
                     <IoSend className={styles.send_btn}/>
                </button>
               </div>
               <div className={styles.email}> 
                 <input type="email" value={email} placeholder="Enter your email" onChange={handleemail} />
-                <button className={styles.button} onClick={handleSend}>
+                <button className={styles.button} onClick={handleSendEmail}>
                     <IoSend className={styles.send_btn}/>
                </button>
               </div>
