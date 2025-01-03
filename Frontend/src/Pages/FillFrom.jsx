@@ -236,7 +236,6 @@ function FillForm() {
   const handleSubmitForm = async () => {
     try {
         const formattedResponses = formatResponsesForSubmission();
-        console.log(formattedResponses)
         const requestData = {
           responses: formattedResponses,
       };
@@ -251,7 +250,7 @@ function FillForm() {
             }
         );
 
-        console.log('Form submission successful:', response.data);
+        
         toast.success("Form submitted successfully!");
     } catch (error) {
         console.error("Error submitting form:", error);
@@ -268,6 +267,7 @@ function FillForm() {
 
     if (!hasStarted && formStage === 'main') {
       updateStartCount();
+      setHasStarted(true)
     }
 
     if (inputType === 'button') {
