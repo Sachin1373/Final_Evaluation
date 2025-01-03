@@ -26,21 +26,7 @@ function FillForm() {
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
-  const [hasStarted, setHasStarted] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-
-  const handlename = (e) => {
-    setName(e.target.value);
-  };
-
-  const handleemail = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handleSendEmail = () =>{
-    hasStarted(true);
-  }
+ 
 
   useEffect(() => {
     const updateViewCount = async () => {
@@ -354,23 +340,7 @@ function FillForm() {
   return (
     <div className={styles.container}>
       <ToastContainer />
-      {hasStarted === false ? (
-          <div className={styles.usernameandemail}>
-              <div className={styles.username}>
-                <input type="text"  value={name} placeholder="Enter your name" onChange={handlename}/>
-                <button className={styles.button} >
-                    <IoSend className={styles.send_btn}/>
-               </button>
-              </div>
-              <div className={styles.email}> 
-                <input type="email" value={email} placeholder="Enter your email" onChange={handleemail} />
-                <button className={styles.button} onClick={handleSendEmail}>
-                    <IoSend className={styles.send_btn}/>
-               </button>
-              </div>
-          </div>
-      ) : (
-        <div className={styles.chatContainer}>
+      <div className={styles.chatContainer}>
         <div className={styles.messagesContainer}>
           {messages.map((message, index) => (
             <div key={index} className={styles.messageWrapper}>
@@ -379,7 +349,6 @@ function FillForm() {
           ))}
         </div>
       </div>
-      )}
     </div>
   );
 }
