@@ -138,10 +138,11 @@ function FillForm() {
             };
         }
         if (message.type === 'input' && message.data !== 'button') {
+          const responseData = userResponses[index] === "Skipped" ? "" : userResponses[index];
             return {
                 label: message.label || `Input ${index + 1}`,
                 type: 'input',
-                data: userResponses[index] || ''
+                data: responseData
             };
         }
         return null;
