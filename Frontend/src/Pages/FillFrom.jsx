@@ -114,7 +114,7 @@ function FillForm() {
 
   const findNextInputIndex = () => {
     for (let i = 0; i < messages.length; i++) {
-      if (messages[i].type === 'input' && userResponses[i]) {
+      if (messages[i].type === 'input' && !userResponses[i]) {
         return i;
       }
     }
