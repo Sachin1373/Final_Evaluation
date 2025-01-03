@@ -133,7 +133,7 @@
 .svgright {
     position: absolute;
     top: 178px;
-    left: 1430px;
+    right: 0px;
     max-width: 230px; 
     height: auto; 
 }
