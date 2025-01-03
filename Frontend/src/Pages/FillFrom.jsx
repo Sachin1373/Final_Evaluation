@@ -7,12 +7,12 @@ import { IoSend } from "react-icons/io5";
 import axios from "axios";
 
 const INPUT_TYPES = {
-  'text-input': { type: 'text', placeholder: 'Enter text' },
-  'email': { type: 'email', placeholder: 'Enter email' },
-  'number': { type: 'number', placeholder: 'Enter number' },
-  'date': { type: 'date', placeholder: 'Select date' },
-  'rating': { type: 'rating', placeholder: 'Select rating' },
-  'phone': { type: 'tel', placeholder: 'Enter phone number' },
+  'text-input': { type: 'text', placeholder: 'Enter text (optional)' },
+  'email': { type: 'email', placeholder: 'Enter email (optional)' },
+  'number': { type: 'number', placeholder: 'Enter number (optional)' },
+  'date': { type: 'date', placeholder: 'Select date (optional)' },
+  'rating': { type: 'rating', placeholder: 'Select rating (optional)' },
+  'phone': { type: 'tel', placeholder: 'Enter phone number (optional)' },
   'button': { type: 'button', placeholder: 'Submit' }
 };
 
@@ -27,6 +27,9 @@ function FillForm() {
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
   const [hasStarted, setHasStarted] = useState(false);
+  const [formUser, setFormUser] = useState({ name: '', email: '' });
+  const [showUserDetails, setShowUserDetails] = useState(true);
+  const [currentVisibleIndex, setCurrentVisibleIndex] = useState(0);
 
   useEffect(() => {
     const updateViewCount = async () => {
@@ -43,7 +46,6 @@ function FillForm() {
 
     updateViewCount();
   }, [formId]);
-
 
   useEffect(() => {
     const fetchFormContent = async () => {
@@ -67,10 +69,8 @@ function FillForm() {
     fetchFormContent();
   }, [formId, userDetails?.token]);
 
-
   const updateStartCount = async () => {
     if (!hasStarted) {
-      setHasStarted(true);
       try {
         await axios.put(
           `https://final-evaluation-qbj9.onrender.com/api/v1/responses/increment-start-count/${formId}`,
@@ -88,8 +88,8 @@ function FillForm() {
     }
   };
 
-
-  const validateInput = (type, value) => {
+  const validateInput = (type, value, isRequired = false) => {
+    if (!value.trim() && isRequired) return 'This field is required';
     if (!value.trim()) return null;
     
     switch(type) {
@@ -104,12 +104,29 @@ function FillForm() {
       case 'number':
         if (isNaN(value)) return 'Must be a number';
         break;
+      default:
+        break;
     }
     return null;
   };
 
-  const findFirstInput = () => {
-    return messages.findIndex(msg => msg.type === 'input');
+  const handleUserDetailSubmit = () => {
+    const nameError = validateInput('text-input', formUser.name, true);
+    const emailError = validateInput('email', formUser.email, true);
+
+    if (nameError || emailError) {
+      setInputErrors({
+        name: nameError,
+        email: emailError
+      });
+      if (nameError) toast.error('Name is required');
+      if (emailError) toast.error(emailError || 'Email is required');
+      return;
+    }
+
+    setShowUserDetails(false);
+    setHasStarted(true);
+    updateStartCount();
   };
 
   const findNextInputIndex = () => {
@@ -120,61 +137,6 @@ function FillForm() {
     }
     return null;
   };
-
-  const formatResponsesForSubmission = () => {
-    const formattedResponses = messages.map((message, index) => {
-        if (message.type === 'text') {
-            return {
-                label: message.label || `Text ${index + 1}`,
-                type: 'text',
-                data: message.data
-            };
-        }
-        if (message.type === 'image') {
-            return {
-                label: message.label || `Image ${index + 1}`,
-                type: 'image',
-                data: message.data
-            };
-        }
-        if (message.type === 'input' && message.data !== 'button') {
-            return {
-                label: message.label || `Input ${index + 1}`,
-                type: 'input',
-                data: userResponses[index] || ''
-            };
-        }
-        return null;
-    }).filter(response => response !== null);
-
-    return formattedResponses;
-};
-
-  const handleSubmitForm = async () => {
-    try {
-        const formattedResponses = formatResponsesForSubmission();
-        console.log(formattedResponses)
-        const requestData = {
-          responses: formattedResponses,
-      };
-
-        const response = await axios.post(
-            `https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response/${formId}`,
-            requestData,
-            {
-                headers: {
-                    Authorization: `Bearer ${userDetails?.token}`,
-                },
-            }
-        );
-
-        console.log('Form submission successful:', response.data);
-        toast.success("Form submitted successfully!");
-    } catch (error) {
-        console.error("Error submitting form:", error);
-        toast.error(error.response?.data?.error || "Error submitting form!");
-    }
-};
 
   const handleSend = () => {
     const currentInputIndex = findNextInputIndex();
@@ -192,6 +154,7 @@ function FillForm() {
       return;
     }
 
+    // Only validate if there's input
     if (inputValue.trim()) {
       const error = validateInput(inputType, inputValue);
       if (error) {
@@ -201,19 +164,86 @@ function FillForm() {
       }
     }
 
+    // Store the response and move to next input
     setUserResponses(prev => ({
       ...prev,
-      [currentInputIndex]: inputValue || ''  // Show 'Skipped' when no input
+      [currentInputIndex]: inputValue.trim() || 'Skipped'
     }));
-
+    
     setInputValue('');
     setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
+    setCurrentVisibleIndex(prev => prev + 1);
 
     const nextIndex = findNextInputIndex();
     if (nextIndex === null) {
       handleSubmitForm();
     }
-    updateStartCount();
+  };
+
+  const formatResponsesForSubmission = () => {
+    const formattedResponses = [
+      {
+        label: 'User Name',
+        type: 'input',
+        data: formUser.name
+      },
+      {
+        label: 'User Email',
+        type: 'input',
+        data: formUser.email
+      },
+      ...messages.map((message, index) => {
+        if (message.type === 'text') {
+          return {
+            label: message.label || `Text ${index + 1}`,
+            type: 'text',
+            data: message.data
+          };
+        }
+        if (message.type === 'image') {
+          return {
+            label: message.label || `Image ${index + 1}`,
+            type: 'image',
+            data: message.data
+          };
+        }
+        if (message.type === 'input' && message.data !== 'button') {
+          return {
+            label: message.label || `Input ${index + 1}`,
+            type: 'input',
+            data: userResponses[index] || ''
+          };
+        }
+        return null;
+      }).filter(response => response !== null)
+    ];
+
+    return formattedResponses;
+  };
+
+  const handleSubmitForm = async () => {
+    try {
+      const formattedResponses = formatResponsesForSubmission();
+      const requestData = {
+        responses: formattedResponses,
+      };
+
+      const response = await axios.post(
+        `https://final-evaluation-qbj9.onrender.com/api/v1/responses/add-form-response/${formId}`,
+        requestData,
+        {
+          headers: {
+            Authorization: `Bearer ${userDetails?.token}`,
+          },
+        }
+      );
+
+      console.log('Form submission successful:', response.data);
+      toast.success("Form submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(error.response?.data?.error || "Error submitting form!");
+    }
   };
 
   const handleRatingSelect = (rating) => {
@@ -239,7 +269,6 @@ function FillForm() {
       <button 
         className={styles.button}
         onClick={handleSend}
-        disabled={!selectedRating}
       >
         <IoSend className={styles.send_btn}/>
       </button>
@@ -289,12 +318,8 @@ function FillForm() {
   };
 
   const shouldShowMessage = (index) => {
-    const firstInputIndex = findFirstInput();
-    const nextInputIndex = findNextInputIndex();
-
-    if (index < firstInputIndex) return true;
-    if (nextInputIndex === null) return true;
-    return index <= nextInputIndex;
+    if (!hasStarted) return false;
+    return index <= currentVisibleIndex;
   };
 
   const renderMessage = (message, index) => {
@@ -303,7 +328,7 @@ function FillForm() {
     if (message.type === 'text') {
       return (
         <div className={styles.messageLeft}>
-           <img src="/Chatbot_img.png" alt="chat"  className={styles.chatbotimg}/>
+           <img src="/Chatbot_img.png" alt="chat" className={styles.chatbotimg}/>
           <div className={styles.messageBubble}>{message.data}</div>
         </div>
       );
@@ -339,16 +364,55 @@ function FillForm() {
     return null;
   };
 
+  const renderUserDetailsForm = () => (
+    <div className={styles.messageRight}>
+      <div className={styles.inputContainer}>
+        <div className={styles.userDetailsForm}>
+          <div className={styles.inputWrapper}>
+            <input
+              type="text"
+              value={formUser.name}
+              onChange={(e) => setFormUser(prev => ({ ...prev, name: e.target.value }))}
+              className={styles.input}
+              placeholder="Enter your name*"
+            />
+            {inputErrors.name && <div className={styles.error}>{inputErrors.name}</div>}
+          </div>
+          <div className={styles.inputWrapper}>
+            <input
+              type="email"
+              value={formUser.email}
+              onChange={(e) => setFormUser(prev => ({ ...prev, email: e.target.value }))}
+              className={styles.input}
+              placeholder="Enter your email*"
+            />
+            {inputErrors.email && <div className={styles.error}>{inputErrors.email}</div>}
+          </div>
+          <button 
+            className={styles.button}
+            onClick={handleUserDetailSubmit}
+          >
+            <IoSend className={styles.send_btn}/>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <div className={styles.container}>
       <ToastContainer />
       <div className={styles.chatContainer}>
         <div className={styles.messagesContainer}>
-          {messages.map((message, index) => (
-            <div key={index} className={styles.messageWrapper}>
-              {renderMessage(message, index)}
-            </div>
-          ))}
+          {showUserDetails ? (
+            renderUserDetailsForm()
+          ) : (
+            messages.map((message, index) => (
+              <div key={index} className={styles.messageWrapper}>
+                {renderMessage(message, index)}
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>
