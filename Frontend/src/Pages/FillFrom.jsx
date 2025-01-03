@@ -26,6 +26,11 @@ function FillForm() {
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
+  const [formStage, setFormStage] = useState('name'); // 'name', 'email', or 'main'
+  const [userInfo, setUserInfo] = useState({
+    name: '',
+    email: ''
+  });
  
 
   useEffect(() => {
@@ -108,6 +113,70 @@ function FillForm() {
     return null;
   };
 
+  const handleInitialFieldSubmit = () => {
+    if (formStage === 'name') {
+      if (!inputValue.trim()) {
+        toast.error('Please enter your name');
+        return;
+      }
+      setUserInfo(prev => ({ ...prev, name: inputValue }));
+      setFormStage('email');
+      setInputValue('');
+    } else if (formStage === 'email') {
+      const emailError = validateInput('email', inputValue);
+      if (emailError) {
+        toast.error(emailError);
+        return;
+      }
+      setUserInfo(prev => ({ ...prev, email: inputValue }));
+      setFormStage('main');
+      setInputValue('');
+    }
+  };
+
+  const renderInitialFields = () => {
+    if (formStage === 'main') return null;
+
+    const isNameStage = formStage === 'name';
+    const placeholder = isNameStage ? 'Enter your name' : 'Enter your email';
+    const inputType = isNameStage ? 'text' : 'email';
+
+    return (
+      <div className={styles.messagesContainer}>
+        {userInfo.name && (
+          <div className={styles.messageRight}>
+            <div className={styles.messageBubble}>{userInfo.name}</div>
+          </div>
+        )}
+        {formStage === 'email' && (
+          <div className={styles.messageLeft}>
+            <img src="/Chatbot_img.png" alt="chat" className={styles.chatbotimg}/>
+            <div className={styles.messageBubble}>Please enter your email</div>
+          </div>
+        )}
+        {formStage !== 'main' && (
+          <div className={styles.inputContainer}>
+            <div className={styles.inputWrapper}>
+              <input
+                type={inputType}
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                className={styles.input}
+                placeholder={placeholder}
+              />
+              <button 
+                className={styles.button}
+                onClick={handleInitialFieldSubmit}
+              >
+                <IoSend className={styles.send_btn}/>
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
   const findFirstInput = () => {
     return messages.findIndex(msg => msg.type === 'input');
   };
@@ -122,34 +191,46 @@ function FillForm() {
   };
 
   const formatResponsesForSubmission = () => {
-    const formattedResponses = messages.map((message, index) => {
+    const formattedResponses = [
+      {
+        label: 'User Name',
+        type: 'input',
+        data: userInfo.name
+      },
+      {
+        label: 'User Email',
+        type: 'input',
+        data: userInfo.email
+      },
+      ...messages.map((message, index) => {
         if (message.type === 'text') {
-            return {
-                label: message.label || `Text ${index + 1}`,
-                type: 'text',
-                data: message.data
-            };
+          return {
+            label: message.label || `Text ${index + 1}`,
+            type: 'text',
+            data: message.data
+          };
         }
         if (message.type === 'image') {
-            return {
-                label: message.label || `Image ${index + 1}`,
-                type: 'image',
-                data: message.data
-            };
+          return {
+            label: message.label || `Image ${index + 1}`,
+            type: 'image',
+            data: message.data
+          };
         }
         if (message.type === 'input' && message.data !== 'button') {
           const responseData = userResponses[index] === "Skipped" ? "" : userResponses[index];
-            return {
-                label: message.label || `Input ${index + 1}`,
-                type: 'input',
-                data: responseData
-            };
+          return {
+            label: message.label || `Input ${index + 1}`,
+            type: 'input',
+            data: responseData
+          };
         }
         return null;
-    }).filter(response => response !== null);
+      }).filter(response => response !== null)
+    ];
 
     return formattedResponses;
-};
+  };
 
   const handleSubmitForm = async () => {
     try {
@@ -341,13 +422,22 @@ function FillForm() {
     <div className={styles.container}>
       <ToastContainer />
       <div className={styles.chatContainer}>
-        <div className={styles.messagesContainer}>
-          {messages.map((message, index) => (
-            <div key={index} className={styles.messageWrapper}>
-              {renderMessage(message, index)}
-            </div>
-          ))}
-        </div>
+        {formStage === 'name' && (
+          <div className={styles.messageLeft}>
+            <img src="/Chatbot_img.png" alt="chat" className={styles.chatbotimg}/>
+            <div className={styles.messageBubble}>Please enter your name</div>
+          </div>
+        )}
+        {renderInitialFields()}
+        {formStage === 'main' && (
+          <div className={styles.messagesContainer}>
+            {messages.map((message, index) => (
+              <div key={index} className={styles.messageWrapper}>
+                {renderMessage(message, index)}
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
