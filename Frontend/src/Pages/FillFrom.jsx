@@ -176,21 +176,28 @@ function FillForm() {
     }
 };
 
-  const handleSend = () => {
-    const currentInputIndex = findNextInputIndex();
-    if (currentInputIndex === null) return;
+const handleSend = () => {
+  const currentInputIndex = findNextInputIndex();
+  if (currentInputIndex === null) return;
 
-    const currentInput = messages[currentInputIndex];
-    const inputType = currentInput.data;
+  const currentInput = messages[currentInputIndex];
+  const inputType = currentInput.data;
 
-    if (inputType === 'button') {
-      handleSubmitForm();
-      setUserResponses(prev => ({
-        ...prev,
-        [currentInputIndex]: 'Submitted'
-      }));
-      return;
-    }
+  if (inputType === 'button') {
+    handleSubmitForm();
+    setUserResponses((prev) => ({
+      ...prev,
+      [currentInputIndex]: 'Submitted',
+    }));
+    return;
+  }
+
+  const error = validateInput(inputType, inputValue);
+  if (error && inputValue.trim()) {
+    setInputErrors((prev) => ({ ...prev, [currentInputIndex]: error }));
+    toast.error(error);
+    return; // Allow only validated fields with data to throw errors
+  }
 
     // const error = validateInput(inputType, inputValue);
     // if (error) {
@@ -199,18 +206,20 @@ function FillForm() {
     //   return;
     // }
 
-    setUserResponses(prev => ({
+    setUserResponses((prev) => ({
       ...prev,
-      [currentInputIndex]: inputValue
+      [currentInputIndex]: inputValue,
     }));
+
     setInputValue('');
-    setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
+    setInputErrors((prev) => ({ ...prev, [currentInputIndex]: null }));
 
     const nextIndex = findNextInputIndex();
     if (nextIndex === null) {
-      handleSubmitForm();
+      handleSubmitForm(); // If no more inputs, submit the form
+    } else {
+      updateStartCount(); // Proceed to the next field
     }
-    updateStartCount();
   };
 
   const handleRatingSelect = (rating) => {
