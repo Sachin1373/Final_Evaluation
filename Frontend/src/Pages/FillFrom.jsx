@@ -90,7 +90,7 @@ function FillForm() {
 
 
   const validateInput = (type, value) => {
-    if (!value.trim()) return 'This field is required';
+    if (!value.trim()) return null;
     
     switch(type) {
       case 'email':
@@ -192,12 +192,12 @@ function FillForm() {
       return;
     }
 
-    const error = validateInput(inputType, inputValue);
-    if (error) {
-      setInputErrors(prev => ({ ...prev, [currentInputIndex]: error }));
-      toast.error(error);
-      return;
-    }
+    // const error = validateInput(inputType, inputValue);
+    // if (error) {
+    //   setInputErrors(prev => ({ ...prev, [currentInputIndex]: error }));
+    //   toast.error(error);
+    //   return;
+    // }
 
     setUserResponses(prev => ({
       ...prev,
