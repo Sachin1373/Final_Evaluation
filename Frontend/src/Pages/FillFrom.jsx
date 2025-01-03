@@ -267,7 +267,6 @@ function FillForm() {
 
     if (!hasStarted && formStage === 'main') {
       updateStartCount();
-      setHasStarted(true)
     }
 
     if (inputType === 'button') {
@@ -297,7 +296,7 @@ function FillForm() {
     if (nextIndex === null) {
       handleSubmitForm();
     }
-    updateStartCount();
+   
   };
 
   const handleRatingSelect = (rating) => {
