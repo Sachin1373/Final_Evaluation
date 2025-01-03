@@ -26,6 +26,7 @@ function FillForm() {
   const [userDetails, setUserDetails] = useState(
     JSON.parse(localStorage.getItem("UserDetails")) || null
   );
+  const [hasStarted, setHasStarted] = useState(false);
   const [formStage, setFormStage] = useState('name'); // 'name', 'email', or 'main'
   const [userInfo, setUserInfo] = useState({
     name: '',
@@ -264,6 +265,11 @@ function FillForm() {
 
     const currentInput = messages[currentInputIndex];
     const inputType = currentInput.data;
+
+    if (!hasStarted) {
+      updateStartCount(); 
+      setHasStarted(true); 
+    }
 
     if (inputType === 'button') {
       handleSubmitForm();
