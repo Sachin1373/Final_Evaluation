@@ -266,9 +266,8 @@ function FillForm() {
     const currentInput = messages[currentInputIndex];
     const inputType = currentInput.data;
 
-    if (!hasStarted) {
-      updateStartCount(); 
-      setHasStarted(true); 
+    if (!hasStarted && formStage === 'main') {
+      updateStartCount();
     }
 
     if (inputType === 'button') {
