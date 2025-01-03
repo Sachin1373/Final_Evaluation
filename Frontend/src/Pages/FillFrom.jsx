@@ -90,7 +90,7 @@ function FillForm() {
 
 
   const validateInput = (type, value) => {
-    if (!value.trim()) return null;
+    if (!value.trim() && type !== 'button') return null
     
     switch(type) {
       case 'email':
@@ -201,7 +201,7 @@ function FillForm() {
 
     setUserResponses(prev => ({
       ...prev,
-      [currentInputIndex]: inputValue || ''
+      [currentInputIndex]: inputValue || 'Skipped'
     }));
     setInputValue('');
     setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
