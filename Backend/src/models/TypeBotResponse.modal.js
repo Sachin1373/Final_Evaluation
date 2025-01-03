@@ -13,8 +13,6 @@ const submissionSchema = new mongoose.Schema({
 
 const formSchema = new mongoose.Schema({
   formId: {type: mongoose.Schema.Types.ObjectId, ref: 'Form', required: true },
-  name: { type: String, required: true },
-  email: { type: String, required: true },
   views: { type: Number, default: 0 }, // Tracks how many times the form was viewed
   starts: { type: Number, default: 0 }, // Tracks when a user starts filling out the form
   submissions: [submissionSchema], // Array of form submissions
