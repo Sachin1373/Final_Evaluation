@@ -20,7 +20,7 @@ const PORT = process.env.PORT || 5000;
 dbconnection()
 
 const corsOptions = {
-  origin: 'https://final-evaluation-ebon.vercel.app', 
+  origin: ['https://final-evaluation-ebon.vercel.app','http://localhost:5173'],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],          
   credentials: true,                                 
 };
