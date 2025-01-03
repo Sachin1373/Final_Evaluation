@@ -176,50 +176,44 @@ function FillForm() {
     }
 };
 
-const handleSend = () => {
-  const currentInputIndex = findNextInputIndex();
-  if (currentInputIndex === null) return;
+  const handleSend = () => {
+    const currentInputIndex = findNextInputIndex();
+    if (currentInputIndex === null) return;
 
-  const currentInput = messages[currentInputIndex];
-  const inputType = currentInput.data;
+    const currentInput = messages[currentInputIndex];
+    const inputType = currentInput.data;
 
-  if (inputType === 'button') {
-    handleSubmitForm();
-    setUserResponses((prev) => ({
+    if (inputType === 'button') {
+      handleSubmitForm();
+      setUserResponses(prev => ({
+        ...prev,
+        [currentInputIndex]: 'Submitted'
+      }));
+      return;
+    }
+
+    if (inputValue.trim()) {
+      const error = validateInput(inputType, inputValue);
+      if (error) {
+        setInputErrors(prev => ({ ...prev, [currentInputIndex]: error }));
+        toast.error(error);
+        return;
+      }
+    }
+
+    setUserResponses(prev => ({
       ...prev,
-      [currentInputIndex]: 'Submitted',
-    }));
-    return;
-  }
-
-  const error = validateInput(inputType, inputValue);
-  if (error && inputValue.trim()) {
-    setInputErrors((prev) => ({ ...prev, [currentInputIndex]: error }));
-    toast.error(error);
-    return; // Allow only validated fields with data to throw errors
-  }
-
-    // const error = validateInput(inputType, inputValue);
-    // if (error) {
-    //   setInputErrors(prev => ({ ...prev, [currentInputIndex]: error }));
-    //   toast.error(error);
-    //   return;
-    // }
-
-    setUserResponses((prev) => ({
-      ...prev,
-      [currentInputIndex]: inputValue,
+      [currentInputIndex]: inputValue || ''  // Show 'Skipped' when no input
     }));
 
     setInputValue('');
-    setInputErrors((prev) => ({ ...prev, [currentInputIndex]: null }));
+    setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
 
     const nextIndex = findNextInputIndex();
     if (nextIndex === null) {
-      handleSubmitForm(); // If no more inputs, submit the form
-    } else {
-      updateStartCount(); // Proceed to the next field
+      handleSubmitForm();
     }
+    updateStartCount();
   };
 
   const handleRatingSelect = (rating) => {
