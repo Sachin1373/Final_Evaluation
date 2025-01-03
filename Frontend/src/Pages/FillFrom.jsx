@@ -90,7 +90,7 @@ function FillForm() {
 
 
   const validateInput = (type, value) => {
-    if (!value.trim() && type !== 'button') return null
+     if (!value.trim() && type !== 'button') return null
     
     switch(type) {
       case 'email':
