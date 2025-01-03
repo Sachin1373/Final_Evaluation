@@ -90,7 +90,7 @@ function FillForm() {
 
 
   const validateInput = (type, value) => {
-    if (!value.trim()) return 'This field is required';
+    if (!value.trim()) return null;
     
     switch(type) {
       case 'email':
@@ -114,7 +114,7 @@ function FillForm() {
 
   const findNextInputIndex = () => {
     for (let i = 0; i < messages.length; i++) {
-      if (messages[i].type === 'input' && !userResponses[i]) {
+      if (messages[i].type === 'input' && userResponses[i]) {
         return i;
       }
     }
@@ -201,7 +201,7 @@ function FillForm() {
 
     setUserResponses(prev => ({
       ...prev,
-      [currentInputIndex]: inputValue
+      [currentInputIndex]: inputValue || ''
     }));
     setInputValue('');
     setInputErrors(prev => ({ ...prev, [currentInputIndex]: null }));
